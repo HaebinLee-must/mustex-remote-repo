@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import AccountOverview from '../features/mypage/components/AccountOverview';
 import KycPromotionModal from '../features/mypage/components/KycPromotionModal';
+import { useMyPage } from '../features/mypage/hooks/useMyPage';
 
 interface MyPageProps {
     showPromotion?: boolean;
@@ -8,15 +9,7 @@ interface MyPageProps {
 }
 
 const MyPage: React.FC<MyPageProps & { onStartKyc?: () => void }> = ({ showPromotion, onPromotionShown, onStartKyc }) => {
-    const [isKycModalOpen, setIsKycModalOpen] = useState(false);
-
-    // Mock initial check: If user just signed up or hasn't verified
-    useEffect(() => {
-        if (showPromotion) {
-            setIsKycModalOpen(true);
-            if (onPromotionShown) onPromotionShown();
-        }
-    }, [showPromotion, onPromotionShown]);
+    const { isKycModalOpen, closeKycModal } = useMyPage(showPromotion, onPromotionShown);
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8 md:py-12 flex gap-10">
@@ -37,9 +30,9 @@ const MyPage: React.FC<MyPageProps & { onStartKyc?: () => void }> = ({ showPromo
 
             <KycPromotionModal
                 isOpen={isKycModalOpen}
-                onClose={() => setIsKycModalOpen(false)}
+                onClose={closeKycModal}
                 onStartKyc={() => {
-                    setIsKycModalOpen(false);
+                    closeKycModal();
                     if (onStartKyc) onStartKyc();
                 }}
             />

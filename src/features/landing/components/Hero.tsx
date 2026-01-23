@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
-import { LanguageContext } from '../../../App';
+import React from 'react';
+import { useUI } from '@/features/shared/UIContext';
 
 const Hero: React.FC = () => {
-    const { t } = useContext(LanguageContext);
+    const { t } = useUI();
 
     // Dynamic title rendering for multi-language
     const renderTitle = () => {

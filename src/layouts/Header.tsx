@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Globe, Sun, Moon, ChevronDown, Check, User, Wallet, Shield, LogOut } from 'lucide-react';
-import { LanguageContext } from '../App';
+import { useUI } from '../features/shared/UIContext';
 import { Language } from '../constants/translations';
 
 interface HeaderProps {
@@ -10,7 +10,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ isAuthenticated = false, onViewChange, currentView }) => {
-    const { lang, setLang, t } = useContext(LanguageContext);
+    const { lang, setLang, t } = useUI();
     const [isLangOpen, setIsLangOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isDark, setIsDark] = useState(true);

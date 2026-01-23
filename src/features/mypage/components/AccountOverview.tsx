@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { ShieldCheck, TrendingUp, AlertCircle, ShieldAlert } from 'lucide-react';
-import { LanguageContext } from '../../../App';
+import { useUI } from '@/features/shared/UIContext';
 
 const AccountOverview: React.FC<{ onStartKyc?: () => void }> = ({ onStartKyc }) => {
-    const { t } = useContext(LanguageContext);
+    const { t } = useUI();
     const isVerified = false; // Mocking as false for now
 
     return (

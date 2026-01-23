@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
-import { Eye, EyeOff, X, Globe } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Globe, Eye, EyeOff } from 'lucide-react';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
-import { LanguageContext } from '@/App';
+import { useUI } from '@/features/shared/UIContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,7 +13,7 @@ interface LoginFormProps {
 }
 
 const LoginForm = ({ onLogin, onViewChange }: LoginFormProps) => {
-    const { lang, setLang } = useContext(LanguageContext);
+    const { lang, setLang } = useUI();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);

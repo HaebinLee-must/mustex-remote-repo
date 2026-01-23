@@ -1,4 +1,4 @@
-import React, { useState, createContext } from 'react';
+import React, { useState } from 'react';
 import Header from './layouts/Header';
 import Footer from './layouts/Footer';
 import Hero from './features/landing/components/Hero';
@@ -13,19 +13,8 @@ import TradeLayout from './features/trade/TradeLayout';
 import WalletPage from './pages/WalletPage';
 import SwapPage from './pages/SwapPage';
 import MyPage from './pages/MyPage';
-import { Language } from './constants/translations';
-import { useLanguage } from './features/shared/hooks/useLanguage';
-
-// Multi-language context
-export const LanguageContext = createContext<{
-    lang: Language;
-    setLang: (lang: Language) => void;
-    t: (key: string) => string;
-}>({
-    lang: 'en',
-    setLang: () => { },
-    t: (key: string) => key,
-});
+import { useAuth } from './features/auth/AuthContext';
+import { useUI } from './features/shared/UIContext';
 
 const LandingPage = () => (
     <>
@@ -37,21 +26,17 @@ const LandingPage = () => (
 );
 
 function App() {
-    const [currentView, setCurrentView] = useState('landing');
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const { isAuthenticated, signup, login } = useAuth();
+    const { currentView, setCurrentView } = useUI();
     const [showKycPromotion, setShowKycPromotion] = useState(false);
-    const [user, setUser] = useState<{ email: string } | null>(null);
-    const { lang, setLang, t } = useLanguage('en');
 
     const handleSignupComplete = (userData: { email: string }) => {
-        setIsAuthenticated(true);
-        setUser(userData);
+        signup(userData);
         setCurrentView('onboarding');
     };
 
     const handleLogin = (userData: { email: string }) => {
-        setIsAuthenticated(true);
-        setUser(userData);
+        login(userData);
         setCurrentView('landing');
     };
 
@@ -70,7 +55,6 @@ function App() {
                         onPromotionShown={() => setShowKycPromotion(false)}
                         onStartKyc={() => {
                             console.log('KYC flow to be implemented');
-                            // setCurrentView('onboarding')
                         }}
                     />
                 );
@@ -101,19 +85,17 @@ function App() {
     };
 
     return (
-        <LanguageContext.Provider value={{ lang, setLang, t }}>
-            <div className="min-h-screen bg-[#0B0E11] text-white font-sans selection:bg-indigo-500/30 flex flex-col">
-                {currentView !== 'signup' && currentView !== 'onboarding' && (
-                    <Header
-                        currentView={currentView}
-                        onViewChange={setCurrentView}
-                        isAuthenticated={isAuthenticated}
-                    />
-                )}
-                <main className="flex-1">{renderContent()}</main>
-                {currentView !== 'exchange' && currentView !== 'signup' && currentView !== 'onboarding' && <Footer />}
-            </div>
-        </LanguageContext.Provider>
+        <div className="min-h-screen bg-[#0B0E11] text-white font-sans selection:bg-indigo-500/30 flex flex-col">
+            {currentView !== 'signup' && currentView !== 'onboarding' && (
+                <Header
+                    currentView={currentView}
+                    onViewChange={setCurrentView}
+                    isAuthenticated={isAuthenticated}
+                />
+            )}
+            <main className="flex-1">{renderContent()}</main>
+            {currentView !== 'exchange' && currentView !== 'signup' && currentView !== 'onboarding' && <Footer />}
+        </div>
     );
 }
 

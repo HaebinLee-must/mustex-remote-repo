@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { X, Globe } from 'lucide-react';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
-import { LanguageContext } from '@/App';
+import { useUI } from '@/features/shared/UIContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -14,7 +14,7 @@ interface SignupFlowProps {
 }
 
 const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
-    const { lang, setLang } = useContext(LanguageContext);
+    const { lang, setLang } = useUI();
     const [email, setEmail] = useState('');
     const [agreeTerms, setAgreeTerms] = useState(false);
     const [subscribeNewsletter, setSubscribeNewsletter] = useState(false);
