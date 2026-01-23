@@ -7,8 +7,7 @@ import Features from './features/landing/components/Features';
 import Highlight from './features/landing/components/Highlight';
 import SignupFlow from './features/auth/components/SignupFlow';
 import LoginForm from './features/auth/components/LoginForm';
-import OnboardingLayout from './features/auth/components/OnboardingLayout';
-import OnboardingFlow from './features/auth/components/OnboardingFlow';
+import VerificationFlow from './features/verification/VerificationFlow';
 import TradeLayout from './features/trade/TradeLayout';
 import WalletPage from './pages/WalletPage';
 import SwapPage from './pages/SwapPage';
@@ -54,7 +53,7 @@ function App() {
                         showPromotion={showKycPromotion}
                         onPromotionShown={() => setShowKycPromotion(false)}
                         onStartKyc={() => {
-                            console.log('KYC flow to be implemented');
+                            setCurrentView('verification');
                         }}
                     />
                 );
@@ -74,9 +73,11 @@ function App() {
                 );
             case 'onboarding':
                 return (
-                    <OnboardingLayout>
-                        <OnboardingFlow onComplete={() => setCurrentView('landing')} />
-                    </OnboardingLayout>
+                    <VerificationFlow onComplete={() => setCurrentView('landing')} />
+                );
+            case 'verification':
+                return (
+                    <VerificationFlow onComplete={() => setCurrentView('mypage')} />
                 );
             case 'landing':
             default:
@@ -86,7 +87,7 @@ function App() {
 
     return (
         <div className="min-h-screen bg-[#0B0E11] text-white font-sans selection:bg-indigo-500/30 flex flex-col">
-            {currentView !== 'signup' && currentView !== 'onboarding' && (
+            {currentView !== 'signup' && currentView !== 'onboarding' && currentView !== 'verification' && (
                 <Header
                     currentView={currentView}
                     onViewChange={setCurrentView}
@@ -94,7 +95,7 @@ function App() {
                 />
             )}
             <main className="flex-1">{renderContent()}</main>
-            {currentView !== 'exchange' && currentView !== 'signup' && currentView !== 'onboarding' && <Footer />}
+            {currentView !== 'exchange' && currentView !== 'signup' && currentView !== 'onboarding' && currentView !== 'verification' && <Footer />}
         </div>
     );
 }

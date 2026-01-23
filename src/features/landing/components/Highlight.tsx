@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
-import { LanguageContext } from '../../../App';
+import React from 'react';
+import { useLanguage } from '../../shared/hooks/useLanguage';
 
 const Highlight: React.FC = () => {
-    const { lang } = useContext(LanguageContext);
+    const { lang } = useLanguage();
 
     return (
         <section className="py-24 bg-dark-surface/30">
