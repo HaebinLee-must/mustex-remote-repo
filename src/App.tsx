@@ -73,11 +73,17 @@ function App() {
                 );
             case 'onboarding':
                 return (
-                    <VerificationFlow onComplete={() => setCurrentView('landing')} />
+                    <VerificationFlow
+                        onComplete={() => setCurrentView('landing')}
+                        onExit={() => setCurrentView('landing')}
+                    />
                 );
             case 'verification':
                 return (
-                    <VerificationFlow onComplete={() => setCurrentView('mypage')} />
+                    <VerificationFlow
+                        onComplete={() => setCurrentView('mypage')}
+                        onExit={() => setCurrentView('mypage')}
+                    />
                 );
             case 'landing':
             default:

@@ -22,11 +22,20 @@ export interface VerificationState {
 }
 
 export type StepId =
-    | 'INTRO'
-    | 'PERSONAL_INFO'
+    | 'COUNTRY_SELECTION'
     | 'ID_UPLOAD'
     | 'LIVENESS'
-    | 'ADDRESS_PROOF'
+    | 'PERSONAL_INFO'
+    | 'ADDRESS_VERIFICATION'
     | 'STATUS_CHECK'
     | 'SECURITY_2FA'
     | 'FEATURE_UNLOCK';
+
+export type DocumentType = 'PASSPORT' | 'ID_CARD' | 'DRIVERS_LICENSE' | 'RESIDENCE_PERMIT';
+
+export interface KYCData {
+    residenceCountry: string;
+    nationality: string;
+    documentType: DocumentType;
+    isEU: boolean;
+}

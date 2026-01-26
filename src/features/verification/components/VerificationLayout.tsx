@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronLeft, Info, ShieldCheck } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { StepId } from '../types';
 
@@ -10,28 +10,21 @@ interface VerificationLayoutProps {
     onExit?: () => void;
     title?: string;
     isEU?: boolean;
+    totalSteps: number;
+    currentStepIndex: number;
 }
 
-const Stepper = ({ currentStep, isEU }: { currentStep: StepId, isEU?: boolean }) => {
-    const totalSteps = isEU ? 5 : 4;
-
-    const currentIdx = (() => {
-        if (currentStep === 'INTRO' || ['PERSONAL_INFO', 'ID_UPLOAD', 'LIVENESS', 'ADDRESS_PROOF', 'STATUS_CHECK'].includes(currentStep)) return 1;
-        if (currentStep === 'SECURITY_2FA') return isEU ? 3 : 2;
-        if (currentStep === 'FEATURE_UNLOCK') return isEU ? 4 : 3;
-        return 0;
-    })();
-
-    const progress = ((currentIdx + 1) / totalSteps) * 100;
+const Stepper = ({ currentStepIndex, totalSteps }: { currentStepIndex: number, totalSteps: number }) => {
+    const progress = ((currentStepIndex + 1) / totalSteps) * 100;
 
     return (
         <div className="w-full">
-            <div className="relative w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+            <div className="relative w-full h-1 bg-white/5 rounded-full overflow-hidden">
                 <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${progress}%` }}
                     transition={{ duration: 0.35, ease: "easeOut" }}
-                    className="absolute inset-0 bg-[#5e5ce6] shadow-[0_0_12px_rgba(94,92,230,0.5)]"
+                    className="absolute inset-0 bg-[#5e5ce6]"
                 />
             </div>
         </div>
@@ -44,67 +37,52 @@ export const VerificationLayout: React.FC<VerificationLayoutProps> = ({
     onBack,
     onExit,
     title,
-    isEU
+    isEU,
+    totalSteps,
+    currentStepIndex
 }) => {
     return (
         <div className="fixed inset-0 z-[1000] bg-[#12122b] text-[#EAECEF] font-sans selection:bg-indigo-500/30 overflow-y-auto custom-scrollbar">
-            {/* Top Navigation Bar */}
-            <header className="sticky top-0 z-[1001] h-20 px-4 sm:px-12 flex items-center justify-between border-b border-white/[0.05] bg-[#12122b]/80 backdrop-blur-xl">
-                <div className="flex items-center gap-6 min-w-[120px]">
-                    <div
-                        className="flex items-center gap-3 cursor-pointer active:scale-95 transition-transform group"
-                        onClick={onExit}
-                    >
-                        <div className="w-10 h-10 bg-[#5e5ce6] rounded-xl flex items-center justify-center shadow-lg shadow-[#5e5ce6]/20 group-hover:shadow-[#5e5ce6]/40 transition-all">
-                            <ShieldCheck className="w-6 h-6 text-white" />
-                        </div>
-                        <span className="text-xl font-black tracking-tighter text-white uppercase italic">Mustex</span>
-                    </div>
-                </div>
-
-                <div className="hidden md:block flex-1 max-w-md mx-8">
-                    <Stepper currentStep={currentStep} isEU={isEU} />
-                </div>
-
-                <div className="flex items-center gap-4 min-w-[120px] justify-end">
-                    <button className="p-3 text-[#848E9C] hover:text-white transition-colors">
-                        <Info className="w-5 h-5" />
-                    </button>
-                    <div className="hidden sm:block h-8 w-[1px] bg-white/10" />
-                    <button className="hidden sm:block text-xs font-bold text-[#848E9C] hover:text-white transition-colors">
-                        Support
-                    </button>
-                </div>
-            </header>
-
-            {/* Mobile Stepper (Condensed) */}
-            <div className="md:hidden px-6 py-4 border-b border-white/[0.03] bg-[#12122b]/50">
-                <Stepper currentStep={currentStep} isEU={isEU} />
-            </div>
-
             {/* Main Content Area */}
-            <main className="flex flex-col items-center justify-start pt-12 sm:pt-20 pb-24 px-4 min-h-[calc(100vh-80px)]">
-                <div className="w-full max-w-[480px] animate-in fade-in slide-in-from-bottom-4 duration-700">
-                    {onBack && (
-                        <button
-                            onClick={onBack}
-                            className="mb-8 p-2 -ml-2 hover:bg-white/5 rounded-lg transition-all text-[#848E9C] hover:text-white flex items-center gap-2 group"
+            <main className="flex flex-col items-center justify-start pt-10 sm:pt-16 pb-24 px-4 min-h-screen">
+                <div className="w-full max-w-[480px] animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-10">
+                    {/* Logo Area */}
+                    <div className="flex justify-center">
+                        <div
+                            className="text-[#5e5ce6] font-black text-2xl tracking-tighter cursor-pointer select-none active:scale-95 transition inline-block uppercase italic"
+                            onClick={onExit}
                         >
-                            <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                            <span className="text-xs font-bold uppercase tracking-widest">Go Back</span>
-                        </button>
-                    )}
+                            MUSTEX
+                        </div>
+                    </div>
+
+                    {/* Progress Bar Area */}
+                    <div className="space-y-6">
+                        <Stepper currentStepIndex={currentStepIndex} totalSteps={totalSteps} />
+
+                        <div className="flex items-center">
+                            {onBack && (
+                                <button
+                                    onClick={onBack}
+                                    className="p-2 -ml-2 hover:bg-white/5 rounded-lg transition-all text-[#848E9C] hover:text-white flex items-center gap-2 group"
+                                >
+                                    <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                                    <span className="text-xs font-bold uppercase tracking-widest">Go Back</span>
+                                </button>
+                            )}
+                        </div>
+                    </div>
 
                     {title && (
-                        <div className="text-center mb-12 space-y-3">
+                        <div className="text-left mb-12 space-y-3">
                             <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
                                 {title === 'Verify Identity' ? "Let's get you verified" : title}
                             </h1>
-                            <p className="text-sm text-[#848E9C] font-medium max-w-[320px] mx-auto leading-relaxed">
-                                {currentStep === 'INTRO' && "This helps keep your account secure and compliant."}
-                                {['ID_UPLOAD', 'LIVENESS'].includes(currentStep) && "제출된 정보는 암호화되어 안전하게 처리됩니다."}
-                                {currentStep === 'PERSONAL_INFO' && "안내에 따라 진행하시면 인증이 완료됩니다."}
-                                {currentStep === 'STATUS_CHECK' && "약 1분에서 2분 정도 소요됩니다."}
+                            <p className="text-sm text-[#848E9C] font-medium max-w-[400px] leading-relaxed">
+                                {currentStep === 'COUNTRY_SELECTION' && "Your country determines the required verification steps."}
+                                {['ID_UPLOAD', 'LIVENESS'].includes(currentStep) && "Your data is encrypted and securely protected."}
+                                {currentStep === 'PERSONAL_INFO' && "Please enter your basic details as they appear on your ID."}
+                                {currentStep === 'STATUS_CHECK' && "Verification usually takes less than 3 minutes."}
                             </p>
                         </div>
                     )}
