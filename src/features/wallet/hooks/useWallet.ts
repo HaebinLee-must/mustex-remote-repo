@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { MOCK_ASSETS } from '../services/mockWalletData';
+import { Asset } from '../types/wallet';
 
 export const useWallet = () => {
     const [isDepositOpen, setIsDepositOpen] = useState(false);
@@ -18,6 +20,14 @@ export const useWallet = () => {
     const closeDeposit = () => setIsDepositOpen(false);
     const closeWithdraw = () => setIsWithdrawOpen(false);
 
+    const balances = useMemo(() => {
+        return MOCK_ASSETS.map((asset: Asset) => ({
+            asset: asset.coin.symbol,
+            available: asset.available,
+            total: asset.total
+        }));
+    }, []);
+
     return {
         isDepositOpen,
         isWithdrawOpen,
@@ -25,6 +35,7 @@ export const useWallet = () => {
         openDeposit,
         openWithdraw,
         closeDeposit,
-        closeWithdraw
+        closeWithdraw,
+        balances
     };
 };

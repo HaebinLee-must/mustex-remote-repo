@@ -17,7 +17,8 @@ const TradeLayout: React.FC = () => {
         recentTrades,
         openOrders,
         marketStats,
-        loading
+        loading,
+        submitOrder
     } = useMarketData(symbol);
     const [favorites, setFavorites] = useState<string[]>(() => {
         const saved = localStorage.getItem('mustex_favorites');
@@ -75,7 +76,11 @@ const TradeLayout: React.FC = () => {
                     </div>
                     <div className="flex-1 min-h-[300px]">
                         <Card title="Order" className="h-full no-padding">
-                            <OrderPanel />
+                            <OrderPanel
+                                symbol={symbol}
+                                marketStats={marketStats}
+                                onSubmit={submitOrder}
+                            />
                         </Card>
                     </div>
                 </div>

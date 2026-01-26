@@ -2,6 +2,23 @@ import { MarketApi } from './marketApi';
 import { PricePoint, CandleData, OrderBookRow, TradeRow, OrderRow, MarketStats } from '../types/market';
 
 export const mockMarketData: MarketApi = {
+    submitOrder: async (order) => {
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 800));
+
+        return {
+            id: Math.random().toString(36).substr(2, 9),
+            symbol: order.symbol,
+            type: order.type,
+            side: order.side,
+            price: order.price,
+            amount: order.amount,
+            filled: 0,
+            status: 'open',
+            timestamp: new Date().toISOString().replace('T', ' ').substr(0, 19)
+        };
+    },
+
     fetchPriceHistory: async (symbol) => {
         const points: PricePoint[] = [];
         let basePrice = symbol === 'BTC/USDT' ? 42000 : 2500;

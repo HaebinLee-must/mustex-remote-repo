@@ -42,11 +42,11 @@ const LoginForm = ({ onLogin, onViewChange }: LoginFormProps) => {
     };
 
     return (
-        <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#0B0E11] p-4 font-sans">
+        <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#12122b] p-4 font-sans">
             {/* Background Pattern Sync with Landing */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,#312e81,transparent_50%)] opacity-20" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,#5e5ce6,transparent_50%)] opacity-10" />
 
-            <Card className="relative z-10 w-full max-w-[520px] overflow-hidden rounded-[32px] border-white/[0.08] bg-[#1E2329]/40 shadow-2xl backdrop-blur-2xl animate-in fade-in slide-in-from-bottom-6 duration-700">
+            <Card className="relative z-10 w-full max-w-[520px] overflow-hidden rounded-[32px] border-white/10 bg-white/10 shadow-2xl backdrop-blur-2xl animate-in fade-in slide-in-from-bottom-6 duration-700">
                 <CardHeader className="space-y-6 pb-8 text-left pt-10 px-8">
                     <div
                         className="text-[#6366F1] font-black text-2xl tracking-tighter cursor-pointer select-none active:scale-95 transition inline-block"
@@ -55,10 +55,10 @@ const LoginForm = ({ onLogin, onViewChange }: LoginFormProps) => {
                         MUSTEX
                     </div>
                     <div className="space-y-2">
-                        <h1 className="text-4xl font-extrabold tracking-tight text-white">
-                            Welcome back
+                        <h1 className="text-4xl font-extrabold tracking-tight text-white uppercase">
+                            LOG IN
                         </h1>
-                        <p className="text-sm text-gray-400">Log in to your MUSTEX account.</p>
+                        <p className="text-sm text-gray-400">WELCOME BACK TO MUSTEX</p>
                     </div>
                 </CardHeader>
                 <CardContent className="px-8 pb-8">
@@ -72,7 +72,7 @@ const LoginForm = ({ onLogin, onViewChange }: LoginFormProps) => {
                                     placeholder="Enter your email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className={`h-14 border-white/[0.08] bg-white/[0.05] pr-10 text-white transition-all placeholder:text-gray-500 focus:bg-white/[0.08] focus:ring-2 focus:ring-[#6366F1]/50 ${errors.email ? 'border-red-500/50 focus:ring-red-500/50' : ''
+                                    className={`h-14 border-white/[0.08] bg-white/[0.05] pr-10 text-white transition-all placeholder:text-gray-500 focus:bg-white/[0.08] focus:ring-2 focus:ring-[#5e5ce6]/50 ${errors.email ? 'border-red-500/50 focus:ring-red-500/50' : ''
                                         }`}
                                 />
                                 {email && (
@@ -104,7 +104,7 @@ const LoginForm = ({ onLogin, onViewChange }: LoginFormProps) => {
                                     type={showPassword ? 'text' : 'password'}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className={`h-14 border-white/[0.08] bg-white/[0.05] pr-10 text-white transition-all placeholder:text-gray-500 focus:bg-white/[0.08] focus:ring-2 focus:ring-[#6366F1]/50 ${errors.password ? 'border-red-500/50 focus:ring-red-500/50' : ''
+                                    className={`h-14 border-white/[0.08] bg-white/[0.05] pr-10 text-white transition-all placeholder:text-gray-500 focus:bg-white/[0.08] focus:ring-2 focus:ring-[#5e5ce6]/50 ${errors.password ? 'border-red-500/50 focus:ring-red-500/50' : ''
                                         }`}
                                 />
                                 <button
@@ -123,7 +123,7 @@ const LoginForm = ({ onLogin, onViewChange }: LoginFormProps) => {
                         </div>
                         <Button
                             type="submit"
-                            className="group relative w-full overflow-hidden rounded-2xl bg-[#5e5ce6] py-7 text-lg font-bold text-white transition-all hover:scale-[1.02] hover:bg-[#6c6af7] hover:shadow-xl hover:shadow-indigo-500/25 active:scale-[0.98]"
+                            className="group relative w-full overflow-hidden rounded-2xl bg-[#5e5ce6] py-7 text-lg font-bold text-white transition-all hover:bg-[#4b4ac2] active:scale-[0.98]"
                         >
                             <span className="relative z-10">Log In</span>
                             <div className="absolute inset-0 z-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />

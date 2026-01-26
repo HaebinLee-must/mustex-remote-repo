@@ -1,49 +1,39 @@
 import React from 'react';
 import { ChevronLeft, Info, ShieldCheck } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { StepId } from '../types';
 
 interface VerificationLayoutProps {
     children: React.ReactNode;
     currentStep: StepId;
     onBack?: () => void;
+    onExit?: () => void;
     title?: string;
+    isEU?: boolean;
 }
 
-const Stepper = ({ currentStep }: { currentStep: StepId }) => {
-    const steps = [
-        { id: 'ACCOUNT', label: 'Account', completed: true },
-        { id: 'KYC', label: 'Verification', active: ['INTRO', 'PERSONAL_INFO', 'ID_UPLOAD', 'LIVENESS', 'ADDRESS_PROOF', 'STATUS_CHECK'].includes(currentStep) },
-        { id: 'SECURITY', label: 'Security', active: currentStep === 'SECURITY_2FA' },
-        { id: 'UNLOCK', label: 'Unlock', active: currentStep === 'FEATURE_UNLOCK' },
-    ];
+const Stepper = ({ currentStep, isEU }: { currentStep: StepId, isEU?: boolean }) => {
+    const totalSteps = isEU ? 5 : 4;
+
+    const currentIdx = (() => {
+        if (currentStep === 'INTRO' || ['PERSONAL_INFO', 'ID_UPLOAD', 'LIVENESS', 'ADDRESS_PROOF', 'STATUS_CHECK'].includes(currentStep)) return 1;
+        if (currentStep === 'SECURITY_2FA') return isEU ? 3 : 2;
+        if (currentStep === 'FEATURE_UNLOCK') return isEU ? 4 : 3;
+        return 0;
+    })();
+
+    const progress = ((currentIdx + 1) / totalSteps) * 100;
 
     return (
-        <div className="flex items-center justify-center gap-4 sm:gap-10 mb-10 overflow-x-auto py-2">
-            {steps.map((step, idx) => (
-                <React.Fragment key={step.id}>
-                    <div className="flex flex-col items-center gap-2 shrink-0">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${step.active || step.completed
-                                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
-                                : 'bg-[#2B3139] text-[#848E9C]'
-                            }`}>
-                            {step.completed && !step.active ? (
-                                <ShieldCheck className="w-4 h-4" />
-                            ) : (
-                                idx + 1
-                            )}
-                        </div>
-                        <span className={`text-[10px] sm:text-xs font-bold uppercase tracking-widest ${step.active ? 'text-white' : 'text-[#848E9C]'
-                            }`}>
-                            {step.label}
-                        </span>
-                    </div>
-                    {idx < steps.length - 1 && (
-                        <div className="h-[2px] w-8 sm:w-16 bg-[#2B3139] -mt-6 rounded-full overflow-hidden">
-                            <div className={`h-full transition-all duration-500 ${step.completed ? 'w-full bg-indigo-600' : 'w-0'}`} />
-                        </div>
-                    )}
-                </React.Fragment>
-            ))}
+        <div className="w-full">
+            <div className="relative w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progress}%` }}
+                    transition={{ duration: 0.35, ease: "easeOut" }}
+                    className="absolute inset-0 bg-[#5e5ce6] shadow-[0_0_12px_rgba(94,92,230,0.5)]"
+                />
+            </div>
         </div>
     );
 };
@@ -52,37 +42,31 @@ export const VerificationLayout: React.FC<VerificationLayoutProps> = ({
     children,
     currentStep,
     onBack,
-    title
+    onExit,
+    title,
+    isEU
 }) => {
     return (
-        <div className="min-h-screen bg-[#0B0E11] text-[#EAECEF] flex flex-col font-sans selection:bg-indigo-500/30">
-            {/* Minimal Onboarding Header */}
-            <header className="h-20 border-b border-white/[0.05] bg-[#0B0E11]/80 backdrop-blur-xl px-4 sm:px-12 flex items-center justify-between sticky top-0 z-[100]">
-                <div className="flex items-center gap-6">
-                    {onBack && (
-                        <button
-                            onClick={onBack}
-                            className="p-3 hover:bg-white/5 rounded-full transition-all text-[#848E9C] hover:text-white"
-                        >
-                            <ChevronLeft className="w-6 h-6" />
-                        </button>
-                    )}
-                    <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/20">
+        <div className="fixed inset-0 z-[1000] bg-[#12122b] text-[#EAECEF] font-sans selection:bg-indigo-500/30 overflow-y-auto custom-scrollbar">
+            {/* Top Navigation Bar */}
+            <header className="sticky top-0 z-[1001] h-20 px-4 sm:px-12 flex items-center justify-between border-b border-white/[0.05] bg-[#12122b]/80 backdrop-blur-xl">
+                <div className="flex items-center gap-6 min-w-[120px]">
+                    <div
+                        className="flex items-center gap-3 cursor-pointer active:scale-95 transition-transform group"
+                        onClick={onExit}
+                    >
+                        <div className="w-10 h-10 bg-[#5e5ce6] rounded-xl flex items-center justify-center shadow-lg shadow-[#5e5ce6]/20 group-hover:shadow-[#5e5ce6]/40 transition-all">
                             <ShieldCheck className="w-6 h-6 text-white" />
                         </div>
-                        <div className="flex flex-col">
-                            <span className="text-lg font-black tracking-tighter text-white uppercase italic">Mustex</span>
-                            <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Verification</span>
-                        </div>
+                        <span className="text-xl font-black tracking-tighter text-white uppercase italic">Mustex</span>
                     </div>
                 </div>
 
-                <div className="hidden lg:block flex-1 max-w-2xl mx-12">
-                    <Stepper currentStep={currentStep} />
+                <div className="hidden md:block flex-1 max-w-md mx-8">
+                    <Stepper currentStep={currentStep} isEU={isEU} />
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 min-w-[120px] justify-end">
                     <button className="p-3 text-[#848E9C] hover:text-white transition-colors">
                         <Info className="w-5 h-5" />
                     </button>
@@ -93,17 +77,35 @@ export const VerificationLayout: React.FC<VerificationLayoutProps> = ({
                 </div>
             </header>
 
+            {/* Mobile Stepper (Condensed) */}
+            <div className="md:hidden px-6 py-4 border-b border-white/[0.03] bg-[#12122b]/50">
+                <Stepper currentStep={currentStep} isEU={isEU} />
+            </div>
+
             {/* Main Content Area */}
-            <main className="flex-1 flex flex-col items-center justify-start pt-10 sm:pt-20 pb-12 px-4 overflow-y-auto custom-scrollbar">
+            <main className="flex flex-col items-center justify-start pt-12 sm:pt-20 pb-24 px-4 min-h-[calc(100vh-80px)]">
                 <div className="w-full max-w-[480px] animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    {onBack && (
+                        <button
+                            onClick={onBack}
+                            className="mb-8 p-2 -ml-2 hover:bg-white/5 rounded-lg transition-all text-[#848E9C] hover:text-white flex items-center gap-2 group"
+                        >
+                            <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                            <span className="text-xs font-bold uppercase tracking-widest">Go Back</span>
+                        </button>
+                    )}
+
                     {title && (
-                        <div className="text-center mb-10 space-y-2">
-                            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                                {title}
+                        <div className="text-center mb-12 space-y-3">
+                            <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+                                {title === 'Verify Identity' ? "Let's get you verified" : title}
                             </h1>
-                            <div className="lg:hidden flex justify-center pt-4">
-                                <Stepper currentStep={currentStep} />
-                            </div>
+                            <p className="text-sm text-[#848E9C] font-medium max-w-[320px] mx-auto leading-relaxed">
+                                {currentStep === 'INTRO' && "This helps keep your account secure and compliant."}
+                                {['ID_UPLOAD', 'LIVENESS'].includes(currentStep) && "제출된 정보는 암호화되어 안전하게 처리됩니다."}
+                                {currentStep === 'PERSONAL_INFO' && "안내에 따라 진행하시면 인증이 완료됩니다."}
+                                {currentStep === 'STATUS_CHECK' && "약 1분에서 2분 정도 소요됩니다."}
+                            </p>
                         </div>
                     )}
                     {children}
@@ -111,11 +113,11 @@ export const VerificationLayout: React.FC<VerificationLayoutProps> = ({
             </main>
 
             {/* Minimal Footer */}
-            <footer className="py-8 border-t border-white/[0.05] text-center bg-[#0B0E11]/40">
+            <footer className="py-10 border-t border-white/[0.05] text-center bg-[#12122b]/40 mt-auto">
                 <p className="text-[#848E9C] text-xs font-medium">
                     © 2026 MUSTEX. Enterprise-grade crypto exchange.
                     <span className="mx-2 text-white/10">|</span>
-                    <a href="#" className="text-indigo-400 hover:text-indigo-300 transition-colors">Privacy Policy</a>
+                    <a href="#" className="text-[#5e5ce6] hover:text-[#5e5ce6]/80 transition-colors font-bold">Privacy Policy</a>
                 </p>
             </footer>
         </div>

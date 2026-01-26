@@ -2,13 +2,14 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface User {
     email: string;
+    kycStatus: 'unverified' | 'basic' | 'advanced';
 }
 
 interface AuthContextType {
     isAuthenticated: boolean;
     user: User | null;
-    login: (userData: User) => void;
-    signup: (userData: User) => void;
+    login: (userData: Partial<User> & { email: string }) => void;
+    signup: (userData: Partial<User> & { email: string }) => void;
     logout: () => void;
 }
 
@@ -18,14 +19,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState<User | null>(null);
 
-    const login = (userData: User) => {
+    const login = (userData: Partial<User> & { email: string }) => {
         setIsAuthenticated(true);
-        setUser(userData);
+        setUser({
+            kycStatus: 'unverified',
+            ...userData
+        } as User);
     };
 
-    const signup = (userData: User) => {
+    const signup = (userData: Partial<User> & { email: string }) => {
         setIsAuthenticated(true);
-        setUser(userData);
+        setUser({
+            kycStatus: 'unverified',
+            ...userData
+        } as User);
     };
 
     const logout = () => {

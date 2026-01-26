@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { mockMarketData } from '../services/mockMarketData';
-import { CandleData, OrderBookRow, TradeRow, OrderRow, MarketStats } from '../types/market';
+import { CandleData, OrderBookRow, TradeRow, OrderRow, MarketStats, Side, OrderType } from '../types/market';
 
 export const useMarketData = (symbol: string) => {
     const [candleData, setCandleData] = useState<CandleData[]>([]);
@@ -37,12 +37,32 @@ export const useMarketData = (symbol: string) => {
         loadInitialData();
     }, [symbol]);
 
+    const submitOrder = useCallback(async (order: {
+        side: Side;
+        type: OrderType;
+        price: number | null;
+        amount: number;
+    }) => {
+        try {
+            const newOrder = await mockMarketData.submitOrder({
+                symbol,
+                ...order
+            });
+            setOpenOrders(prev => [newOrder, ...prev]);
+            return newOrder;
+        } catch (error) {
+            console.error('Failed to submit order', error);
+            throw error;
+        }
+    }, [symbol]);
+
     return {
         candleData,
         orderBook,
         recentTrades,
         openOrders,
         marketStats,
-        loading
+        loading,
+        submitOrder
     };
 };

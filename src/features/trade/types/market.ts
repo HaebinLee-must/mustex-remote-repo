@@ -1,6 +1,12 @@
 export type Side = 'buy' | 'sell';
-export type OrderType = 'limit' | 'market';
+export type OrderType = 'limit' | 'market' | 'stop_limit' | 'oco';
 export type OrderStatus = 'open' | 'filled' | 'canceled';
+
+export type KycLevel = 'LEVEL_0_UNVERIFIED' | 'LEVEL_1_BASIC' | 'LEVEL_2_ADVANCED';
+export type TradePermission = 'ALLOWED' | 'RESTRICTED' | 'REVIEW_REQUIRED';
+export type CountryPolicyResult = 'ALLOWED' | 'LIMITED' | 'BLOCKED';
+
+export type OrderSubmitStatus = 'IDLE' | 'VALIDATING' | 'SUBMITTING' | 'SUCCESS' | 'ERROR';
 
 export interface PricePoint {
     timeLabel: string;
