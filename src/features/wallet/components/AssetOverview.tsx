@@ -19,8 +19,8 @@ const AssetOverview: React.FC<AssetOverviewProps> = ({ onDepositClick, onWithdra
                 <div className="space-y-4">
                     <div>
                         <div className="flex items-center space-x-2 mb-2">
-                            <h2 className="text-sm font-bold text-[#848E9C] tracking-wide uppercase">
-                                Estimated Balance
+                            <h2 className="text-sm font-bold text-[#848E9C] tracking-wide">
+                                Estimated balance
                             </h2>
                             <button
                                 onClick={toggleHideBalance}
@@ -69,7 +69,7 @@ const AssetOverview: React.FC<AssetOverviewProps> = ({ onDepositClick, onWithdra
 
                     <div className="flex items-center space-x-6 pt-2 border-t border-[#2B3139]/50">
                         <div>
-                            <div className="text-[10px] font-bold text-[#848E9C] uppercase mb-1">Today's PnL</div>
+                            <div className="text-[10px] font-bold text-[#848E9C] mb-1">Today's PnL</div>
                             <div className={`text-sm font-bold flex items-center ${MOCK_SUMMARY.todayPnLAmount >= 0 ? 'text-[#00C087]' : 'text-[#F6465D]'}`}>
                                 {MOCK_SUMMARY.todayPnLAmount >= 0 ? '+' : ''}{MOCK_SUMMARY.todayPnLAmount.toLocaleString()} USD ({MOCK_SUMMARY.todayPnLPercentage}%)
                                 <svg className={`w-3 h-3 ml-1 ${MOCK_SUMMARY.todayPnLAmount < 0 ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 20 20">

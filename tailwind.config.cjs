@@ -35,6 +35,13 @@ module.exports = {
                     muted: 'hsl(var(--muted-foreground))',
                     border: 'hsl(var(--border))'
                 },
+                slate: {
+                    850: '#151e2e',
+                    950: '#020617',
+                },
+                blue: {
+                    450: '#3b82f6',
+                },
                 // shadcn/ui 색상 변수
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
@@ -84,6 +91,7 @@ module.exports = {
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out",
+                'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
         },
     },

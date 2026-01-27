@@ -3,8 +3,10 @@ import Header from './layouts/Header';
 import Footer from './layouts/Footer';
 import Hero from './features/landing/components/Hero';
 import MarketData from './features/landing/components/MarketData';
+import Blog from './features/landing/components/Blog';
 import Features from './features/landing/components/Features';
 import Highlight from './features/landing/components/Highlight';
+import TradeAnywhere from './features/landing/components/TradeAnywhere';
 import SignupFlow from './features/auth/components/SignupFlow';
 import LoginForm from './features/auth/components/LoginForm';
 import VerificationFlow from './features/verification/VerificationFlow';
@@ -12,6 +14,7 @@ import TradeLayout from './features/trade/TradeLayout';
 import WalletPage from './pages/WalletPage';
 import SwapPage from './pages/SwapPage';
 import MyPage from './pages/MyPage';
+import P2PPage from './features/p2p/P2PPage';
 import { useAuth } from './features/auth/AuthContext';
 import { useUI } from './features/shared/UIContext';
 
@@ -19,8 +22,10 @@ const LandingPage = () => (
     <>
         <Hero />
         <MarketData />
+        <Blog />
         <Features />
         <Highlight />
+        <TradeAnywhere />
     </>
 );
 
@@ -47,6 +52,8 @@ function App() {
                 return <WalletPage />;
             case 'swap':
                 return <SwapPage />;
+            case 'p2p':
+                return <P2PPage />;
             case 'mypage':
                 return (
                     <MyPage

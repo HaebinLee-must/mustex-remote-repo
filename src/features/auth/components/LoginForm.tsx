@@ -53,7 +53,7 @@ const LoginForm = ({ onLogin, onViewChange }: LoginFormProps) => {
                         className="cursor-pointer select-none active:scale-95 transition inline-block"
                         onClick={() => onViewChange?.('landing')}
                     >
-                        <img src={logoLight} alt="FINORA" className="h-8 w-auto" />
+                        <img src={logoLight} alt="FINORA" className="h-[22px] w-auto" />
                     </div>
                     <div className="space-y-2">
                         <h1 className="text-4xl font-extrabold tracking-tight text-white uppercase">

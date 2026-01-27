@@ -48,14 +48,14 @@ const MarketListPanel: React.FC<MarketListPanelProps> = ({
         <div className="flex gap-4">
           <button
             onClick={() => setActiveTab('all')}
-            className={`text-[10px] font-black uppercase tracking-widest transition-colors ${activeTab === 'all' ? 'text-primary' : 'text-dark-muted hover:text-text'
+            className={`text-[10px] font-black tracking-widest transition-colors ${activeTab === 'all' ? 'text-primary' : 'text-dark-muted hover:text-text'
               }`}
           >
-            All Markets
+            All markets
           </button>
           <button
             onClick={() => setActiveTab('favorites')}
-            className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest transition-colors ${activeTab === 'favorites' ? 'text-primary' : 'text-dark-muted hover:text-text'
+            className={`flex items-center gap-1.5 text-[10px] font-black tracking-widest transition-colors ${activeTab === 'favorites' ? 'text-primary' : 'text-dark-muted hover:text-text'
               }`}
           >
             <Star size={12} fill={activeTab === 'favorites' ? 'currentColor' : 'none'} />
@@ -65,10 +65,10 @@ const MarketListPanel: React.FC<MarketListPanelProps> = ({
 
         {/* Search Input */}
         <div className="relative group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-dark-muted group-focus-within:text-primary transition-colors" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-dark-muted" />
           <input
             type="text"
-            placeholder="Search Markets"
+            placeholder="Search markets"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-dark-surface border border-dark-border rounded-lg pl-9 pr-4 py-2 text-xs font-bold text-text focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
@@ -77,7 +77,7 @@ const MarketListPanel: React.FC<MarketListPanelProps> = ({
       </div>
 
       {/* List Header */}
-      <div className="grid grid-cols-[32px_1fr_1fr_1fr] px-4 py-3 text-[10px] font-black text-dark-muted border-b border-dark-border uppercase tracking-widest bg-dark-surface/10">
+      <div className="grid grid-cols-[32px_1fr_1fr_1fr] px-4 py-3 text-[10px] font-black text-dark-muted border-b border-dark-border tracking-widest bg-dark-surface/10">
         <div />
         <span>Pair</span>
         <span className="text-right">Price</span>

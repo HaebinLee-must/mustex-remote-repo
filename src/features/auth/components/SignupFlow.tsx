@@ -26,6 +26,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [agreeTerms, setAgreeTerms] = useState(false);
+    const [subscribeNewsletter, setSubscribeNewsletter] = useState(false);
     const [error, setError] = useState('');
     const [countdown, setCountdown] = useState(30);
 
@@ -128,7 +129,9 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                                     placeholder="Enter your email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className={`h-14 sm:h-14 border-white/[0.08] bg-white/[0.05] pr-10 text-white transition-all placeholder:text-gray-500 focus:bg-white/[0.08] focus:ring-2 focus:ring-[#5e5ce6]/50 ${error && !email ? 'border-red-500/50 focus:ring-red-500/50' : ''
+                                    className={`h-14 sm:h-14 border-white/[0.08] bg-white/[0.05] pr-10 text-white transition-all placeholder:text-gray-500 focus:bg-white/[0.08] focus:outline-none focus:ring-1 ${error && !email
+                                        ? 'border-red-500 focus:ring-red-500'
+                                        : 'focus:ring-[#5e5ce6]'
                                         }`}
                                 />
                                 {email && (
@@ -141,6 +144,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                                     </button>
                                 )}
                             </div>
+                            {error && <p className="text-sm font-medium text-red-500 mt-2">{error}</p>}
                         </div>
 
                         <div className="space-y-4">
@@ -160,9 +164,22 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                                     <span className="text-gray-300 underline underline-offset-4 hover:text-white">Privacy Policy</span>
                                 </Label>
                             </div>
-                        </div>
 
-                        {error && <p className="text-sm font-medium text-red-500">{error}</p>}
+                            <div className="flex items-center space-x-3">
+                                <Checkbox
+                                    id="newsletter"
+                                    checked={subscribeNewsletter}
+                                    onCheckedChange={(checked) => setSubscribeNewsletter(checked as boolean)}
+                                    className="border-white/20 bg-white/5 data-[state=checked]:bg-[#5e5ce6] data-[state=checked]:border-[#5e5ce6]"
+                                />
+                                <Label
+                                    htmlFor="newsletter"
+                                    className="text-sm font-medium leading-none text-gray-300 cursor-pointer"
+                                >
+                                    I agree to receive marketing updates and newsletters (Optional)
+                                </Label>
+                            </div>
+                        </div>
 
                         <Button
                             type="submit"
@@ -343,10 +360,10 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
 
     const getTitle = () => {
         switch (step) {
-            case 'email': return 'Create Your Account';
-            case 'verify': return 'Verify Your Email';
-            case 'password': return 'Secure Your Account';
-            case 'complete': return 'Registration Complete';
+            case 'email': return 'Create your account';
+            case 'verify': return 'Verify your email';
+            case 'password': return 'Create a password';
+            case 'complete': return 'Registration complete';
         }
     };
 
@@ -360,7 +377,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                         className="cursor-pointer select-none active:scale-95 transition inline-block"
                         onClick={() => onViewChange?.('landing')}
                     >
-                        <img src={logoLight} alt="FINORA" className="h-8 w-auto" />
+                        <img src={logoLight} alt="FINORA" className="h-[22px] w-auto" />
                     </div>
                     <div className="space-y-2">
                         <h1 className="text-4xl font-extrabold tracking-tight text-white leading-tight">

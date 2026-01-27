@@ -112,7 +112,7 @@ const ChartPanel: React.FC<ChartPanelProps> = ({ data, loading }) => {
   if (loading) {
     return (
       <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-dark-main animate-pulse">
-        <span className="text-dark-muted font-bold uppercase tracking-widest text-xs">Loading Candles...</span>
+        <span className="text-dark-muted font-bold tracking-widest text-xs">Loading candles...</span>
       </div>
     );
   }

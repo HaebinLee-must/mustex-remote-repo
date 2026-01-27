@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logoLight from '../assets/finora_bi_light.png';
-import { Globe, Sun, Moon, ChevronDown, Check, User, Wallet, Shield, LogOut } from 'lucide-react';
+import { Globe, Sun, Moon, ChevronDown, Check, User, Wallet, Shield, LogOut, Menu, X, ArrowRight } from 'lucide-react';
 import { useUI } from '../features/shared/UIContext';
 import { Language } from '../constants/translations';
 
@@ -10,16 +10,32 @@ interface HeaderProps {
     currentView: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ isAuthenticated = false, onViewChange, currentView }) => {
+const Header: React.FC<HeaderProps> = ({ isAuthenticated = false, onViewChange: parentOnViewChange, currentView }) => {
     const { lang, setLang, t } = useUI();
+
+    const onViewChange = (view: any) => {
+        parentOnViewChange(view);
+        window.scrollTo(0, 0);
+    };
     const [isLangOpen, setIsLangOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isDark, setIsDark] = useState(true);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    // Prevent scrolling when mobile menu is open
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+    }, [isMenuOpen]);
 
     const navItems = [
         { label: t('wallet'), view: 'wallet' },
         { label: t('exchange'), view: 'exchange' },
         { label: t('swap'), view: 'swap' },
+        { label: 'P2P', view: 'p2p' },
     ];
 
     const languages: { code: Language; label: string }[] = [
@@ -29,8 +45,8 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated = false, onViewChange, 
     ];
 
     return (
-        <header className="sticky top-0 z-50 bg-[#0B0E11]/80 backdrop-blur-md border-b border-[#2B3139]">
-            <nav className="w-full px-4 h-14 flex items-center justify-between">
+        <header className="sticky top-0 z-50 bg-[#0B0E11] h-14">
+            <nav className="w-full px-6 md:px-10 h-14 flex items-center justify-between border-b border-[#2B3139] relative z-[110] bg-[#0B0E11]">
                 {/* Left: Logo & Menu */}
                 <div className="flex items-center gap-8 flex-shrink-0">
                     <div
@@ -56,9 +72,9 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated = false, onViewChange, 
                 </div>
 
                 {/* Right: Actions */}
-                <div className="flex items-center gap-6">
-                    {/* Common Icons Group */}
-                    <div className="flex items-center gap-4 border-r border-[#2B3139] pr-6">
+                <div className="flex items-center gap-2 md:gap-6">
+                    {/* Common Icons Group - Hidden on Mobile */}
+                    <div className="hidden md:flex items-center gap-4 border-r border-[#2B3139] pr-6">
                         {/* Theme Switcher */}
                         <button
                             onClick={() => setIsDark(!isDark)}
@@ -101,18 +117,18 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated = false, onViewChange, 
                         </div>
                     </div>
 
-                    {/* Auth Buttons */}
+                    {/* Auth Buttons - Hidden on small screens if not authenticated */}
                     {!isAuthenticated ? (
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2 md:gap-4">
                             <button
                                 onClick={() => onViewChange('login')}
-                                className={`text-sm font-semibold transition hover:text-white ${currentView === 'login' ? 'text-white' : 'text-[#848E9C]'}`}
+                                className={`hidden sm:block text-sm font-semibold transition hover:text-white ${currentView === 'login' ? 'text-white' : 'text-[#848E9C]'}`}
                             >
                                 {t('login')}
                             </button>
                             <button
                                 onClick={() => onViewChange('signup')}
-                                className="bg-[#6366F1] text-white px-5 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition shadow-lg shadow-indigo-500/20 active:scale-95"
+                                className="bg-[#6366F1] text-white px-4 md:px-5 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition shadow-lg shadow-indigo-500/20 active:scale-95"
                             >
                                 {t('register')}
                             </button>
@@ -134,9 +150,9 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated = false, onViewChange, 
                                     <span className="text-[10px] font-bold text-[#F6465D] uppercase">{t('unverified')}</span>
                                 </div>
 
-                                {/* Profile Dropdown */}
+                                {/* Profile Dropdown - Desktop Only */}
                                 <div
-                                    className="relative"
+                                    className="relative hidden md:block"
                                     onMouseEnter={() => setIsProfileOpen(true)}
                                     onMouseLeave={() => setIsProfileOpen(false)}
                                 >
@@ -195,8 +211,111 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated = false, onViewChange, 
                             </div>
                         </div>
                     )}
+
+                    {/* Mobile Menu Toggle */}
+                    <button
+                        onClick={() => setIsMenuOpen(true)}
+                        className="flex md:hidden p-2 text-[#848E9C] hover:text-white"
+                    >
+                        <Menu className="w-6 h-6" />
+                    </button>
                 </div>
             </nav>
+
+            {/* Mobile Menu Content (Overlay from Header) */}
+            <div
+                className={`fixed inset-0 z-[100] md:hidden bg-[#0B0E11] transition-all duration-500 ease-[cubic-bezier(0.32,0,0.67,0)] ${isMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10 pointer-events-none'
+                    }`}
+            >
+                {/* Drawer Body (Minimal List) */}
+                <div className="flex-1 overflow-y-auto px-6 pt-20">
+                    <nav className="space-y-0">
+                        {navItems.map((item) => (
+                            <div key={item.view} className="border-b border-white/10">
+                                <button
+                                    onClick={() => { onViewChange(item.view); setIsMenuOpen(false); }}
+                                    className="w-full flex items-center justify-between py-5 group"
+                                >
+                                    <span className={`text-xl font-medium tracking-tight transition-colors duration-300 ${currentView === item.view ? 'text-white' : 'text-[#848E9C] group-hover:text-white'
+                                        }`}>
+                                        {item.label}
+                                    </span>
+                                    <ChevronDown className="w-5 h-5 text-[#404040] -rotate-90 group-hover:text-white transition-colors" />
+                                </button>
+                            </div>
+                        ))}
+
+                        {isAuthenticated && (
+                            <div className="border-b border-white/10">
+                                <button
+                                    onClick={() => { onViewChange('mypage'); setIsMenuOpen(false); }}
+                                    className="w-full flex items-center justify-between py-5 group"
+                                >
+                                    <span className={`text-xl font-medium tracking-tight transition-colors duration-300 ${currentView === 'mypage' ? 'text-white' : 'text-[#848E9C] group-hover:text-white'
+                                        }`}>
+                                        {t('myPage')}
+                                    </span>
+                                    <ChevronDown className="w-5 h-5 text-[#404040] -rotate-90 group-hover:text-white transition-colors" />
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Auth Actions if not authenticated */}
+                        {!isAuthenticated && (
+                            <div className="pt-10 space-y-3">
+                                <button
+                                    onClick={() => { onViewChange('signup'); setIsMenuOpen(false); }}
+                                    className="w-full py-3.5 bg-white text-black rounded-full font-bold text-base active:scale-[0.98] transition-all"
+                                >
+                                    {t('register')}
+                                </button>
+                                <button
+                                    onClick={() => { onViewChange('login'); setIsMenuOpen(false); }}
+                                    className="w-full py-3.5 border border-white/20 text-white rounded-full font-bold text-base active:scale-[0.98] transition-all hover:bg-white/5"
+                                >
+                                    {t('login')}
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Logout if authenticated */}
+                        {isAuthenticated && (
+                            <div className="pt-10">
+                                <button
+                                    onClick={() => { /* Handle Logout */ setIsMenuOpen(false); }}
+                                    className="text-base font-medium text-[#F6465D] active:opacity-60 transition-opacity"
+                                >
+                                    {t('logout')}
+                                </button>
+                            </div>
+                        )}
+                    </nav>
+                </div>
+
+                {/* Drawer Footer (Settings) */}
+                <div className="p-8 pb-16">
+                    <div className="flex items-center justify-between">
+                        <div className="flex gap-8">
+                            {languages.map((l) => (
+                                <button
+                                    key={l.code}
+                                    onClick={() => setLang(l.code)}
+                                    className={`text-base font-bold uppercase tracking-widest transition-colors ${lang === l.code ? 'text-white underline underline-offset-[12px] decoration-2' : 'text-[#848E9C]'
+                                        }`}
+                                >
+                                    {l.code}
+                                </button>
+                            ))}
+                        </div>
+                        <button
+                            onClick={() => setIsDark(!isDark)}
+                            className="p-3 border border-white/10 rounded-full text-[#848E9C] hover:text-white transition-colors"
+                        >
+                            {isDark ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
+                        </button>
+                    </div>
+                </div>
+            </div>
         </header>
     );
 };

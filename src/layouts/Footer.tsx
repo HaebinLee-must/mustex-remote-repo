@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
                     {/* Logo and Description */}
                     <div className="md:col-span-4 flex flex-col gap-6">
                         <div>
-                            <img src={logoLight} alt="FINORA" className="h-8 w-auto" />
+                            <img src={logoLight} alt="FINORA" className="h-[22px] w-auto" />
                         </div>
                         <p className="text-[#848E9C] text-sm leading-relaxed max-w-xs font-medium">
                             The leading cryptocurrency exchange in Philippines, offering secure and reliable trading services since 2026.

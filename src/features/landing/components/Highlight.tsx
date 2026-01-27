@@ -1,49 +1,65 @@
 import React from 'react';
-import { useLanguage } from '../../shared/hooks/useLanguage';
+import { Check } from 'lucide-react';
 
 const Highlight: React.FC = () => {
-    const { lang } = useLanguage();
-
     return (
-        <section className="py-24 bg-dark-surface/30">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-32 items-center text-left">
-                <div className="order-2 md:order-1 relative flex items-center justify-center">
-                    <div className="absolute inset-0 bg-primary/20 blur-[120px] -z-10 transition duration-1000"></div>
-                    <img
-                        src="screens/mustex_trade.png"
-                        alt="Product UI"
-                        className="rounded-[3rem] shadow-2xl border border-dark-border opacity-90 hover:opacity-100 transition-all duration-700 transform hover:scale-[1.02]"
-                    />
-                </div>
-                <div className="flex flex-col gap-10 order-1 md:order-2 text-left font-sans">
-                    <div className="flex flex-col gap-6">
-                        <h2 className="text-5xl font-black tracking-tight leading-tight text-white uppercase">
-                            {lang === 'ko' ? '사용자 친화적이고' : (lang === 'mn' ? 'Хэрэглэхэд хялбар' : 'User-friendly and')} <br />
-                            <span className="text-primary italic">{lang === 'ko' ? '빠른 인터페이스' : (lang === 'mn' ? 'хурдан интерфэйс' : 'fast interface')}</span>
+        <section id="why" className="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-6">
+            <div className="bg-gradient-to-r from-primary/20 to-indigo-900/40 border border-primary/20 rounded-3xl p-8 md:p-16 relative overflow-hidden text-left">
+                {/* Background Patterns */}
+                <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[radial-gradient(hsl(var(--primary))_1px,transparent_1px)] [background-size:16px_16px]"></div>
+
+                <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
+                    <div className="space-y-8">
+                        <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight uppercase">
+                            WHY CHOOSE <span className="text-primary">FINORA</span>?
                         </h2>
-                        <p className="text-dark-muted leading-relaxed text-lg font-medium">
-                            {lang === 'ko'
-                                ? '당사의 거래 터미널은 초당 수천 개의 주문을 처리할 수 있는 고성능 엔진을 기반으로 구축되었습니다. 모든 장치에서 지연 없는 실시간 업데이트를 경험하십시오.'
-                                : (lang === 'mn'
-                                    ? 'Манай арилжааны терминал нь секундэд мянга мянган захиалга боловсруулах чадвартай өндөр гүйцэтгэлтэй систем дээр суурилсан.'
-                                    : 'Our trading terminal is built on a high-performance engine capable of processing thousands of orders per second. Experience zero lag and real-time updates across all your devices.')}
-                        </p>
+                        <div className="space-y-6">
+                            {[
+                                { title: "Stable Trading Environment", desc: "99.99% 가동률을 보장하는 인프라." },
+                                { title: "Lowest Fees in Industry", desc: "메이커 0%, 테이커 0.01%의 업계 최저 수수료." },
+                                { title: "Deep Liquidity", desc: "슬리피지 걱정 없는 풍부한 유동성 제공." },
+                            ].map((item, i) => (
+                                <div key={i} className="flex gap-4 items-start">
+                                    <div className="mt-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-lg shadow-primary/30">
+                                        <Check className="w-3.5 h-3.5 text-white" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-bold text-white mb-1">{item.title}</h3>
+                                        <p className="text-slate-400 text-sm">{item.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="pt-4">
+                            <button className="bg-white text-blue-900 hover:bg-blue-50 hover:text-blue-950 font-bold px-8 py-4 w-full md:w-auto text-base shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all rounded-lg">
+                                Create Free Account
+                            </button>
+                        </div>
                     </div>
 
-                    <div className="h-px bg-dark-border w-24"></div>
-
-                    <div className="flex flex-col gap-6">
-                        <div className="flex items-center gap-4 text-sm text-primary font-black uppercase tracking-[0.2em]">
-                            <div className="w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_rgba(99,102,241,0.5)]"></div>
-                            <span>Deep Liquidity</span>
-                        </div>
-                        <div className="flex items-center gap-4 text-sm text-primary font-black uppercase tracking-[0.2em] opacity-80">
-                            <div className="w-2 h-2 rounded-full bg-primary opacity-50"></div>
-                            <span>Pro Charting Tools</span>
-                        </div>
-                        <div className="flex items-center gap-4 text-sm text-primary font-black uppercase tracking-[0.2em] opacity-60">
-                            <div className="w-2 h-2 rounded-full bg-primary opacity-30"></div>
-                            <span>Zero Lag execution</span>
+                    {/* Abstract Visual Right */}
+                    <div className="relative hidden md:block">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/30 rounded-full blur-[80px]"></div>
+                        <div className="relative grid grid-cols-2 gap-4">
+                            <div className="space-y-4 mt-12">
+                                <div className="bg-slate-900/80 backdrop-blur border border-slate-700/50 p-6 rounded-2xl h-40 w-full animate-pulse-slow">
+                                    <div className="w-10 h-10 bg-primary/20 rounded-lg mb-4"></div>
+                                    <div className="w-full h-2 bg-slate-700 rounded mb-2"></div>
+                                    <div className="w-2/3 h-2 bg-slate-700 rounded"></div>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <div className="bg-slate-800/80 backdrop-blur border border-slate-700/50 p-6 rounded-2xl h-48 w-full shadow-2xl">
+                                    <div className="flex justify-between items-center mb-6">
+                                        <div className="w-8 h-8 rounded-full bg-green-500/20"></div>
+                                        <span className="text-green-400 text-xs">+12.5%</span>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="w-full h-16 bg-gradient-to-t from-green-500/20 to-transparent rounded-lg border-b border-green-500/30"></div>
+                                    </div>
+                                </div>
+                                <div className="bg-slate-900/60 backdrop-blur border border-slate-700/50 p-4 rounded-2xl h-24 w-full"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -21,32 +21,32 @@ const AssetTable: React.FC<AssetTableProps> = ({ onDeposit, onWithdraw }) => {
 
     return (
         <Card className="shadow-2xl mb-8">
-            <div className="p-6 border-b border-dark-border flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center space-x-6">
-                    <h3 className="font-extrabold text-lg">Fiat and Spot</h3>
-                    <div className="flex items-center space-x-2">
+            <div className="p-6 border-b border-dark-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-4 sm:gap-6 whitespace-nowrap overflow-x-auto no-scrollbar w-full sm:w-auto">
+                    <h3 className="font-extrabold text-base sm:text-lg">Fiat and spot</h3>
+                    <div className="flex items-center space-x-2 flex-shrink-0">
                         <input
                             type="checkbox"
                             id="hide-low"
                             checked={hideLowBalance}
                             onChange={(e) => setHideLowBalance(e.target.checked)}
-                            className="accent-[#6366F1] w-4 h-4 rounded cursor-pointer"
+                            className="accent-[#6366F1] w-3.5 h-3.5 sm:w-4 sm:h-4 rounded cursor-pointer"
                         />
                         <label htmlFor="hide-low"
-                            className="text-xs font-bold text-[#848E9C] cursor-pointer hover:text-[#EAECEF] transition">
-                            Hide Low Balance
+                            className="text-[10px] sm:text-xs font-bold text-[#848E9C] cursor-pointer hover:text-[#EAECEF] transition">
+                            Hide assets {'<'}1 USD
                         </label>
                     </div>
                 </div>
                 <div className="relative w-full sm:w-64 group">
                     <input
                         type="text"
-                        placeholder="Search Asset"
+                        placeholder="Search asset"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full bg-dark-main border border-dark-border rounded-xl px-10 py-2.5 text-sm outline-none focus:border-[#6366F1] transition group-hover:border-[#848E9C]"
                     />
-                    <svg className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#848E9C] group-focus-within:text-[#6366F1] transition"
+                    <svg className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#848E9C] transition"
                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>

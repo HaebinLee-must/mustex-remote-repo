@@ -124,27 +124,27 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ symbol, marketStats, onSubmit }
           className={`flex-1 py-2.5 rounded-lg text-sm font-black transition-all ${side === 'buy' ? 'bg-success text-white shadow-lg' : 'text-dark-muted hover:text-white'
             }`}
         >
-          BUY
+          Buy
         </button>
         <button
           onClick={() => setSide('sell')}
           className={`flex-1 py-2.5 rounded-lg text-sm font-black transition-all ${side === 'sell' ? 'bg-danger text-white shadow-lg' : 'text-dark-muted hover:text-white'
             }`}
         >
-          SELL
+          Sell
         </button>
       </div>
 
       {/* Order Type Tabs */}
-      <div className="flex gap-6 mb-6 border-b border-dark-border overflow-x-auto no-scrollbar">
+      <div className="flex gap-6 mb-6 border-b border-dark-border overflow-x-auto no-scrollbar text-xs font-bold">
         {['limit', 'market', 'stop_limit', 'oco'].map((t) => (
           <button
             key={t}
             onClick={() => setType(t as OrderType)}
-            className={`pb-2 text-xs font-bold uppercase tracking-widest transition-all relative ${type === t ? 'text-primary' : 'text-dark-muted hover:text-white'
+            className={`pb-2 transition-all relative ${type === t ? 'text-primary' : 'text-dark-muted hover:text-white'
               }`}
           >
-            {t}
+            {t.charAt(0).toUpperCase() + t.slice(1).replace('_', ' ')}
             {type === t && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full" />}
           </button>
         ))}

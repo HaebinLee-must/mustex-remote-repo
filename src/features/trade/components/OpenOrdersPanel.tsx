@@ -10,13 +10,13 @@ interface OpenOrdersPanelProps {
 
 const OpenOrdersPanel: React.FC<OpenOrdersPanelProps> = ({ orders, loading, onCancel }) => {
   if (loading) {
-    return <div className="p-10 text-center text-dark-muted animate-pulse font-bold uppercase tracking-widest text-xs">Loading Open Orders...</div>;
+    return <div className="p-10 text-center text-dark-muted animate-pulse font-bold tracking-widest text-xs">Loading open orders...</div>;
   }
 
   return (
     <div className="w-full h-full bg-dark-main flex flex-col font-sans">
       {/* Header */}
-      <div className="grid grid-cols-8 px-6 py-3 text-[10px] font-black text-dark-muted border-b border-dark-border uppercase tracking-widest bg-dark-surface/10">
+      <div className="grid grid-cols-8 px-6 py-3 text-[10px] font-black text-dark-muted border-b border-dark-border tracking-widest bg-dark-surface/10">
         <span className="col-span-1">Date</span>
         <span className="col-span-1">Symbol</span>
         <span className="col-span-1">Type</span>
@@ -41,8 +41,8 @@ const OpenOrdersPanel: React.FC<OpenOrdersPanelProps> = ({ orders, loading, onCa
             <div key={order.id} className="grid grid-cols-8 px-6 py-4 text-xs font-bold border-b border-dark-border/50 hover:bg-white/5 transition-colors tabular">
               <span className="col-span-1 text-dark-muted">{order.timestamp}</span>
               <span className="col-span-1 text-text">{order.symbol}</span>
-              <span className="col-span-1 text-dark-muted uppercase">{order.type}</span>
-              <span className={`col-span-1 uppercase ${order.side === 'buy' ? 'text-success' : 'text-danger'}`}>{order.side}</span>
+              <span className="col-span-1 text-dark-muted">{order.type.charAt(0).toUpperCase() + order.type.slice(1)}</span>
+              <span className={`col-span-1 ${order.side === 'buy' ? 'text-success' : 'text-danger'}`}>{order.side.charAt(0).toUpperCase() + order.side.slice(1)}</span>
               <span className="col-span-1 text-right text-text">{order.price?.toLocaleString() || 'Market'}</span>
               <span className="col-span-1 text-right text-text">{order.amount.toFixed(4)}</span>
               <span className="col-span-1 text-right text-text">{((order.filled / order.amount) * 100).toFixed(2)}%</span>

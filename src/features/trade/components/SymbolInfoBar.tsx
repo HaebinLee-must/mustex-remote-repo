@@ -51,7 +51,7 @@ const SymbolInfoBar: React.FC<SymbolInfoBarProps> = ({
                         )}
                     </div>
                     <div className="flex flex-col -gap-1">
-                        <span className="text-sm font-black text-white tracking-tight leading-tight">{symbol}</span>
+                        <span className="text-sm font-black text-white tracking-tight leading-tight uppercase">{symbol}</span>
                         <span className="text-[10px] font-bold text-dark-muted tracking-tight">{coinName}</span>
                     </div>
                 </div>
@@ -69,7 +69,7 @@ const SymbolInfoBar: React.FC<SymbolInfoBarProps> = ({
 
                 {/* 24h Change */}
                 <div className="flex flex-col">
-                    <span className="text-[10px] font-black text-dark-muted uppercase tracking-widest mb-0.5">24h Change</span>
+                    <span className="text-[10px] font-black text-dark-muted tracking-widest mb-0.5">24h change</span>
                     <span className={`text-xs font-black tabular ${isPositive ? 'text-success' : 'text-danger'}`}>
                         {isPositive ? '+' : ''}{change24hPercent.toFixed(2)}%
                     </span>
@@ -78,7 +78,7 @@ const SymbolInfoBar: React.FC<SymbolInfoBarProps> = ({
                 {/* 24h Volume */}
                 {volume24hQuote !== null && (
                     <div className="flex flex-col">
-                        <span className="text-[10px] font-black text-dark-muted uppercase tracking-widest mb-0.5">24h Volume(USDT)</span>
+                        <span className="text-[10px] font-black text-dark-muted tracking-widest mb-0.5">24h volume(USDT)</span>
                         <span className="text-xs font-black text-text tabular leading-none">
                             {volume24hQuote.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                         </span>

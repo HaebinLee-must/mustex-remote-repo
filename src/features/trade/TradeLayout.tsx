@@ -88,12 +88,12 @@ const TradeLayout: React.FC = () => {
                 {/* Right Column: Order Book & Recent Trades */}
                 <div className="lg:col-span-3 flex flex-col gap-2 sm:gap-4 h-auto lg:h-[800px]">
                     <div className="h-[400px] lg:h-[500px]">
-                        <Card title="Order Book" className="h-full no-padding">
+                        <Card title="Order book" className="h-full no-padding">
                             <OrderBookPanel asks={orderBook.asks} bids={orderBook.bids} loading={loading} />
                         </Card>
                     </div>
                     <div className="flex-1 min-h-[300px]">
-                        <Card title="Recent Trades" className="h-full no-padding">
+                        <Card title="Recent trades" className="h-full no-padding">
                             <RecentTradesPanel trades={recentTrades} loading={loading} />
                         </Card>
                     </div>
@@ -101,7 +101,7 @@ const TradeLayout: React.FC = () => {
 
                 {/* Bottom: Open Orders */}
                 <div className="lg:col-span-12 h-[350px]">
-                    <Card title="Open Orders" className="h-full no-padding">
+                    <Card title="Open orders" className="h-full no-padding">
                         <OpenOrdersPanel orders={openOrders} loading={loading} onCancel={(id) => console.log('Cancel', id)} />
                     </Card>
                 </div>
