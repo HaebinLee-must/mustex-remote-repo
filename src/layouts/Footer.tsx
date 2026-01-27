@@ -1,4 +1,5 @@
 import React from 'react';
+import logoLight from '../assets/finora_bi_light.png';
 
 const Footer: React.FC = () => {
     return (
@@ -7,11 +8,11 @@ const Footer: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
                     {/* Logo and Description */}
                     <div className="md:col-span-4 flex flex-col gap-6">
-                        <div className="text-[#4F46E5] font-bold text-2xl tracking-tight">
-                            MUSTEX
+                        <div>
+                            <img src={logoLight} alt="FINORA" className="h-8 w-auto" />
                         </div>
                         <p className="text-[#848E9C] text-sm leading-relaxed max-w-xs font-medium">
-                            The leading cryptocurrency exchange in Mongolia, offering secure and reliable trading services since 2026.
+                            The leading cryptocurrency exchange in Philippines, offering secure and reliable trading services since 2026.
                         </p>
                     </div>
 
@@ -50,7 +51,7 @@ const Footer: React.FC = () => {
 
                 {/* Bottom Section */}
                 <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-[#1E2329] gap-6 text-[#848E9C] text-xs font-medium">
-                    <p>2026 © MUSTEX Mongolia Exchange Crypto Investment Platform</p>
+                    <p>2026 © FINORA Philippines Exchange Crypto Investment Platform</p>
                     <div className="flex gap-8">
                         <button className="hover:text-white transition-colors">Twitter</button>
                         <button className="hover:text-white transition-colors">Telegram</button>

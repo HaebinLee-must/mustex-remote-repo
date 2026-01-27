@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import logoLight from '../../../assets/finora_bi_light.png';
 import { X, Eye, EyeOff, CheckCircle2, Check, ShieldCheck, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
@@ -356,16 +357,16 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
             <Card className="relative z-10 w-full max-w-[520px] overflow-hidden rounded-[32px] border-white/10 bg-white/10 shadow-2xl backdrop-blur-2xl animate-in fade-in slide-in-from-bottom-6 duration-700">
                 <CardHeader className="space-y-6 pb-8 pt-10">
                     <div
-                        className="text-[#6366F1] font-black text-2xl tracking-tighter cursor-pointer select-none active:scale-95 transition inline-block"
+                        className="cursor-pointer select-none active:scale-95 transition inline-block"
                         onClick={() => onViewChange?.('landing')}
                     >
-                        MUSTEX
+                        <img src={logoLight} alt="FINORA" className="h-8 w-auto" />
                     </div>
                     <div className="space-y-2">
                         <h1 className="text-4xl font-extrabold tracking-tight text-white leading-tight">
                             {getTitle()}
                         </h1>
-                        {step === 'email' && <p className="text-sm text-gray-400">Welcome to MUSTEX</p>}
+                        {step === 'email' && <p className="text-sm text-gray-400">Welcome to FINORA</p>}
                     </div>
                 </CardHeader>
                 <CardContent className="pb-10">

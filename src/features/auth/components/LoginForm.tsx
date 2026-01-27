@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import logoLight from '../../../assets/finora_bi_light.png';
 import { X, Globe, Eye, EyeOff } from 'lucide-react';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { useUI } from '@/features/shared/UIContext';
@@ -49,16 +50,16 @@ const LoginForm = ({ onLogin, onViewChange }: LoginFormProps) => {
             <Card className="relative z-10 w-full max-w-[520px] overflow-hidden rounded-[32px] border-white/10 bg-white/10 shadow-2xl backdrop-blur-2xl animate-in fade-in slide-in-from-bottom-6 duration-700">
                 <CardHeader className="space-y-6 pb-8 text-left pt-10 px-8">
                     <div
-                        className="text-[#6366F1] font-black text-2xl tracking-tighter cursor-pointer select-none active:scale-95 transition inline-block"
+                        className="cursor-pointer select-none active:scale-95 transition inline-block"
                         onClick={() => onViewChange?.('landing')}
                     >
-                        MUSTEX
+                        <img src={logoLight} alt="FINORA" className="h-8 w-auto" />
                     </div>
                     <div className="space-y-2">
                         <h1 className="text-4xl font-extrabold tracking-tight text-white uppercase">
                             LOG IN
                         </h1>
-                        <p className="text-sm text-gray-400">WELCOME BACK TO MUSTEX</p>
+                        <p className="text-sm text-gray-400">WELCOME BACK TO FINORA</p>
                     </div>
                 </CardHeader>
                 <CardContent className="px-8 pb-8">

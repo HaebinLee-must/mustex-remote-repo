@@ -1,4 +1,5 @@
 import React from 'react';
+import logoLight from '../../../assets/finora_bi_light.png';
 import { ChevronLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { StepId } from '../types';
@@ -49,10 +50,10 @@ export const VerificationLayout: React.FC<VerificationLayoutProps> = ({
                     {/* Logo Area */}
                     <div className="flex justify-center">
                         <div
-                            className="text-[#5e5ce6] font-black text-2xl tracking-tighter cursor-pointer select-none active:scale-95 transition inline-block uppercase italic"
+                            className="cursor-pointer select-none active:scale-95 transition inline-block"
                             onClick={onExit}
                         >
-                            MUSTEX
+                            <img src={logoLight} alt="FINORA" className="h-8 w-auto" />
                         </div>
                     </div>
 
@@ -93,7 +94,7 @@ export const VerificationLayout: React.FC<VerificationLayoutProps> = ({
             {/* Minimal Footer */}
             <footer className="py-10 border-t border-white/[0.05] text-center bg-[#12122b]/40 mt-auto">
                 <p className="text-[#848E9C] text-xs font-medium">
-                    © 2026 MUSTEX. Enterprise-grade crypto exchange.
+                    © 2026 FINORA. Enterprise-grade crypto exchange.
                     <span className="mx-2 text-white/10">|</span>
                     <a href="#" className="text-[#5e5ce6] hover:text-[#5e5ce6]/80 transition-colors font-bold">Privacy Policy</a>
                 </p>

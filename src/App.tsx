@@ -93,15 +93,22 @@ function App() {
 
     return (
         <div className="min-h-screen bg-[#0B0E11] text-white font-sans selection:bg-indigo-500/30 flex flex-col">
-            {currentView !== 'signup' && currentView !== 'onboarding' && currentView !== 'verification' && (
-                <Header
-                    currentView={currentView}
-                    onViewChange={setCurrentView}
-                    isAuthenticated={isAuthenticated}
-                />
-            )}
+            {currentView !== 'signup' &&
+                currentView !== 'login' &&
+                currentView !== 'onboarding' &&
+                currentView !== 'verification' && (
+                    <Header
+                        currentView={currentView}
+                        onViewChange={setCurrentView}
+                        isAuthenticated={isAuthenticated}
+                    />
+                )}
             <main className="flex-1">{renderContent()}</main>
-            {currentView !== 'exchange' && currentView !== 'signup' && currentView !== 'onboarding' && currentView !== 'verification' && <Footer />}
+            {currentView !== 'exchange' &&
+                currentView !== 'signup' &&
+                currentView !== 'login' &&
+                currentView !== 'onboarding' &&
+                currentView !== 'verification' && <Footer />}
         </div>
     );
 }

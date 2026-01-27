@@ -2,7 +2,7 @@
   "name": "mustex",
   "version": "1.0.0",
   "description": "MUSTEX Exchange",
-  "homepage": "https://haebinlee-must.github.io/mustex-remote-repo/",
+  "homepage": "https://HaebinLee-must.github.io/mustex-remote-repo/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
