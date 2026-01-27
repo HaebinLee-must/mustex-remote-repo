@@ -30,21 +30,21 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated = false, onViewChange, 
 
     return (
         <header className="sticky top-0 z-50 bg-[#0B0E11]/80 backdrop-blur-md border-b border-[#2B3139]">
-            <nav className="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
+            <nav className="w-full px-4 h-14 flex items-center justify-between">
                 {/* Left: Logo & Menu */}
-                <div className="flex items-center gap-12 flex-shrink-0">
+                <div className="flex items-center gap-8 flex-shrink-0">
                     <div
                         className="cursor-pointer select-none active:scale-95 transition"
                         onClick={() => onViewChange('landing')}
                     >
-                        <img src={logoLight} alt="FINORA" className="h-8 w-auto" />
+                        <img src={logoLight} alt="FINORA" className="h-[22px] w-auto" />
                     </div>
-                    <div className="hidden md:flex items-center gap-8 text-sm font-bold text-[#848E9C]">
+                    <div className="hidden md:flex items-center gap-6 text-sm font-bold text-[#848E9C]">
                         {navItems.map((item) => (
                             <button
                                 key={item.view}
                                 onClick={() => onViewChange(item.view)}
-                                className={`transition hover:text-white relative h-16 flex items-center ${currentView === item.view
+                                className={`transition hover:text-white relative h-14 flex items-center ${currentView === item.view
                                     ? 'text-white font-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-1 after:bg-[#6366F1] after:rounded-t-full'
                                     : ''
                                     }`}
