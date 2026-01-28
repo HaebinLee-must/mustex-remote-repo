@@ -110,7 +110,18 @@ function App() {
                         isAuthenticated={isAuthenticated}
                     />
                 )}
-            <main className={`flex-1 ${currentView === 'landing' ? '' : 'pt-14'}`}>{renderContent()}</main>
+            <main
+                className={`flex-1 ${currentView === 'landing' ||
+                    currentView === 'signup' ||
+                    currentView === 'login' ||
+                    currentView === 'onboarding' ||
+                    currentView === 'verification'
+                    ? ''
+                    : 'pt-14'
+                    }`}
+            >
+                {renderContent()}
+            </main>
             {currentView !== 'exchange' &&
                 currentView !== 'signup' &&
                 currentView !== 'login' &&

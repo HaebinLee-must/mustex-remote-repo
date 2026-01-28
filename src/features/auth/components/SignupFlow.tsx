@@ -375,14 +375,24 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
         <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#12122b] p-4 font-sans text-left">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,#5e5ce6,transparent_50%)] opacity-10" />
 
+            {/* Navigation Bar */}
+            <div className="absolute top-0 left-0 right-0 h-20 px-6 md:px-10 flex items-center justify-between z-50">
+                <div
+                    className="cursor-pointer select-none active:scale-95 transition"
+                    onClick={() => onViewChange?.('landing')}
+                >
+                    <img src={logoLight} alt="FINORA" className="h-[22px] w-auto" />
+                </div>
+                <button
+                    onClick={() => onViewChange?.('landing')}
+                    className="p-2 text-[#848E9C] hover:text-white transition-colors"
+                >
+                    <X className="w-6 h-6" />
+                </button>
+            </div>
+
             <Card className="relative z-10 w-full max-w-[520px] overflow-hidden rounded-[32px] border-white/10 bg-white/10 shadow-2xl backdrop-blur-2xl animate-in fade-in slide-in-from-bottom-6 duration-700">
                 <CardHeader className="space-y-6 pb-8 pt-10">
-                    <div
-                        className="cursor-pointer select-none active:scale-95 transition inline-block"
-                        onClick={() => onViewChange?.('landing')}
-                    >
-                        <img src={logoLight} alt="FINORA" className="h-[22px] w-auto" />
-                    </div>
                     <div className="space-y-2">
                         <h1 className="text-4xl font-extrabold tracking-tight text-white leading-tight">
                             {getTitle()}
