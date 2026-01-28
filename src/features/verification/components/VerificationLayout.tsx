@@ -48,12 +48,12 @@ export const VerificationLayout: React.FC<VerificationLayoutProps> = ({
             <main className="flex flex-col items-center justify-start pt-10 sm:pt-16 pb-24 px-4 min-h-screen">
                 <div className="w-full max-w-[480px] animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-10">
                     {/* Logo Area */}
-                    <div className="flex justify-center">
+                    <div className="flex justify-start">
                         <div
                             className="cursor-pointer select-none active:scale-95 transition inline-block"
                             onClick={onExit}
                         >
-                            <img src={logoLight} alt="FINORA" className="h-8 w-auto" />
+                            <img src={logoLight} alt="FINORA" className="h-[22px] w-auto" />
                         </div>
                     </div>
 

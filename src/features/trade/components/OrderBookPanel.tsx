@@ -18,7 +18,7 @@ const OrderBookPanel: React.FC<OrderBookPanelProps> = ({ asks, bids, loading }) 
   );
 
   return (
-    <div className="flex flex-col h-full bg-dark-main text-[11px] font-medium tabular">
+    <div className="flex flex-col h-full bg-[#0B0E11] text-[11px] font-medium tabular">
       {/* Header */}
       <div className="grid grid-cols-3 px-4 py-2 text-dark-muted border-b border-dark-border font-bold tracking-wider">
         <span>Price</span>

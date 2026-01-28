@@ -67,7 +67,10 @@ export const PaymentTagGroup: React.FC<{ payments: string[] }> = ({ payments }) 
 
 export const CTAButton: React.FC<{ ad: P2PAd }> = ({ ad }) => (
     <Button
-        className={`w-full ${ad.type === 'buy' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'} text-white font-bold h-9`}
+        className={`w-full ${ad.type === 'buy'
+                ? 'bg-[#00C087] hover:bg-[#00A876] shadow-lg shadow-emerald-500/10'
+                : 'bg-[#F6465D] hover:bg-[#E03F52] shadow-lg shadow-red-500/10'
+            } text-white font-bold h-9 text-xs border-none`}
         disabled={ad.requiresVerification}
     >
         {ad.requiresVerification ? 'Verify Identity' : `${ad.type === 'buy' ? 'Buy' : 'Sell'} ${ad.asset}`}

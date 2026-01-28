@@ -1,9 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useUI } from '@/features/shared/UIContext';
 import { Zap } from 'lucide-react';
+import { AuroraBackground } from './AuroraBackground';
+import { mockMarketData } from '@/features/trade/services/mockMarketData';
+import { MarketStats } from '@/features/trade/types/market';
 
 const Hero: React.FC = () => {
     const { t } = useUI();
+    const [btcStats, setBtcStats] = useState<MarketStats | null>(null);
+    const [ethStats, setEthStats] = useState<MarketStats | null>(null);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const [btc, eth] = await Promise.all([
+                    mockMarketData.fetchMarketStats('BTC/USDT'),
+                    mockMarketData.fetchMarketStats('ETH/USDT')
+                ]);
+                setBtcStats(btc);
+                setEthStats(eth);
+            } catch (err) {
+                console.error('Failed to fetch hero stats', err);
+            }
+        };
+        fetchStats();
+        const interval = setInterval(fetchStats, 10000); // Update every 10s
+        return () => clearInterval(interval);
+    }, []);
 
     // Dynamic title rendering for multi-language
     const renderTitle = () => {
@@ -11,7 +34,7 @@ const Hero: React.FC = () => {
         const words = title.split(' ');
         if (words.length <= 2) {
             return (
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1]">
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] font-display">
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
                         {title}
                     </span>
@@ -19,7 +42,7 @@ const Hero: React.FC = () => {
             );
         }
         return (
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1]">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] font-display">
                 {words.slice(0, 2).join(' ')} <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
                     {words.slice(2).join(' ')}
@@ -29,11 +52,15 @@ const Hero: React.FC = () => {
     };
 
     return (
-        <section id="hero" className="w-full pt-32 pb-20 md:pt-48 md:pb-32 px-4 md:px-6 relative overflow-hidden">
-            {/* Ambient Background */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/10 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+        <section id="hero" className="w-full pt-32 pb-20 md:pt-48 md:pb-32 relative overflow-hidden bg-slate-950">
+            {/* Aurora Background */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <AuroraBackground />
+                {/* Gradient Overlay for better text readability */}
+                <div className="absolute inset-0 bg-slate-950/40"></div>
+            </div>
 
-            <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div className="max-w-7xl mx-auto px-4 md:px-8 grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
                 {/* Left: Content */}
                 <div className="space-y-8 relative z-10 text-center md:text-left">
                     {renderTitle()}
@@ -51,19 +78,25 @@ const Hero: React.FC = () => {
                         </button>
                     </div>
 
-                    {/* Live Ticker Mock */}
+                    {/* Live Ticker */}
                     <div className="pt-8 flex gap-8 text-sm justify-center md:justify-start border-t border-slate-900/50 mt-8">
                         <div className="flex flex-col text-left">
                             <span className="text-slate-500 text-xs font-semibold mb-1">BTC/USDT</span>
                             <span className="text-white font-bold flex gap-2 items-baseline text-lg">
-                                42,500.50 <span className="text-green-400 text-xs bg-green-400/10 px-1.5 py-0.5 rounded">+2.45%</span>
+                                {btcStats?.lastPrice.toLocaleString() || '42,500.50'}
+                                <span className={`${(btcStats?.change24h || 0) >= 0 ? 'text-green-400 bg-green-400/10' : 'text-red-400 bg-red-400/10'} text-xs px-1.5 py-0.5 rounded`}>
+                                    {(btcStats?.change24h || 0) >= 0 ? '+' : ''}{btcStats?.change24h || '2.45'}%
+                                </span>
                             </span>
                         </div>
                         <div className="w-[1px] bg-slate-800"></div>
                         <div className="flex flex-col text-left">
                             <span className="text-slate-500 text-xs font-semibold mb-1">ETH/USDT</span>
                             <span className="text-white font-bold flex gap-2 items-baseline text-lg">
-                                2,250.10 <span className="text-red-400 text-xs bg-red-400/10 px-1.5 py-0.5 rounded">-1.20%</span>
+                                {ethStats?.lastPrice.toLocaleString() || '2,250.10'}
+                                <span className={`${(ethStats?.change24h || 0) >= 0 ? 'text-green-400 bg-green-400/10' : 'text-red-400 bg-red-400/10'} text-xs px-1.5 py-0.5 rounded`}>
+                                    {(ethStats?.change24h || 0) >= 0 ? '+' : ''}{ethStats?.change24h || '-1.20'}%
+                                </span>
                             </span>
                         </div>
                     </div>

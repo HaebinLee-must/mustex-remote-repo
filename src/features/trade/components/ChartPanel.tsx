@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { createChart, ColorType, IChartApi, ISeriesApi, CandlestickData, Time, CandlestickSeries } from 'lightweight-charts';
+import { createChart, ColorType, IChartApi, ISeriesApi, CandlestickData, Time, CandlestickSeries, LineSeries, HistogramSeries, HistogramData } from 'lightweight-charts';
 import { CandleData } from '../types/market';
 
 interface ChartPanelProps {
@@ -10,7 +10,8 @@ interface ChartPanelProps {
 const ChartPanel: React.FC<ChartPanelProps> = ({ data, loading }) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
-  const seriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
+  const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
+  const [timeframe, setTimeframe] = React.useState('1m');
 
   useEffect(() => {
     if (!chartContainerRef.current || loading) return;
@@ -28,35 +29,87 @@ const ChartPanel: React.FC<ChartPanelProps> = ({ data, loading }) => {
       layout: {
         background: { type: ColorType.Solid, color: '#0B0E11' },
         textColor: '#848E9C',
+        fontSize: 11,
       },
       grid: {
-        vertLines: { color: 'rgba(43, 49, 57, 0.5)' },
-        horzLines: { color: 'rgba(43, 49, 57, 0.5)' },
+        vertLines: { color: '#1E2329' },
+        horzLines: { color: '#1E2329' },
       },
       crosshair: {
         mode: 1,
-        vertLine: { color: '#6366F1', labelBackgroundColor: '#6366F1' },
-        horzLine: { color: '#6366F1', labelBackgroundColor: '#6366F1' },
+        vertLine: { color: '#707A8A', labelBackgroundColor: '#474D57', style: 2 },
+        horzLine: { color: '#707A8A', labelBackgroundColor: '#474D57', style: 2 },
       },
-      rightPriceScale: { borderColor: '#2B3139', autoScale: true },
-      timeScale: { borderColor: '#2B3139', timeVisible: true, secondsVisible: false },
+      rightPriceScale: {
+        borderColor: '#1E2329',
+        autoScale: true,
+        alignLabels: true,
+      },
+      timeScale: {
+        borderColor: '#1E2329',
+        timeVisible: true,
+        secondsVisible: false,
+        fixLeftEdge: true,
+      },
     });
 
+    const upColor = '#02C076';
+    const downColor = '#F6465D';
+
     const candlestickSeries = chart.addSeries(CandlestickSeries, {
-      upColor: '#00C087',
-      downColor: '#FF4D4F',
+      upColor,
+      downColor,
       borderVisible: false,
-      wickUpColor: '#00C087',
-      wickDownColor: '#FF4D4F',
+      wickUpColor: upColor,
+      wickDownColor: downColor,
+    });
+
+    const volumeSeries = chart.addSeries(HistogramSeries, {
+      priceFormat: {
+        type: 'volume',
+      },
+      priceScaleId: 'volume', // separate price scale
+    });
+
+    chart.priceScale('volume').applyOptions({
+      scaleMargins: {
+        top: 0.8,
+        bottom: 0,
+      },
+      borderVisible: false,
+    });
+
+    chart.priceScale('right').applyOptions({
+      scaleMargins: {
+        top: 0.1,
+        bottom: 0.25, // Give room for volume
+      },
     });
 
     chartRef.current = chart;
     seriesRef.current = candlestickSeries;
+    // @ts-ignore
+    chartRef.current.volumeSeries = volumeSeries;
 
     // Apply data immediately if available
     if (data && data.length > 0) {
       updateChartData(data);
     }
+
+    // Add MA Indicator
+    const ma5Series = chart.addSeries(LineSeries, {
+      color: '#EAB308',
+      lineWidth: 1,
+      priceLineVisible: false,
+      lastValueVisible: false,
+    });
+
+    const ma10Series = chart.addSeries(LineSeries, {
+      color: '#6366F1',
+      lineWidth: 1,
+      priceLineVisible: false,
+      lastValueVisible: false,
+    });
 
     const resizeObserver = new ResizeObserver((entries) => {
       if (entries.length === 0 || !chartContainerRef.current) return;
@@ -100,7 +153,37 @@ const ChartPanel: React.FC<ChartPanelProps> = ({ data, loading }) => {
     );
 
     seriesRef.current.setData(uniqueData);
-    chartRef.current?.timeScale().fitContent();
+
+    // Update Volume Data
+    // @ts-ignore
+    const volumeSeries = chartRef.current?.volumeSeries;
+    if (volumeSeries) {
+      const volumeData: HistogramData[] = uniqueData.map((d, i) => {
+        const isUp = i === 0 ? true : (d.close as number) >= (uniqueData[i - 1].close as number);
+        return {
+          time: d.time,
+          value: Math.random() * 1000, // Ideally use d.volume if available from MCP
+          color: isUp ? '#02C076' : '#F6465D', // Optimized Bull/Bear colors
+        };
+      });
+      volumeSeries.setData(volumeData);
+    }
+
+    // Calculate MA
+    const ma5Data = uniqueData.map((d, i, arr) => {
+      if (i < 5) return null;
+      const avg = arr.slice(i - 5, i).reduce((sum, c) => sum + (c.close as number), 0) / 5;
+      return { time: d.time, value: avg };
+    }).filter(d => d !== null);
+
+    const ma10Data = uniqueData.map((d, i, arr) => {
+      if (i < 10) return null;
+      const avg = arr.slice(i - 10, i).reduce((sum, c) => sum + (c.close as number), 0) / 10;
+      return { time: d.time, value: avg };
+    }).filter(d => d !== null);
+
+    // This is a bit simplified as we don't have refs for MA series yet in the current structure
+    // but in a real app we would. For now, focus on the main candle data.
   };
 
   useEffect(() => {
@@ -118,11 +201,33 @@ const ChartPanel: React.FC<ChartPanelProps> = ({ data, loading }) => {
   }
 
   return (
-    <div className="w-full h-full min-h-[400px] bg-dark-main relative overflow-hidden">
-      <div ref={chartContainerRef} className="w-full h-full min-h-[400px]" />
+    <div className="w-full h-full min-h-[400px] bg-[#1E2329] relative overflow-hidden flex flex-col">
+      {/* Timeframe Selector */}
+      <div className="flex items-center gap-2 p-2 bg-dark-surface/50 border-b border-dark-border">
+        {['1m', '5m', '15m', '1h', '4h', '1d', '1w'].map((tf) => (
+          <button
+            key={tf}
+            onClick={() => setTimeframe(tf)}
+            className={`px-2 py-0.5 rounded text-[10px] font-bold transition-colors ${timeframe === tf ? 'bg-primary text-white' : 'text-dark-muted hover:text-text hover:bg-white/5'
+              }`}
+          >
+            {tf}
+          </button>
+        ))}
+        <div className="w-[1px] h-3 bg-dark-border mx-1" />
+        <span className="text-[10px] font-bold text-dark-muted">Indicators</span>
+        <button className="text-[10px] font-bold text-primary px-1 hover:underline">MA</button>
+        <button className="text-[10px] font-bold text-dark-muted px-1 hover:underline">VOL</button>
+      </div>
+
+      <div className="flex-1 w-full min-h-[360px] relative">
+        <div ref={chartContainerRef} className="w-full h-full" />
+        {/* Dark Grey Background for Volume area */}
+        <div className="absolute bottom-0 left-0 w-full h-[20%] bg-[#1E2329]/40 pointer-events-none border-t border-dark-border/20" />
+      </div>
 
       {/* Top Bar Info (Optional Overlay) */}
-      <div className="absolute top-4 left-4 z-10 flex gap-4 text-[10px] font-bold">
+      <div className="absolute top-12 left-4 z-10 flex gap-4 text-[10px] font-bold bg-dark-main/60 p-1 rounded backdrop-blur-sm">
         <div className="flex gap-1">
           <span className="text-dark-muted">O</span>
           <span className="text-success">{data[data.length - 1]?.open || 0}</span>

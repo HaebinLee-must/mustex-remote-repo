@@ -147,13 +147,20 @@ export const mockMarketData: MarketApi = {
     },
 
     fetchMarketStats: async (symbol) => {
+        const coin = symbol.split('/')[0].toLowerCase();
+        // Simulate minor price fluctuation for visual feedback
+        const basePrice = symbol === 'BTC/USDT' ? 42500.50 : 2550.20;
+        const randomFactor = 1 + (Math.random() - 0.5) * 0.001; // 0.1% fluctuation
+        const currentPrice = parseFloat((basePrice * randomFactor).toFixed(2));
+
         return {
             symbol,
-            lastPrice: symbol === 'BTC/USDT' ? 42500.50 : 2550.20,
-            change24h: 2.45,
+            lastPrice: currentPrice,
+            change24h: 2.45 + (Math.random() - 0.5) * 0.1,
             high24h: symbol === 'BTC/USDT' ? 43100 : 2600,
             low24h: symbol === 'BTC/USDT' ? 41800 : 2480,
-            volume24h: symbol === 'BTC/USDT' ? 1250.45 : 8500.12
+            volume24h: symbol === 'BTC/USDT' ? 1250.45 : 8500.12,
+            icon: `https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/${coin}.png`
         };
     }
 };

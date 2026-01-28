@@ -43,9 +43,9 @@ const SymbolInfoBar: React.FC<SymbolInfoBarProps> = ({
                 </button>
 
                 <div className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-full bg-dark-surface border border-dark-border flex items-center justify-center overflow-hidden">
+                    <div className="w-7 h-7 rounded-full bg-dark-surface border border-dark-border flex items-center justify-center overflow-hidden transition-transform hover:scale-110">
                         {iconUrl ? (
-                            <img src={iconUrl} alt={coinName} className="w-full h-full object-cover" />
+                            <img src={iconUrl} alt={coinName} className="w-full h-full object-cover animate-in fade-in zoom-in duration-500" />
                         ) : (
                             <span className="text-[10px] font-black text-primary">{baseAsset[0]}</span>
                         )}
@@ -61,7 +61,7 @@ const SymbolInfoBar: React.FC<SymbolInfoBarProps> = ({
             <div className="flex items-center gap-10">
                 {/* Current Price */}
                 <div className="flex flex-col">
-                    <span className={`text-sm font-black tabular ${isPositive ? 'text-success' : 'text-danger'}`}>
+                    <span className={`text-sm font-black tabular transition-all duration-300 ${isPositive ? 'text-success drop-shadow-[0_0_8px_rgba(0,192,135,0.3)]' : 'text-danger drop-shadow-[0_0_8px_rgba(255,77,79,0.3)]'}`}>
                         {price.toLocaleString(undefined, { minimumFractionDigits: pricePrecision, maximumFractionDigits: pricePrecision })}
                     </span>
                     <span className="text-[10px] font-bold text-dark-muted leading-tight">${price.toLocaleString()}</span>

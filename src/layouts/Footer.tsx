@@ -4,7 +4,7 @@ import logoLight from '../assets/finora_bi_light.png';
 const Footer: React.FC = () => {
     return (
         <footer className="bg-[#0B0E11] pt-20 pb-10 border-t border-[#1E2329] mt-auto font-sans">
-            <div className="max-w-[1200px] mx-auto px-6">
+            <div className="max-w-7xl mx-auto px-4 md:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
                     {/* Logo and Description */}
                     <div className="md:col-span-4 flex flex-col gap-6">

@@ -35,6 +35,43 @@ export const useMarketData = (symbol: string) => {
         };
 
         loadInitialData();
+
+        // Real-time Simulation with Randomized Jitter for natural feel
+        let timeoutId: NodeJS.Timeout;
+
+        const updateData = async () => {
+            try {
+                const [book, trades, stats] = await Promise.all([
+                    mockMarketData.fetchOrderBook(symbol),
+                    mockMarketData.fetchRecentTrades(symbol),
+                    mockMarketData.fetchMarketStats(symbol)
+                ]);
+                setOrderBook(book);
+                setRecentTrades(trades);
+                setMarketStats(stats);
+
+                setCandleData(prev => {
+                    if (prev.length === 0) return prev;
+                    const lastCandle = { ...prev[prev.length - 1] };
+                    const newPrice = stats.lastPrice;
+                    lastCandle.close = newPrice;
+                    lastCandle.high = Math.max(lastCandle.high, newPrice);
+                    lastCandle.low = Math.min(lastCandle.low, newPrice);
+                    return [...prev.slice(0, -1), lastCandle];
+                });
+
+                // Random interval between 500ms and 2500ms
+                const nextTick = Math.random() * 2000 + 500;
+                timeoutId = setTimeout(updateData, nextTick);
+            } catch (error) {
+                console.error('Failed to update market data', error);
+                timeoutId = setTimeout(updateData, 3000);
+            }
+        };
+
+        timeoutId = setTimeout(updateData, 1000);
+
+        return () => clearTimeout(timeoutId);
     }, [symbol]);
 
     const submitOrder = useCallback(async (order: {

@@ -14,7 +14,7 @@ const OpenOrdersPanel: React.FC<OpenOrdersPanelProps> = ({ orders, loading, onCa
   }
 
   return (
-    <div className="w-full h-full bg-dark-main flex flex-col font-sans">
+    <div className="w-full h-full bg-[#0B0E11] flex flex-col font-sans">
       {/* Header */}
       <div className="grid grid-cols-8 px-6 py-3 text-[10px] font-black text-dark-muted border-b border-dark-border tracking-widest bg-dark-surface/10">
         <span className="col-span-1">Date</span>

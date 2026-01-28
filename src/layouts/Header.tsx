@@ -21,6 +21,15 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated = false, onViewChange: 
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isDark, setIsDark] = useState(true);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     // Prevent scrolling when mobile menu is open
     useEffect(() => {
@@ -44,9 +53,14 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated = false, onViewChange: 
         { code: 'mn', label: 'Монгол' },
     ];
 
+    const isLanding = currentView === 'landing';
+    const headerBgClass = isLanding
+        ? (scrolled ? 'bg-[#0B0E11]/80 backdrop-blur-md border-[#2B3139]' : 'bg-transparent border-transparent')
+        : 'bg-[#0B0E11] border-[#2B3139]';
+
     return (
-        <header className="sticky top-0 z-50 bg-[#0B0E11] h-14">
-            <nav className="w-full px-6 md:px-10 h-14 flex items-center justify-between border-b border-[#2B3139] relative z-[110] bg-[#0B0E11]">
+        <header className={`fixed top-0 left-0 right-0 z-50 h-14 transition-all duration-300 ${headerBgClass}`}>
+            <nav className="w-full px-6 md:px-10 h-14 flex items-center justify-between border-b border-inherit relative z-[110]">
                 {/* Left: Logo & Menu */}
                 <div className="flex items-center gap-8 flex-shrink-0">
                     <div

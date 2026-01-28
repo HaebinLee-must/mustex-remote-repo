@@ -56,4 +56,5 @@ export interface MarketStats {
     high24h: number;
     low24h: number;
     volume24h: number;
+    icon?: string;
 }

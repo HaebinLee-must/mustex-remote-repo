@@ -70,8 +70,8 @@ module.exports = {
                 },
             },
             fontFamily: {
-                sans: ['Roboto', 'Inter', 'sans-serif'],
-                display: ['Poppins', 'sans-serif'],
+                sans: ['Inter', 'Roboto', 'system-ui', 'sans-serif'],
+                display: ['Poppins', 'Inter', 'sans-serif'],
             },
             borderRadius: {
                 lg: "var(--radius)",

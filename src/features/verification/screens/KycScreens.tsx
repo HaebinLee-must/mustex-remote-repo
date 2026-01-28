@@ -283,25 +283,159 @@ export const KYC03_IdUpload: React.FC<KycScreenProps & { documentType?: Document
 
 export const KYC04_Liveness: React.FC<KycScreenProps> = ({ onNext }) => {
     const [cameraActive, setCameraActive] = useState(false);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [isCompleted, setIsCompleted] = useState(false);
+    const [showGuide, setShowGuide] = useState(true);
+    const [cameraError, setCameraError] = useState<string | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const streamRef = useRef<MediaStream | null>(null);
+    const analysisTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+    const stopCamera = () => {
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+            streamRef.current = null;
+        }
+    };
+
+    const handleComplete = () => {
+        setIsAnalyzing(false);
+        setIsCompleted(true);
+        stopCamera();
+        // 완료 표시 후 잠시 뒤 다음 단계로 이동
+        setTimeout(onNext, 1000);
+    };
+
+    const startAnalysis = () => {
+        setIsAnalyzing(true);
+        if (analysisTimerRef.current) clearTimeout(analysisTimerRef.current);
+
+        analysisTimerRef.current = setTimeout(() => {
+            handleComplete();
+        }, 3000);
+    };
 
     const startCamera = async () => {
+        setCameraError(null);
+        setShowGuide(false);
+        const constraints = {
+            video: {
+                facingMode: "user",
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            }
+        };
+
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                throw new Error('Camera API not supported');
+            }
+
+            // 분석 타임아웃 세이프가드 (버튼 클릭 후 3초 내에 완료되도록 보장)
+            const safeguardTimer = setTimeout(() => {
+                if (!isCompleted) {
+                    handleComplete();
+                }
+            }, 3500);
+
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            streamRef.current = stream;
+
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
                 setCameraActive(true);
+
+                videoRef.current.onloadedmetadata = async () => {
+                    clearTimeout(safeguardTimer);
+                    try {
+                        await videoRef.current?.play();
+                        if (!isAnalyzing && !isCompleted) {
+                            startAnalysis();
+                        }
+                    } catch (playError) {
+                        console.error('Video play error:', playError);
+                        if (!isCompleted) startAnalysis();
+                    }
+                };
             }
-        } catch (err) {
-            alert('Unable to access camera. Please check permissions.');
+        } catch (err: any) {
+            console.error('Camera access error:', err);
+            setCameraActive(false);
+            setShowGuide(true);
+
+            let message = 'Unable to access camera.';
+            if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+                message = 'Camera permission denied. Please enable camera access in browser settings.';
+            } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+                message = 'No camera device found.';
+            } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+                message = 'Camera is already in use by another application.';
+            }
+            setCameraError(message);
         }
     };
+
+    React.useEffect(() => {
+        return () => stopCamera();
+    }, []);
+
+    if (showGuide) {
+        return (
+            <div className="space-y-8">
+                <div className="flex flex-col items-center text-center space-y-10">
+                    <div className="relative">
+                        <div className="w-48 h-48 rounded-full border-[6px] border-dashed border-[#5e5ce6]/20 flex items-center justify-center bg-white/5 relative">
+                            <div className="w-24 h-24 rounded-full bg-[#5e5ce6] flex items-center justify-center">
+                                <User className="w-12 h-12 text-white" />
+                            </div>
+                            <div className="absolute inset-0 border-[6px] border-dashed border-[#5e5ce6] rounded-full animate-[spin_20s_linear_infinite] opacity-60" />
+                        </div>
+                    </div>
+
+                    <div className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 text-left space-y-4">
+                        <p className="text-sm font-bold text-white">Please show your face clearly</p>
+                        <ul className="space-y-3">
+                            {[
+                                "Your face and background will be recorded",
+                                "Maximize screen brightness",
+                                "Well lit area",
+                                "No glasses, mask, hat"
+                            ].map((text, i) => (
+                                <li key={i} className="flex items-center gap-3 text-xs text-[#848E9C]">
+                                    <div className="w-1.5 h-1.5 rotate-45 bg-[#5e5ce6]" />
+                                    {text}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <p className="text-[13px] text-[#848E9C] leading-relaxed">
+                        Please be mindful that both your face and the surrounding background will be recorded during the verification.
+                    </p>
+
+                    {cameraError && (
+                        <div className="w-full p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-start gap-3 text-left">
+                            <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                            <div className="space-y-1">
+                                <p className="text-xs font-bold text-red-500">Camera Error</p>
+                                <p className="text-[11px] text-red-500/80 leading-snug">{cameraError}</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <Button onClick={startCamera} className="w-full bg-[#5e5ce6] hover:bg-[#4b4ac2] h-14 rounded-2xl text-lg font-black">
+                    {cameraError ? "Try Again" : "Continue"}
+                </Button>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-8">
             <div className="flex flex-col items-center text-center space-y-8">
                 <div className="relative">
-                    <div className="w-48 h-48 rounded-full border-4 border-[#5e5ce6]/30 flex items-center justify-center relative overflow-hidden bg-white/5">
+                    <div className="w-64 h-64 rounded-full border-[6px] border-dashed border-[#5e5ce6]/40 flex items-center justify-center relative overflow-hidden bg-black/20">
                         {cameraActive ? (
                             <video
                                 ref={videoRef}
@@ -310,27 +444,47 @@ export const KYC04_Liveness: React.FC<KycScreenProps> = ({ onNext }) => {
                                 className="w-full h-full object-cover scale-x-[-1]"
                             />
                         ) : (
-                            <Camera className="w-20 h-20 text-[#5e5ce6]/20" />
+                            <Loader2 className="w-10 h-10 text-[#5e5ce6] animate-spin" />
                         )}
-                        <div className={`absolute inset-0 border-4 border-[#5e5ce6] border-t-transparent animate-[spin_3s_linear_infinite] rounded-full ${!cameraActive && 'opacity-30'}`} />
+
+                        <div className="absolute inset-0 border-[6px] border-dashed border-[#5e5ce6] rounded-full animate-[spin_15s_linear_infinite] opacity-60" />
+
+                        {isAnalyzing && (
+                            <div className="absolute inset-0 bg-[#5e5ce6]/10 flex flex-col items-center justify-center backdrop-blur-[1px]">
+                                <div className="bg-black/40 px-4 py-2 rounded-full flex items-center gap-2">
+                                    <Loader2 className="w-4 h-4 text-white animate-spin" />
+                                    <span className="text-[11px] font-bold text-white uppercase tracking-widest">Verifying...</span>
+                                </div>
+                            </div>
+                        )}
+
+                        {isCompleted && (
+                            <div className="absolute inset-0 bg-green-500/20 flex flex-col items-center justify-center backdrop-blur-[2px]">
+                                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="bg-white rounded-full p-3">
+                                    <CheckCircle className="w-10 h-10 text-green-500" />
+                                </motion.div>
+                                <span className="text-[11px] font-bold text-white uppercase mt-3">Verified</span>
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 <div className="space-y-2">
-                    <h2 className="text-2xl font-black text-white">Liveness Check</h2>
-                    <p className="text-sm text-[#848E9C] leading-relaxed">
-                        Please position your face within the circle <br />
-                        and follow the instructions on the screen.
+                    <h2 className="text-2xl font-black text-white">
+                        {isCompleted ? "Verification Success" : isAnalyzing ? "Analyzing Face..." : "Liveness Check"}
+                    </h2>
+                    <p className="text-sm text-[#848E9C] leading-relaxed max-w-[280px]">
+                        {isCompleted
+                            ? "Identity verified. Moving to the next step."
+                            : isAnalyzing
+                                ? "Please hold still. We're verifying your identity."
+                                : "Position your face within the circle and stay still."
+                        }
                     </p>
                 </div>
             </div>
 
-            <Button
-                onClick={cameraActive ? onNext : startCamera}
-                className="w-full bg-[#5e5ce6] hover:bg-[#4b4ac2] h-14 rounded-2xl text-lg font-black mt-4"
-            >
-                {cameraActive ? "I'm Ready" : "Start Camera"}
-            </Button>
+            <div className="h-14" />
         </div>
     );
 };

@@ -40,10 +40,44 @@
     }
 
     body {
-        @apply bg-background text-foreground;
+        @apply bg-background text-foreground font-sans;
         background-color: #0B0E11;
         color: #EAECEF;
-        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-display tracking-tight;
+    }
+
+    h1 {
+        @apply text-3xl font-semibold md:text-4xl;
+    }
+
+    h2 {
+        @apply text-2xl font-semibold mb-4;
+    }
+
+    h3 {
+        @apply text-xl font-medium mb-3;
+    }
+}
+
+@layer utilities {
+    .text-data {
+        @apply font-sans tabular-nums;
+    }
+
+    .binance-article-h2 {
+        @apply text-2xl font-semibold mt-8 mb-4 border-l-4 border-primary pl-4;
+    }
+
+    .binance-article-h3 {
+        @apply text-lg font-medium mt-6 mb-2 text-primary;
     }
 }
 

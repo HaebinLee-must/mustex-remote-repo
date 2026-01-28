@@ -1,23 +1,26 @@
 import React from 'react';
 import { Check } from 'lucide-react';
+import { useLanguage } from '../../shared/hooks/useLanguage';
 
 const Highlight: React.FC = () => {
+    const { t } = useLanguage();
+
     return (
-        <section id="why" className="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-6">
+        <section id="why" className="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
             <div className="bg-gradient-to-r from-primary/20 to-indigo-900/40 border border-primary/20 rounded-3xl p-8 md:p-16 relative overflow-hidden text-left">
                 {/* Background Patterns */}
                 <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[radial-gradient(hsl(var(--primary))_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
                 <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
                     <div className="space-y-8">
-                        <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight uppercase">
-                            WHY CHOOSE <span className="text-primary">FINORA</span>?
+                        <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+                            Why Choose <span className="text-primary">Finora</span>?
                         </h2>
                         <div className="space-y-6">
                             {[
-                                { title: "Stable Trading Environment", desc: "99.99% 가동률을 보장하는 인프라." },
-                                { title: "Lowest Fees in Industry", desc: "메이커 0%, 테이커 0.01%의 업계 최저 수수료." },
-                                { title: "Deep Liquidity", desc: "슬리피지 걱정 없는 풍부한 유동성 제공." },
+                                { title: t('landing.highlight.stable.title'), desc: t('landing.highlight.stable.desc') },
+                                { title: t('landing.highlight.fees.title'), desc: t('landing.highlight.fees.desc') },
+                                { title: t('landing.highlight.liquidity.title'), desc: t('landing.highlight.liquidity.desc') },
                             ].map((item, i) => (
                                 <div key={i} className="flex gap-4 items-start">
                                     <div className="mt-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-lg shadow-primary/30">
@@ -31,7 +34,7 @@ const Highlight: React.FC = () => {
                             ))}
                         </div>
                         <div className="pt-4">
-                            <button className="bg-white text-blue-900 hover:bg-blue-50 hover:text-blue-950 font-bold px-8 py-4 w-full md:w-auto text-base shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all rounded-lg">
+                            <button className="bg-primary text-white hover:opacity-90 shadow-lg shadow-primary/20 hover:shadow-primary/30 font-bold px-8 py-4 w-full md:w-auto text-base transition-all rounded-lg active:scale-95">
                                 Create Free Account
                             </button>
                         </div>

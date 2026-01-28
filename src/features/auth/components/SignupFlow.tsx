@@ -222,15 +222,19 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                                         type="text"
                                         maxLength={1}
                                         value={digit}
-                                        onChange={(e) => handleOtpChange(idx, e.target.value)}
+                                        onChange={(e) => {
+                                            handleOtpChange(idx, e.target.value);
+                                            if (error) setError('');
+                                        }}
                                         onKeyDown={(e) => handleOtpKeyDown(idx, e)}
-                                        className="w-10 h-14 sm:w-12 sm:h-16 text-center text-2xl font-black rounded-xl border border-white/10 bg-[#1a1a3a] text-white focus:border-[#5e5ce6] focus:ring-1 focus:ring-[#5e5ce6] outline-none transition-all"
+                                        className={`w-10 h-14 sm:w-12 sm:h-16 text-center text-2xl font-black rounded-xl border bg-[#1a1a3a] text-white focus:ring-1 outline-none transition-all ${error ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-white/10 focus:border-[#5e5ce6] focus:ring-[#5e5ce6]'}`}
                                     />
                                 ))}
                             </div>
+                            {error && <p className="text-sm font-medium text-red-500 text-center animate-in fade-in slide-in-from-top-1">{error}</p>}
                         </div>
                         <div className="space-y-4">
-                            <Button type="submit" className="w-full rounded-2xl bg-[#5e5ce6] py-7 text-lg font-bold hover:bg-[#4b4ac2]">Verify Email</Button>
+                            <Button type="submit" className="w-full rounded-2xl bg-[#5e5ce6] py-7 text-lg font-bold hover:bg-[#4b4ac2]">Continue</Button>
                             <div className="text-center">
                                 <button
                                     type="button"
@@ -389,18 +393,20 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                 <CardContent className="pb-10">
                     {renderStep()}
 
-                    <CardFooter className="flex flex-col items-center justify-center pt-4 pb-0">
-                        <div className="text-sm text-gray-400">
-                            Already have an account?{' '}
-                            <Button
-                                variant="link"
-                                className="h-auto p-0 font-bold text-white hover:underline"
-                                onClick={() => onViewChange?.('login')}
-                            >
-                                Log In
-                            </Button>
-                        </div>
-                    </CardFooter>
+                    {step === 'email' && (
+                        <CardFooter className="flex flex-col items-center justify-center pt-4 pb-0">
+                            <div className="text-sm text-gray-400">
+                                Already have an account?{' '}
+                                <Button
+                                    variant="link"
+                                    className="h-auto p-0 font-bold text-white hover:underline"
+                                    onClick={() => onViewChange?.('login')}
+                                >
+                                    Log In
+                                </Button>
+                            </div>
+                        </CardFooter>
+                    )}
                 </CardContent>
             </Card>
 

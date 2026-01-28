@@ -20,7 +20,7 @@ const MarketData: React.FC = () => {
         <div className="w-full">
             {/* Trust Metrics Strip */}
             <div className="border-y border-slate-800 bg-slate-900/30 backdrop-blur-sm">
-                <div className="max-w-7xl mx-auto px-4 md:px-6 py-12">
+                <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x-0 md:divide-x divide-slate-800">
                         {[
                             { label: "24h Volume (USDT)", value: "700,703,761" },
@@ -28,8 +28,8 @@ const MarketData: React.FC = () => {
                             { label: "Assets Supported", value: "600+" },
                             { label: "Avg. Latency", value: "< 50ms" }
                         ].map((item, idx) => (
-                            <div key={idx} className="flex flex-col gap-2 px-2 group">
-                                <span className="text-2xl md:text-3xl font-bold text-white tracking-tight group-hover:text-blue-400 transition-colors cursor-default">{item.value}</span>
+                            <div key={idx} className="flex flex-col gap-2 px-2">
+                                <span className="text-2xl md:text-3xl font-bold text-white tracking-tight cursor-default">{item.value}</span>
                                 <span className="text-sm text-slate-500 font-medium">{item.label}</span>
                             </div>
                         ))}
@@ -38,11 +38,11 @@ const MarketData: React.FC = () => {
             </div>
 
             {/* Market Trends Section */}
-            <section id="market" className="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-6 space-y-8">
+            <section id="market" className="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8 space-y-8">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 text-left">
-                    <h2 className="text-2xl md:text-3xl font-bold text-white uppercase tracking-tight">MARKET TRENDS</h2>
-                    <a href="#" className="text-primary text-sm font-semibold hover:opacity-80 flex items-center gap-1 group transition-all">
-                        View All Markets
+                    <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Market Trends</h2>
+                    <a href="#" className="text-white text-sm font-semibold hover:opacity-80 flex items-center gap-1 group transition-all">
+                        View More
                         <span className="group-hover:translate-x-1 transition-transform"><ChevronRight className="w-4 h-4" /></span>
                     </a>
                 </div>

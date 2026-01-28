@@ -5,6 +5,7 @@ interface Market {
   symbol: string;
   price: number;
   change: number;
+  icon?: string;
 }
 
 interface MarketListPanelProps {
@@ -24,14 +25,14 @@ const MarketListPanel: React.FC<MarketListPanelProps> = ({
   const [activeTab, setActiveTab] = useState<'all' | 'favorites'>('all');
 
   const markets: Market[] = [
-    { symbol: 'BTC/USDT', price: 42500.50, change: 2.45 },
-    { symbol: 'ETH/USDT', price: 2550.20, change: -1.20 },
-    { symbol: 'SOL/USDT', price: 95.15, change: 5.67 },
-    { symbol: 'BNB/USDT', price: 312.40, change: 0.15 },
-    { symbol: 'XRP/USDT', price: 0.52, change: -2.10 },
-    { symbol: 'ADA/USDT', price: 0.48, change: 1.25 },
-    { symbol: 'DOT/USDT', price: 6.75, change: -0.85 },
-    { symbol: 'LINK/USDT', price: 14.20, change: 3.40 },
+    { symbol: 'BTC/USDT', price: 42500.50, change: 2.45, icon: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/btc.png' },
+    { symbol: 'ETH/USDT', price: 2550.20, change: -1.20, icon: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/eth.png' },
+    { symbol: 'SOL/USDT', price: 95.15, change: 5.67, icon: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/sol.png' },
+    { symbol: 'BNB/USDT', price: 312.40, change: 0.15, icon: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/bnb.png' },
+    { symbol: 'XRP/USDT', price: 0.52, change: -2.10, icon: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/xrp.png' },
+    { symbol: 'ADA/USDT', price: 0.48, change: 1.25, icon: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/ada.png' },
+    { symbol: 'DOT/USDT', price: 6.75, change: -0.85, icon: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/dot.png' },
+    { symbol: 'LINK/USDT', price: 14.20, change: 3.40, icon: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/link.png' },
   ];
 
   const filteredMarkets = markets.filter(m => {
@@ -41,7 +42,7 @@ const MarketListPanel: React.FC<MarketListPanelProps> = ({
   });
 
   return (
-    <div className="flex flex-col h-full bg-dark-main font-sans select-none">
+    <div className="flex flex-col h-full bg-[#0B0E11] font-sans select-none">
       {/* Search & Tabs */}
       <div className="p-4 border-b border-dark-border flex flex-col gap-4">
         {/* Tabs */}
@@ -105,10 +106,13 @@ const MarketListPanel: React.FC<MarketListPanelProps> = ({
                 <Star size={14} fill={favorites.includes(m.symbol) ? 'currentColor' : 'none'} />
               </button>
             </div>
-            <div className="flex flex-col">
-              <span className={`text-xs font-bold transition-colors ${selectedSymbol === m.symbol ? 'text-primary' : 'text-text group-hover:text-primary'
-                }`}>{m.symbol}</span>
-              <span className="text-[9px] text-dark-muted font-bold">Vol 1.2M</span>
+            <div className="flex items-center gap-2">
+              {m.icon && <img src={m.icon} alt={m.symbol} className="w-5 h-5 rounded-full" />}
+              <div className="flex flex-col">
+                <span className={`text-xs font-bold transition-colors ${selectedSymbol === m.symbol ? 'text-primary' : 'text-text group-hover:text-primary'
+                  }`}>{m.symbol}</span>
+                <span className="text-[9px] text-dark-muted font-bold">Vol 1.2M</span>
+              </div>
             </div>
             <div className="flex flex-col items-end justify-center">
               <span className="text-xs font-bold text-text tabular">{m.price.toLocaleString()}</span>

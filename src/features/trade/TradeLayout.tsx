@@ -36,11 +36,11 @@ const TradeLayout: React.FC = () => {
     };
 
     return (
-        <div className="bg-[#0B0E11] min-h-screen p-2 sm:p-4">
-            <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-4">
+        <div className="bg-[#0B0E11] min-h-screen p-2 sm:p-4 font-sans text-[#EAECEF]">
+            <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-3">
                 {/* Market List */}
                 <div className="lg:col-span-3 h-[400px] lg:h-[800px]">
-                    <Card title="Markets" className="h-full no-padding">
+                    <Card title="Markets" className="h-full no-padding" variant="flat">
                         <MarketListPanel
                             selectedSymbol={symbol}
                             onSymbolSelect={setSymbol}
@@ -51,16 +51,16 @@ const TradeLayout: React.FC = () => {
                 </div>
 
                 {/* Center Column: Chart & Orders */}
-                <div className="lg:col-span-6 flex flex-col gap-2 sm:gap-4 min-h-0">
+                <div className="lg:col-span-6 flex flex-col gap-2 sm:gap-3 min-h-0">
                     <div className="h-[400px] lg:h-[500px] min-h-[400px]">
-                        <Card className="h-full no-padding overflow-hidden flex flex-col">
+                        <Card className="h-full no-padding overflow-hidden flex flex-col" variant="flat">
                             {marketStats && (
                                 <SymbolInfoBar
                                     symbol={marketStats.symbol}
                                     baseAsset={marketStats.symbol.split('/')[0]}
                                     quoteAsset={marketStats.symbol.split('/')[1]}
-                                    coinName={marketStats.symbol.split('/')[0] === 'BTC' ? 'Bitcoin' : 'Ethereum'}
-                                    iconUrl={null}
+                                    coinName={marketStats.symbol.split('/')[0]}
+                                    iconUrl={marketStats.icon || null}
                                     price={marketStats.lastPrice}
                                     pricePrecision={2}
                                     change24hPercent={marketStats.change24h}
@@ -75,7 +75,7 @@ const TradeLayout: React.FC = () => {
                         </Card>
                     </div>
                     <div className="flex-1 min-h-[300px]">
-                        <Card title="Order" className="h-full no-padding">
+                        <Card title="Order" className="h-full no-padding" variant="flat">
                             <OrderPanel
                                 symbol={symbol}
                                 marketStats={marketStats}
@@ -86,14 +86,14 @@ const TradeLayout: React.FC = () => {
                 </div>
 
                 {/* Right Column: Order Book & Recent Trades */}
-                <div className="lg:col-span-3 flex flex-col gap-2 sm:gap-4 h-auto lg:h-[800px]">
+                <div className="lg:col-span-3 flex flex-col gap-2 sm:gap-3 h-auto lg:h-[800px]">
                     <div className="h-[400px] lg:h-[500px]">
-                        <Card title="Order book" className="h-full no-padding">
+                        <Card title="Order book" className="h-full no-padding" variant="flat">
                             <OrderBookPanel asks={orderBook.asks} bids={orderBook.bids} loading={loading} />
                         </Card>
                     </div>
                     <div className="flex-1 min-h-[300px]">
-                        <Card title="Recent trades" className="h-full no-padding">
+                        <Card title="Recent trades" className="h-full no-padding" variant="flat">
                             <RecentTradesPanel trades={recentTrades} loading={loading} />
                         </Card>
                     </div>
@@ -101,7 +101,7 @@ const TradeLayout: React.FC = () => {
 
                 {/* Bottom: Open Orders */}
                 <div className="lg:col-span-12 h-[350px]">
-                    <Card title="Open orders" className="h-full no-padding">
+                    <Card title="Open orders" className="h-full no-padding" variant="flat">
                         <OpenOrdersPanel orders={openOrders} loading={loading} onCancel={(id) => console.log('Cancel', id)} />
                     </Card>
                 </div>

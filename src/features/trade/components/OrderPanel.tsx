@@ -116,7 +116,7 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ symbol, marketStats, onSubmit }
   };
 
   return (
-    <div className="flex flex-col h-full bg-dark-main p-4 font-sans">
+    <div className="flex flex-col h-full bg-[#1E2329] p-4 font-sans">
       {/* Buy/Sell Switch */}
       <div className="flex gap-1 p-1 bg-dark-surface rounded-xl mb-6">
         <button
