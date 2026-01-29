@@ -72,6 +72,7 @@ module.exports = {
             fontFamily: {
                 sans: ['Inter', 'Roboto', 'system-ui', 'sans-serif'],
                 display: ['Poppins', 'Inter', 'sans-serif'],
+                roboto: ['Roboto', 'Inter', 'sans-serif'],
             },
             borderRadius: {
                 lg: "var(--radius)",

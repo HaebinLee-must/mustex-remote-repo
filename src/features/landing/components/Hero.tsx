@@ -31,10 +31,23 @@ const Hero: React.FC = () => {
     // Dynamic title rendering for multi-language
     const renderTitle = () => {
         const title = t('heroTitle');
+
+        // English version optimization for design flow
+        if (title.includes('Trade Global Assets')) {
+            return (
+                <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] font-display">
+                    Trade Global Assets <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
+                        on Finora without Limits
+                    </span>
+                </h1>
+            );
+        }
+
         const words = title.split(' ');
         if (words.length <= 2) {
             return (
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] font-display">
+                <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] font-display">
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
                         {title}
                     </span>
@@ -42,7 +55,7 @@ const Hero: React.FC = () => {
             );
         }
         return (
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] font-display">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] font-display">
                 {words.slice(0, 2).join(' ')} <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
                     {words.slice(2).join(' ')}
@@ -52,104 +65,30 @@ const Hero: React.FC = () => {
     };
 
     return (
-        <section id="hero" className="w-full pt-32 pb-20 md:pt-48 md:pb-32 relative overflow-hidden bg-slate-950">
-            {/* Aurora Background */}
+        <section id="hero" className="relative overflow-hidden bg-background font-sans min-h-[75vh] flex items-center">
+            {/* Aurora Background (성운 느낌 그라데이션) */}
             <div className="absolute inset-0 z-0 pointer-events-none">
                 <AuroraBackground />
-                {/* Gradient Overlay for better text readability */}
-                <div className="absolute inset-0 bg-slate-950/40"></div>
+                <div className="absolute inset-0 bg-background/60"></div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 md:px-8 grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
-                {/* Left: Content */}
-                <div className="space-y-8 relative z-10 text-center md:text-left">
-                    {renderTitle()}
+            <div className="relative mx-auto w-full max-w-7xl px-6 py-20 sm:px-8 lg:px-12 md:py-32">
+                <div className="flex flex-col items-center text-center">
+                    {/* Content 영역 */}
+                    <div className="max-w-4xl space-y-8 relative z-10">
+                        {renderTitle()}
 
-                    <p className="text-lg text-slate-400 max-w-lg mx-auto md:mx-0 leading-relaxed font-medium">
-                        {t('heroSub')}
-                    </p>
+                        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
+                            {t('heroSub')}
+                        </p>
 
-                    <div className="flex flex-col sm:flex-row gap-4 pt-2 justify-center md:justify-start">
-                        <button className="bg-primary text-white hover:opacity-90 focus:ring-primary shadow-lg shadow-primary/20 hover:shadow-primary/30 border border-transparent inline-flex items-center justify-center rounded-lg px-8 py-4 text-base font-bold transition-all duration-200 active:scale-95 w-full sm:w-auto">
-                            {t('tradeNow')}
-                        </button>
-                        <button className="bg-slate-800 text-slate-100 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 inline-flex items-center justify-center rounded-lg px-8 py-4 text-base font-bold transition-all duration-200 active:scale-95 w-full sm:w-auto">
-                            View Markets
-                        </button>
-                    </div>
-
-                    {/* Live Ticker */}
-                    <div className="pt-8 flex gap-8 text-sm justify-center md:justify-start border-t border-slate-900/50 mt-8">
-                        <div className="flex flex-col text-left">
-                            <span className="text-slate-500 text-xs font-semibold mb-1">BTC/USDT</span>
-                            <span className="text-white font-bold flex gap-2 items-baseline text-lg">
-                                {btcStats?.lastPrice.toLocaleString() || '42,500.50'}
-                                <span className={`${(btcStats?.change24h || 0) >= 0 ? 'text-green-400 bg-green-400/10' : 'text-red-400 bg-red-400/10'} text-xs px-1.5 py-0.5 rounded`}>
-                                    {(btcStats?.change24h || 0) >= 0 ? '+' : ''}{btcStats?.change24h || '2.45'}%
-                                </span>
-                            </span>
-                        </div>
-                        <div className="w-[1px] bg-slate-800"></div>
-                        <div className="flex flex-col text-left">
-                            <span className="text-slate-500 text-xs font-semibold mb-1">ETH/USDT</span>
-                            <span className="text-white font-bold flex gap-2 items-baseline text-lg">
-                                {ethStats?.lastPrice.toLocaleString() || '2,250.10'}
-                                <span className={`${(ethStats?.change24h || 0) >= 0 ? 'text-green-400 bg-green-400/10' : 'text-red-400 bg-red-400/10'} text-xs px-1.5 py-0.5 rounded`}>
-                                    {(ethStats?.change24h || 0) >= 0 ? '+' : ''}{ethStats?.change24h || '-1.20'}%
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Right: Visual Mockup */}
-                <div className="relative z-10 mt-8 md:mt-0 [perspective:1000px]">
-                    {/* Glow Effect */}
-                    <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-blue-500/20 rounded-full blur-3xl opacity-50 animate-pulse-slow"></div>
-
-                    <div className="relative bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden transform md:[transform:rotateY(12deg)_rotateX(6deg)] hover:[transform:rotateY(0deg)_rotateX(0deg)] transition-all duration-700 ease-out group">
-                        {/* Mockup Top Bar */}
-                        <div className="flex justify-between items-center px-4 py-3 border-b border-slate-800 bg-slate-900/50 backdrop-blur">
-                            <div className="flex gap-2">
-                                <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
-                                <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
-                                <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
-                            </div>
-                            <div className="text-[10px] font-mono text-slate-500">FINORA PRO TERMINAL v2.0</div>
-                        </div>
-
-                        {/* Mockup Content */}
-                        <div className="p-1 bg-slate-950">
-                            <div className="grid grid-cols-3 gap-1 h-64 md:h-80 text-left">
-                                {/* Chart Area */}
-                                <div className="col-span-2 bg-slate-900/50 rounded p-4 relative overflow-hidden border border-slate-800/50">
-                                    <div className="flex justify-between mb-4">
-                                        <div className="flex gap-2">
-                                            <div className="h-6 w-16 bg-slate-800 rounded"></div>
-                                            <div className="h-6 w-10 bg-slate-800 rounded"></div>
-                                        </div>
-                                        <div className="h-6 w-24 bg-slate-800 rounded"></div>
-                                    </div>
-                                    {/* Fake Candles */}
-                                    <div className="flex items-end justify-between h-32 md:h-48 gap-1 opacity-80">
-                                        {[40, 60, 45, 70, 50, 80, 65, 90, 75, 55, 60, 85, 95, 80].map((h, i) => (
-                                            <div key={i} style={{ height: `${h}%` }} className={`flex-1 rounded-sm ${i % 2 === 0 ? 'bg-green-500/40' : 'bg-red-500/40'}`}></div>
-                                        ))}
-                                    </div>
-                                </div>
-                                {/* Orderbook Area */}
-                                <div className="col-span-1 bg-slate-900/50 rounded border border-slate-800/50 p-2 space-y-1">
-                                    {[...Array(12)].map((_, i) => (
-                                        <div key={i} className="flex justify-between text-[10px]">
-                                            <span className="text-slate-500">42,{500 + i * 15}</span>
-                                            <span className={`${i < 6 ? 'text-red-400' : 'text-green-400'}`}>0.{Math.floor(Math.random() * 900)}</span>
-                                        </div>
-                                    ))}
-                                    <div className="mt-2 pt-2 border-t border-slate-800">
-                                        <div className="h-8 bg-primary rounded flex items-center justify-center text-xs font-bold text-white">Buy BTC</div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="flex flex-col sm:flex-row gap-4 pt-6 justify-center">
+                            <button className="bg-primary text-primary-foreground hover:opacity-90 focus:ring-2 focus:ring-ring focus:ring-offset-2 shadow-xl shadow-primary/20 inline-flex items-center justify-center rounded-xl px-8 py-4 text-base font-bold transition-all duration-200 active:scale-95 w-full sm:w-auto">
+                                {t('tradeNow')}
+                            </button>
+                            <button className="bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border inline-flex items-center justify-center rounded-xl px-8 py-4 text-base font-bold transition-all duration-200 active:scale-95 w-full sm:w-auto">
+                                View Markets
+                            </button>
                         </div>
                     </div>
                 </div>

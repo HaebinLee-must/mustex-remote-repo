@@ -20,10 +20,10 @@ const AssetTable: React.FC<AssetTableProps> = ({ onDeposit, onWithdraw }) => {
     });
 
     return (
-        <Card className="shadow-2xl mb-8">
-            <div className="p-6 border-b border-dark-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <Card className="shadow-2xl mb-8 font-roboto">
+            <div className="p-6 border-b border-dark-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 font-roboto">
                 <div className="flex items-center gap-4 sm:gap-6 whitespace-nowrap overflow-x-auto no-scrollbar w-full sm:w-auto">
-                    <h3 className="font-extrabold text-base sm:text-lg">Fiat and spot</h3>
+                    <h3 className="font-extrabold text-base sm:text-lg">Fiat and Spot</h3>
                     <div className="flex items-center space-x-2 flex-shrink-0">
                         <input
                             type="checkbox"

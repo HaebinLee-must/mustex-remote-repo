@@ -4,8 +4,8 @@ import Card from '../../shared/components/Card';
 
 const TransactionHistory: React.FC = () => {
     return (
-        <Card className="shadow-2xl">
-            <div className="p-6 border-b border-dark-border">
+        <Card className="shadow-2xl font-roboto">
+            <div className="p-6 border-b border-dark-border font-roboto">
                 <h3 className="font-extrabold text-lg">Recent Transactions</h3>
             </div>
 

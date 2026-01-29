@@ -21,15 +21,15 @@ const DownloadButton = ({ icon, text, subtext, qr }: { icon: React.ReactNode, te
 const TradeAnywhere: React.FC = () => {
     return (
         <>
-            <section className="max-w-7xl mx-auto py-24 px-4 md:px-8 overflow-hidden">
+            <section className="max-w-7xl mx-auto py-24 px-4 md:px-8 overflow-hidden font-sans">
                 <div className="grid lg:grid-cols-2 gap-16 items-center">
                     {/* Left: Content */}
                     <div className="space-y-12 text-left">
                         <div className="space-y-6">
-                            <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+                            <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-tight font-display tracking-tight">
                                 Trade. Anywhere.
                             </h2>
-                            <p className="text-lg text-slate-400 max-w-lg leading-relaxed">
+                            <p className="text-lg text-muted-foreground max-w-lg leading-relaxed font-medium">
                                 Compatible with multiple devices, start trading with safety and convenience.
                             </p>
                         </div>
@@ -120,13 +120,13 @@ const TradeAnywhere: React.FC = () => {
             </section>
 
             {/* Bottom CTA Banner */}
-            <section className="w-full bg-[#161A1E] py-20 md:py-24 border-t border-white/5">
+            <section className="w-full bg-[#0D1017] py-20 md:py-28 border-t border-white/5 font-sans">
                 <div className="max-w-7xl mx-auto px-4 md:px-8 text-center space-y-8">
-                    <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight">
+                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight font-display">
                         Simple, Secure Trading on Finora
                     </h2>
                     <div className="flex justify-center">
-                        <button className="bg-primary text-white hover:opacity-90 shadow-lg shadow-primary/20 font-bold px-8 py-4 rounded-lg text-base transition-all active:scale-95">
+                        <button className="bg-primary text-primary-foreground hover:opacity-90 focus:ring-2 focus:ring-ring focus:ring-offset-2 shadow-xl shadow-primary/30 font-bold px-10 py-5 rounded-xl text-base transition-all active:scale-95">
                             Trade Now
                         </button>
                     </div>

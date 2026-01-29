@@ -14,13 +14,13 @@ const AssetOverview: React.FC<AssetOverviewProps> = ({ onDepositClick, onWithdra
     const toggleHideBalance = () => setHideBalance(!hideBalance);
 
     return (
-        <Card className="p-8 mb-8 shadow-xl" noOverflow>
+        <Card className="p-8 mb-8 shadow-xl font-roboto" noOverflow>
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-6 lg:space-y-0">
                 <div className="space-y-4">
                     <div>
-                        <div className="flex items-center space-x-2 mb-2">
+                        <div className="flex items-center space-x-2 mb-2 font-roboto">
                             <h2 className="text-sm font-bold text-[#848E9C] tracking-wide">
-                                Estimated balance
+                                Estimated Balance
                             </h2>
                             <button
                                 onClick={toggleHideBalance}

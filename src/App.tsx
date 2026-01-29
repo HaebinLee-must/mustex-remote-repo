@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from './layouts/Header';
 import Footer from './layouts/Footer';
 import Hero from './features/landing/components/Hero';
+import Hero2 from './features/landing/components/Hero2';
 import MarketData from './features/landing/components/MarketData';
 import Blog from './features/landing/components/Blog';
 import Features from './features/landing/components/Features';
@@ -18,9 +19,9 @@ import P2PPage from './features/p2p/P2PPage';
 import { useAuth } from './features/auth/AuthContext';
 import { useUI } from './features/shared/UIContext';
 
-const LandingPage = () => (
+const LandingPage = ({ variant = 1 }: { variant?: number }) => (
     <>
-        <Hero />
+        {variant === 1 ? <Hero /> : <Hero2 />}
         <MarketData />
         <Blog />
         <Features />
@@ -94,7 +95,8 @@ function App() {
                 );
             case 'landing':
             default:
-                return <LandingPage />;
+                // variant=1: 기존 시안, variant=2: 신규 시안
+                return <LandingPage variant={1} />;
         }
     };
 

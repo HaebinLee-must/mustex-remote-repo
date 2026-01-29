@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createChart, ColorType, IChartApi, ISeriesApi, CandlestickData, Time, CandlestickSeries, LineSeries, HistogramSeries, HistogramData } from 'lightweight-charts';
+import { Maximize, Minimize } from 'lucide-react';
 import { CandleData } from '../types/market';
 
 interface ChartPanelProps {
@@ -11,7 +12,8 @@ const ChartPanel: React.FC<ChartPanelProps> = ({ data, loading }) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
-  const [timeframe, setTimeframe] = React.useState('1m');
+  const [timeframe, setTimeframe] = useState('1m');
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     if (!chartContainerRef.current || loading) return;
@@ -169,21 +171,8 @@ const ChartPanel: React.FC<ChartPanelProps> = ({ data, loading }) => {
       volumeSeries.setData(volumeData);
     }
 
-    // Calculate MA
-    const ma5Data = uniqueData.map((d, i, arr) => {
-      if (i < 5) return null;
-      const avg = arr.slice(i - 5, i).reduce((sum, c) => sum + (c.close as number), 0) / 5;
-      return { time: d.time, value: avg };
-    }).filter(d => d !== null);
-
-    const ma10Data = uniqueData.map((d, i, arr) => {
-      if (i < 10) return null;
-      const avg = arr.slice(i - 10, i).reduce((sum, c) => sum + (c.close as number), 0) / 10;
-      return { time: d.time, value: avg };
-    }).filter(d => d !== null);
-
-    // This is a bit simplified as we don't have refs for MA series yet in the current structure
-    // but in a real app we would. For now, focus on the main candle data.
+    // Calculate MA (Simplified Mock)
+    // Real implementation would calculate these properly based on the dataset
   };
 
   useEffect(() => {
@@ -191,6 +180,14 @@ const ChartPanel: React.FC<ChartPanelProps> = ({ data, loading }) => {
       updateChartData(data);
     }
   }, [data, loading]);
+
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen);
+  };
+
+  const containerClass = isFullscreen
+    ? "fixed inset-0 z-[2000] bg-[#0B0E11] w-full h-full flex flex-col p-4"
+    : "w-full h-full min-h-[400px] bg-[#1E2329] relative overflow-hidden flex flex-col";
 
   if (loading) {
     return (
@@ -201,23 +198,34 @@ const ChartPanel: React.FC<ChartPanelProps> = ({ data, loading }) => {
   }
 
   return (
-    <div className="w-full h-full min-h-[400px] bg-[#1E2329] relative overflow-hidden flex flex-col">
-      {/* Timeframe Selector */}
-      <div className="flex items-center gap-2 p-2 bg-dark-surface/50 border-b border-dark-border">
-        {['1m', '5m', '15m', '1h', '4h', '1d', '1w'].map((tf) => (
-          <button
-            key={tf}
-            onClick={() => setTimeframe(tf)}
-            className={`px-2 py-0.5 rounded text-[10px] font-bold transition-colors ${timeframe === tf ? 'bg-primary text-white' : 'text-dark-muted hover:text-text hover:bg-white/5'
-              }`}
-          >
-            {tf}
-          </button>
-        ))}
-        <div className="w-[1px] h-3 bg-dark-border mx-1" />
-        <span className="text-[10px] font-bold text-dark-muted">Indicators</span>
-        <button className="text-[10px] font-bold text-primary px-1 hover:underline">MA</button>
-        <button className="text-[10px] font-bold text-dark-muted px-1 hover:underline">VOL</button>
+    <div className={containerClass}>
+      {/* Timeframe Selector and Toolbar */}
+      <div className="flex items-center justify-between p-2 bg-dark-surface/50 border-b border-dark-border">
+        <div className="flex items-center gap-2">
+          {['1m', '5m', '15m', '1h', '4h', '1d', '1w'].map((tf) => (
+            <button
+              key={tf}
+              onClick={() => setTimeframe(tf)}
+              className={`px-2 py-0.5 rounded text-[10px] font-bold transition-colors ${timeframe === tf ? 'bg-primary text-white' : 'text-dark-muted hover:text-text hover:bg-white/5'
+                }`}
+            >
+              {tf}
+            </button>
+          ))}
+          <div className="w-[1px] h-3 bg-dark-border mx-1" />
+          <span className="text-[10px] font-bold text-dark-muted">Indicators</span>
+          <button className="text-[10px] font-bold text-primary px-1 hover:underline">MA</button>
+          <button className="text-[10px] font-bold text-dark-muted px-1 hover:underline">VOL</button>
+        </div>
+
+        {/* Fullscreen Toggle */}
+        <button
+          onClick={toggleFullscreen}
+          className="text-dark-muted hover:text-white transition-colors p-1 rounded hover:bg-white/5"
+          title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+        >
+          {isFullscreen ? <Minimize size={14} /> : <Maximize size={14} />}
+        </button>
       </div>
 
       <div className="flex-1 w-full min-h-[360px] relative">
@@ -227,7 +235,7 @@ const ChartPanel: React.FC<ChartPanelProps> = ({ data, loading }) => {
       </div>
 
       {/* Top Bar Info (Optional Overlay) */}
-      <div className="absolute top-12 left-4 z-10 flex gap-4 text-[10px] font-bold bg-dark-main/60 p-1 rounded backdrop-blur-sm">
+      <div className="absolute top-12 left-4 z-10 flex gap-4 text-[10px] font-bold bg-dark-main/60 p-1 rounded backdrop-blur-sm pointer-events-none">
         <div className="flex gap-1">
           <span className="text-dark-muted">O</span>
           <span className="text-success">{data[data.length - 1]?.open || 0}</span>

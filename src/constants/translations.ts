@@ -18,7 +18,7 @@ export const translations = {
         verifyNow: 'Verify Now',
         kycDescriptionUnverified: 'Verify your identity to increase your withdrawal limits and access more features.',
         kycDescriptionVerified: 'Your account is fully verified. You have access to all trading features and higher limits.',
-        heroTitle: 'Trade Global Assets on FINORA without Limits',
+        heroTitle: 'Trade Global Assets on Finora without Limits',
         heroSub: 'Clear information, strong security, and fast execution. From your trade onward, Finora keeps everything simple and secure.',
         tradeNow: 'Trade Bitcoin Now',
         'p2p.notice.title': 'Welcome to FINORA P2P!',

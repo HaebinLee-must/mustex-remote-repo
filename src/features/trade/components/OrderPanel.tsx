@@ -14,57 +14,50 @@ interface OrderPanelProps {
     price: number | null;
     amount: number;
   }) => Promise<OrderRow>;
+  price?: number | '';
+  onPriceChange?: (val: number | '') => void;
 }
 
-const OrderPanel: React.FC<OrderPanelProps> = ({ symbol, marketStats, onSubmit }) => {
+const OrderPanel: React.FC<OrderPanelProps> = ({ symbol, marketStats, onSubmit, price: externalPrice, onPriceChange }) => {
   const { isAuthenticated, user } = useAuth();
   const { balances, openDeposit } = useWallet();
   const { setCurrentView } = useUI();
 
-  const [side, setSide] = useState<Side>('buy');
   const [type, setType] = useState<OrderType>('limit');
   const [status, setStatus] = useState<OrderSubmitStatus>('IDLE');
-  const [price, setPrice] = useState<number | ''>(42500.50);
-  const [amount, setAmount] = useState<number | ''>('');
-  const [total, setTotal] = useState<string>('0.00');
+
+  // Separate states for Buy and Sell sides (Phase 1: Dual Column)
+  const [buyPrice, setBuyPrice] = useState<number | ''>(42500.50);
+  const [buyAmount, setBuyAmount] = useState<number | ''>('');
+  const [sellPrice, setSellPrice] = useState<number | ''>(42500.50);
+  const [sellAmount, setSellAmount] = useState<number | ''>('');
+
+  // Sync with external price
+  useEffect(() => {
+    if (externalPrice !== undefined && externalPrice !== '') {
+      setBuyPrice(externalPrice);
+      setSellPrice(externalPrice);
+    }
+  }, [externalPrice]);
 
   const baseAsset = symbol.split('/')[0];
   const quoteAsset = symbol.split('/')[1];
 
-  const availableBalance = useMemo(() => {
+  const getAvailableBalance = (side: Side) => {
     if (!isAuthenticated) return 0;
     const asset = side === 'buy' ? quoteAsset : baseAsset;
     return balances.find(b => b.asset === asset)?.available || 0;
-  }, [isAuthenticated, balances, side, baseAsset, quoteAsset]);
-
-  useEffect(() => {
-    if (type === 'limit') {
-      const p = typeof price === 'number' ? price : 0;
-      const a = typeof amount === 'number' ? amount : 0;
-      setTotal((p * a).toFixed(2));
-    } else {
-      setTotal('Market Price');
-    }
-  }, [price, amount, type]);
-
-  const validate = () => {
-    if (!amount || amount <= 0) return 'Please enter a valid amount';
-    if (type === 'limit' && (!price || price <= 0)) return 'Please enter a valid price';
-
-    const orderTotal = type === 'limit' ? (Number(price) * Number(amount)) : (marketStats?.lastPrice || 0) * Number(amount);
-    if (side === 'buy' && orderTotal > availableBalance) return 'Insufficient quote balance';
-    if (side === 'sell' && Number(amount) > availableBalance) return 'Insufficient base balance';
-
-    return null;
   };
 
-  const handleAction = async () => {
+  const buyAvailable = getAvailableBalance('buy');
+  const sellAvailable = getAvailableBalance('sell');
+
+  const handleAction = async (side: Side) => {
     if (!isAuthenticated) {
       setCurrentView('login');
       return;
     }
 
-    // PRD: Policy validation (Simulated)
     if (user?.kycStatus === 'unverified') {
       if (confirm('인증이 필요합니다. 거래를 진행하려면 신원 인증을 완료해 주세요. 지금 인증하시겠습니까?')) {
         setCurrentView('verification');
@@ -72,14 +65,29 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ symbol, marketStats, onSubmit }
       return;
     }
 
-    const error = validate();
-    if (error) {
-      if (error === 'Insufficient quote balance' || error === 'Insufficient base balance') {
-        if (confirm(`${error === 'Insufficient quote balance' ? quoteAsset : baseAsset} 잔고가 부족합니다. 입금 후 다시 시도해 주세요. 입금 페이지로 이동하시겠습니까?`)) {
-          openDeposit(side === 'buy' ? quoteAsset : baseAsset);
-        }
-      } else {
-        alert(error);
+    const price = side === 'buy' ? buyPrice : sellPrice;
+    const amount = side === 'buy' ? buyAmount : sellAmount;
+    const available = side === 'buy' ? buyAvailable : sellAvailable;
+
+    if (!amount || amount <= 0) {
+      alert('Please enter a valid amount');
+      return;
+    }
+    if (type === 'limit' && (!price || price <= 0)) {
+      alert('Please enter a valid price');
+      return;
+    }
+
+    const orderTotal = type === 'limit' ? (Number(price) * Number(amount)) : (marketStats?.lastPrice || 0) * Number(amount);
+    if (side === 'buy' && orderTotal > available) {
+      if (confirm(`${quoteAsset} 잔고가 부족합니다. 입금 후 다시 시도해 주세요. 입금 페이지로 이동하시겠습니까?`)) {
+        openDeposit(quoteAsset);
+      }
+      return;
+    }
+    if (side === 'sell' && Number(amount) > available) {
+      if (confirm(`${baseAsset} 잔고가 부족합니다. 입금 후 다시 시도해 주세요. 입금 페이지로 이동하시겠습니까?`)) {
+        openDeposit(baseAsset);
       }
       return;
     }
@@ -93,7 +101,8 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ symbol, marketStats, onSubmit }
         amount: Number(amount)
       });
       setStatus('SUCCESS');
-      setAmount('');
+      if (side === 'buy') setBuyAmount('');
+      else setSellAmount('');
       setTimeout(() => setStatus('IDLE'), 2000);
     } catch (e) {
       setStatus('ERROR');
@@ -101,67 +110,61 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ symbol, marketStats, onSubmit }
     }
   };
 
-  const handlePercentClick = (percent: number) => {
-    if (!availableBalance) return;
+  const handlePercentClick = (side: Side, percent: number) => {
+    const available = side === 'buy' ? buyAvailable : sellAvailable;
+    if (!available) return;
+
     if (side === 'buy') {
-      const currentPrice = type === 'limit' ? Number(price) : marketStats?.lastPrice;
+      const currentPrice = type === 'limit' ? Number(buyPrice) : marketStats?.lastPrice;
       if (currentPrice && currentPrice > 0) {
-        const maxAmount = (availableBalance * (percent / 100)) / currentPrice;
-        setAmount(Number(maxAmount.toFixed(4)));
+        const maxAmount = (available * (percent / 100)) / currentPrice;
+        setBuyAmount(Number(maxAmount.toFixed(4)));
       }
     } else {
-      const maxAmount = availableBalance * (percent / 100);
-      setAmount(Number(maxAmount.toFixed(4)));
+      const maxAmount = available * (percent / 100);
+      setSellAmount(Number(maxAmount.toFixed(4)));
     }
   };
 
-  return (
-    <div className="flex flex-col h-full bg-[#1E2329] p-4 font-sans">
-      {/* Buy/Sell Switch */}
-      <div className="flex gap-1 p-1 bg-dark-surface rounded-xl mb-6">
-        <button
-          onClick={() => setSide('buy')}
-          className={`flex-1 py-2.5 rounded-lg text-sm font-black transition-all ${side === 'buy' ? 'bg-success text-white shadow-lg' : 'text-dark-muted hover:text-white'
-            }`}
-        >
-          Buy
-        </button>
-        <button
-          onClick={() => setSide('sell')}
-          className={`flex-1 py-2.5 rounded-lg text-sm font-black transition-all ${side === 'sell' ? 'bg-danger text-white shadow-lg' : 'text-dark-muted hover:text-white'
-            }`}
-        >
-          Sell
-        </button>
-      </div>
+  const OrderForm = ({ side }: { side: Side }) => {
+    const isBuy = side === 'buy';
+    const price = isBuy ? buyPrice : sellPrice;
+    const amount = isBuy ? buyAmount : sellAmount;
+    const available = isBuy ? buyAvailable : sellAvailable;
+    const setPrice = isBuy ? setBuyPrice : setSellPrice;
+    const setAmount = isBuy ? setBuyAmount : setSellAmount;
+    const colorClass = isBuy ? 'text-success' : 'text-danger';
+    const bgClass = isBuy ? 'bg-success' : 'bg-danger';
 
-      {/* Order Type Tabs */}
-      <div className="flex gap-6 mb-6 border-b border-dark-border overflow-x-auto no-scrollbar text-xs font-bold">
-        {['limit', 'market', 'stop_limit', 'oco'].map((t) => (
-          <button
-            key={t}
-            onClick={() => setType(t as OrderType)}
-            className={`pb-2 transition-all relative ${type === t ? 'text-primary' : 'text-dark-muted hover:text-white'
-              }`}
+    return (
+      <div className="flex flex-col gap-3 flex-1">
+        <div className="flex justify-between items-center mb-1">
+          <span className="text-[10px] font-black text-dark-muted uppercase tracking-widest">Available</span>
+          <span
+            className="text-[10px] font-bold text-white cursor-pointer hover:text-primary transition-colors"
+            onClick={() => handlePercentClick(side, 100)}
           >
-            {t.charAt(0).toUpperCase() + t.slice(1).replace('_', ' ')}
-            {type === t && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full" />}
-          </button>
-        ))}
-      </div>
+            {available.toLocaleString()} {isBuy ? quoteAsset : baseAsset}
+          </span>
+        </div>
 
-      {/* Form Fields */}
-      <div className="flex flex-col gap-5">
-        {type === 'limit' && (
+        {type === 'limit' ? (
           <NumericStepperInput
             label="Price"
             value={price}
             onChange={setPrice}
-            unit="USDT"
+            unit={quoteAsset}
             step={0.1}
             precision={2}
             min={0}
           />
+        ) : (
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] font-black text-dark-muted uppercase tracking-widest leading-none">Price</label>
+            <div className="w-full h-[40px] bg-dark-surface border border-dark-border rounded-lg px-3 flex items-center text-xs font-bold text-dark-muted">
+              Market Price
+            </div>
+          </div>
         )}
 
         <NumericStepperInput
@@ -175,58 +178,53 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ symbol, marketStats, onSubmit }
           placeholder="0.0000"
         />
 
-        {/* Percentage Buttons */}
-        <div className="grid grid-cols-4 gap-2">
+        {/* 25% ~ 100% Quick Inputs */}
+        <div className="flex gap-1.5 mt-1">
           {[25, 50, 75, 100].map((p) => (
             <button
               key={p}
-              onClick={() => handlePercentClick(p)}
-              className="py-1.5 rounded-lg bg-dark-surface border border-dark-border text-[10px] font-bold text-dark-muted hover:border-primary hover:text-white transition-all"
+              onClick={() => handlePercentClick(side, p)}
+              className="flex-1 py-1 rounded bg-dark-surface border border-dark-border text-[9px] font-bold text-dark-muted hover:border-white/20 hover:text-white transition-all"
             >
               {p}%
             </button>
           ))}
         </div>
 
-        {/* Total */}
-        <div className="flex flex-col gap-2 mt-2">
-          <label className="text-[10px] font-black text-dark-muted uppercase tracking-widest">Total</label>
-          <div className="w-full bg-dark-surface/50 border border-dark-border border-dashed rounded-xl px-4 py-3 text-sm font-bold text-dark-muted flex justify-between items-center">
-            <span>{total}</span>
-            <span className="text-[10px]">{quoteAsset}</span>
-          </div>
-        </div>
-
-        {/* Submit Button */}
         <button
-          onClick={handleAction}
+          onClick={() => handleAction(side)}
           disabled={status === 'SUBMITTING'}
-          className={`w-full py-4 rounded-xl text-sm font-black text-white shadow-xl transition-all transform active:scale-95 mt-4 ${!isAuthenticated
-            ? 'bg-primary shadow-primary/20 hover:bg-primary/90'
-            : side === 'buy'
-              ? 'bg-success shadow-success/20 hover:bg-success/90'
-              : 'bg-danger shadow-danger/20 hover:bg-danger/90'
-            } ${status === 'SUBMITTING' ? 'opacity-70 cursor-not-allowed' : ''}`}
+          className={`w-full py-3 rounded-lg text-xs font-black text-white shadow-lg transition-all mt-2 ${bgClass
+            } ${status === 'SUBMITTING' ? 'opacity-70 cursor-not-allowed' : 'hover:brightness-110 active:scale-[0.98]'}`}
         >
-          {status === 'SUBMITTING' ? (
-            <span className="flex items-center justify-center gap-2">
-              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              Processing...
-            </span>
-          ) : !isAuthenticated ? (
-            'Log In'
-          ) : (
-            `${side.charAt(0).toUpperCase() + side.slice(1)} ${baseAsset}`
-          )}
+          {status === 'SUBMITTING' ? '...' : `${side.toUpperCase()} ${baseAsset}`}
         </button>
+      </div>
+    );
+  };
 
-        {/* Available Balance */}
-        <div className="flex justify-between items-center text-[10px] font-bold text-dark-muted uppercase tracking-widest">
-          <span>Available</span>
-          <span className="text-text">
-            {availableBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })} {side === 'buy' ? quoteAsset : baseAsset}
-          </span>
-        </div>
+  return (
+    <div className="bg-[#1E2329] p-3 font-roboto flex flex-col gap-3">
+      {/* Type Selection */}
+      <div className="flex gap-4 border-b border-white/5 pb-2">
+        {['limit', 'market', 'stop_limit'].map((t) => (
+          <button
+            key={t}
+            onClick={() => setType(t as OrderType)}
+            className={`text-[11px] font-black transition-all relative uppercase tracking-wider ${type === t ? 'text-primary' : 'text-dark-muted hover:text-white'
+              }`}
+          >
+            {t.replace('_', ' ')}
+            {type === t && <div className="absolute -bottom-2 left-0 right-0 h-0.5 bg-primary rounded-full shadow-[0_0_8px_#7B61FF]" />}
+          </button>
+        ))}
+      </div>
+
+      {/* Dual Column Form */}
+      <div className="flex flex-col md:flex-row gap-6">
+        <OrderForm side="buy" />
+        <div className="hidden md:block w-px bg-white/5 self-stretch" />
+        <OrderForm side="sell" />
       </div>
     </div>
   );
