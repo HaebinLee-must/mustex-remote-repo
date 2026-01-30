@@ -3,6 +3,8 @@ import Header from './layouts/Header';
 import Footer from './layouts/Footer';
 import Hero from './features/landing/components/Hero';
 import Hero2 from './features/landing/components/Hero2';
+import Hero3 from './features/landing/components/Hero3';
+import Hero4 from './features/landing/components/Hero4';
 import MarketData from './features/landing/components/MarketData';
 import Blog from './features/landing/components/Blog';
 import Features from './features/landing/components/Features';
@@ -19,16 +21,32 @@ import P2PPage from './features/p2p/P2PPage';
 import { useAuth } from './features/auth/AuthContext';
 import { useUI } from './features/shared/UIContext';
 
-const LandingPage = ({ variant = 1 }: { variant?: number }) => (
-    <>
-        {variant === 1 ? <Hero /> : <Hero2 />}
-        <MarketData />
-        <Blog />
-        <Features />
-        <Highlight />
-        <TradeAnywhere />
-    </>
-);
+const LandingPage = ({ variant = 1 }: { variant?: number }) => {
+    const renderHero = () => {
+        switch (variant) {
+            case 4:
+                return <Hero4 />;
+            case 3:
+                return <Hero3 />;
+            case 2:
+                return <Hero2 />;
+            case 1:
+            default:
+                return <Hero />;
+        }
+    };
+
+    return (
+        <>
+            {renderHero()}
+            <MarketData />
+            <Blog />
+            <Features />
+            <Highlight />
+            <TradeAnywhere />
+        </>
+    );
+};
 
 function App() {
     const { isAuthenticated, signup, login } = useAuth();
@@ -46,6 +64,12 @@ function App() {
     };
 
     const renderContent = () => {
+        // URL 쿼리 파라미터에서 시안 버전 확인 (?v=1, ?v=2, ?v=3, ?v=4)
+        const params = new URLSearchParams(window.location.search);
+        const urlVariant = params.get('v');
+        // 기본값을 1로 설정하여 명시적으로 v=2, v=4를 입력했을 때만 바뀌도록 확인
+        const variant = urlVariant ? parseInt(urlVariant) : 1;
+
         switch (currentView) {
             case 'exchange':
                 return <TradeLayout />;
@@ -96,7 +120,7 @@ function App() {
             case 'landing':
             default:
                 // variant=1: 기존 시안, variant=2: 신규 시안
-                return <LandingPage variant={1} />;
+                return <LandingPage variant={variant} />;
         }
     };
 
@@ -132,5 +156,5 @@ function App() {
         </div>
     );
 }
-
+// TO DO 
 export default App;

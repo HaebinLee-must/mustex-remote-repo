@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'Sprat';
+    src: url('https://assets.unicorn.studio/fonts/studio_picks/Sprat%2FSprat-CondensedMedium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
 @layer base {
     :root {
         /* shadcn Indigo + Neutral (Nova Style) */
@@ -69,6 +77,10 @@
 }
 
 @layer utilities {
+    .font-sprat {
+        font-family: 'Sprat', serif;
+    }
+
     .text-data {
         @apply font-sans tabular-nums;
     }
@@ -163,4 +175,61 @@
 
 .border-primary {
     border-color: hsl(var(--primary));
+}
+
+/* Background Loop Animations */
+@keyframes aurora-loop {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(2%, 2%) scale(1.1);
+    }
+
+    66% {
+        transform: translate(-1%, 3%) scale(0.95);
+    }
+
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+}
+
+.animate-aurora-slow {
+    animation: aurora-loop 20s ease-in-out infinite;
+}
+
+@keyframes float-slow {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.animate-float-slow {
+    animation: float-slow 6s ease-in-out infinite;
+}
+
+@keyframes gradient-x {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.animate-gradient-x {
+    animation: gradient-x 15s ease infinite;
 }

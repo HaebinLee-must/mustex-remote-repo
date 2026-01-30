@@ -37,7 +37,7 @@ const Hero: React.FC = () => {
             return (
                 <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] font-display">
                     Trade Global Assets <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5b42f3] via-[#7b6fe6] to-[#3366ff]">
                         on Finora without Limits
                     </span>
                 </h1>
@@ -48,7 +48,7 @@ const Hero: React.FC = () => {
         if (words.length <= 2) {
             return (
                 <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] font-display">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5b42f3] via-[#7b6fe6] to-[#3366ff]">
                         {title}
                     </span>
                 </h1>
@@ -57,7 +57,7 @@ const Hero: React.FC = () => {
         return (
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] font-display">
                 {words.slice(0, 2).join(' ')} <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5b42f3] via-[#7b6fe6] to-[#3366ff]">
                     {words.slice(2).join(' ')}
                 </span>
             </h1>
@@ -69,7 +69,7 @@ const Hero: React.FC = () => {
             {/* Aurora Background (성운 느낌 그라데이션) */}
             <div className="absolute inset-0 z-0 pointer-events-none">
                 <AuroraBackground />
-                <div className="absolute inset-0 bg-background/60"></div>
+                <div className="absolute inset-0 bg-background/40"></div>
             </div>
 
             <div className="relative mx-auto w-full max-w-7xl px-6 py-20 sm:px-8 lg:px-12 md:py-32">
@@ -83,10 +83,10 @@ const Hero: React.FC = () => {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-6 justify-center">
-                            <button className="bg-primary text-primary-foreground hover:opacity-90 focus:ring-2 focus:ring-ring focus:ring-offset-2 shadow-xl shadow-primary/20 inline-flex items-center justify-center rounded-xl px-8 py-4 text-base font-bold transition-all duration-200 active:scale-95 w-full sm:w-auto">
+                            <button className="bg-[#5b42f3] text-white hover:opacity-90 focus:ring-2 focus:ring-ring focus:ring-offset-2 shadow-xl shadow-primary/20 inline-flex items-center justify-center rounded-xl px-8 py-4 text-base font-bold transition-all duration-200 active:scale-95 w-full sm:w-auto">
                                 {t('tradeNow')}
                             </button>
-                            <button className="bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border inline-flex items-center justify-center rounded-xl px-8 py-4 text-base font-bold transition-all duration-200 active:scale-95 w-full sm:w-auto">
+                            <button className="bg-white/5 text-white hover:bg-white/10 border border-white/10 backdrop-blur-md inline-flex items-center justify-center rounded-xl px-8 py-4 text-base font-bold transition-all duration-200 active:scale-95 w-full sm:w-auto">
                                 View Markets
                             </button>
                         </div>

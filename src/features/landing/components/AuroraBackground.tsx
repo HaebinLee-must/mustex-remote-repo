@@ -51,7 +51,7 @@ export const AuroraBackground: React.FC = () => {
         vec3 deepPurple = vec3(0.08, 0.03, 0.15);  // Deep background
         vec3 vibrantViolet = vec3(0.45, 0.1, 0.85); // Main purple
         vec3 neonCyan = vec3(0.0, 0.8, 0.95);       // Bright highlight
-        vec3 hotPink = vec3(0.9, 0.1, 0.5);         // Secondary highlight
+        vec3 hotPink = vec3(0.85, 0.65, 1.0);       // Secondary highlight (#D9A7FF)
 
         // Mixing the colors
         vec3 color = mix(deepPurple, vibrantViolet, r * 0.8);
