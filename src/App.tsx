@@ -68,7 +68,7 @@ function App() {
         // URL 쿼리 파라미터에서 시안 버전 확인 (?v=1, ?v=2, ?v=3, ?v=4)
         const params = new URLSearchParams(window.location.search);
         const urlVariant = params.get('v');
-        // 기본값을 1로 설정하여 명시적으로 v=2, v=4를 입력했을 때만 바뀌도록 확인
+        // landing1 브랜치: 기본값을 1로 고정
         const variant = urlVariant ? parseInt(urlVariant) : 1;
 
         switch (currentView) {
