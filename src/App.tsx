@@ -23,6 +23,7 @@ import { useUI } from './features/shared/UIContext';
 
 const LandingPage = ({ variant = 1 }: { variant?: number }) => {
     const renderHero = () => {
+        console.log('Rendering LandingPage with variant:', variant);
         switch (variant) {
             case 4:
                 return <Hero4 />;
