@@ -29,7 +29,7 @@ const LandingPage = ({ variant = 1 }: { variant?: number }) => {
         switch (variant) {
             case 5:
                 return (
-                    <div className="relative">
+                    <div className="relative overflow-hidden bg-[#050508]">
                         <AuroraBorealis className="z-0" />
                         <HeroBorealis />
                     </div>
@@ -74,11 +74,10 @@ function App() {
     };
 
     const renderContent = () => {
-        // URL 쿼리 파라미터에서 시안 버전 확인 (?v=1, ?v=2, ?v=3, ?v=4)
+        // 5번 시안 브랜치: 기본값을 5번으로 고정
         const params = new URLSearchParams(window.location.search);
         const urlVariant = params.get('v');
-        // 배포용 메인 브랜치: URL 파라미터가 있으면 해당 버전을, 없으면 1번을 보여줌
-        const variant = urlVariant ? parseInt(urlVariant) : 1;
+        const variant = urlVariant ? parseInt(urlVariant) : 5;
 
         switch (currentView) {
             case 'exchange':
