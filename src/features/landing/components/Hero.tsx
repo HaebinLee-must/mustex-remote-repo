@@ -5,7 +5,11 @@ import { AuroraBackground } from './AuroraBackground';
 import { mockMarketData } from '@/features/trade/services/mockMarketData';
 import { MarketStats } from '@/features/trade/types/market';
 
-const Hero: React.FC = () => {
+interface HeroProps {
+    transparentBg?: boolean;
+}
+
+const Hero: React.FC<HeroProps> = ({ transparentBg }) => {
     const { t } = useUI();
     const [btcStats, setBtcStats] = useState<MarketStats | null>(null);
     const [ethStats, setEthStats] = useState<MarketStats | null>(null);
@@ -65,12 +69,14 @@ const Hero: React.FC = () => {
     };
 
     return (
-        <section id="hero" className="relative overflow-hidden bg-background font-sans min-h-[75vh] flex items-center">
+        <section id="hero" className={`relative overflow-hidden font-sans min-h-[75vh] flex items-center ${transparentBg ? 'bg-transparent' : 'bg-background'}`}>
             {/* Aurora Background (성운 느낌 그라데이션) */}
-            <div className="absolute inset-0 z-0 pointer-events-none">
-                <AuroraBackground />
-                <div className="absolute inset-0 bg-background/40"></div>
-            </div>
+            {!transparentBg && (
+                <div className="absolute inset-0 z-0 pointer-events-none">
+                    <AuroraBackground />
+                    <div className="absolute inset-0 bg-background/40"></div>
+                </div>
+            )}
 
             <div className="relative mx-auto w-full max-w-7xl px-6 py-20 sm:px-8 lg:px-12 md:py-32">
                 <div className="flex flex-col items-center text-center">
