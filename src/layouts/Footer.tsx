@@ -1,7 +1,11 @@
 import React from 'react';
 import logoLight from '../assets/finora_bi_light.png';
 
+import { useUI } from '../features/shared/UIContext';
+
 const Footer: React.FC = () => {
+    const { setCurrentView } = useUI();
+
     return (
         <footer className="bg-[#0B0E11] pt-20 pb-10 border-t border-[#1E2329] mt-auto font-sans">
             <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -31,6 +35,7 @@ const Footer: React.FC = () => {
                     <div className="md:col-span-2 flex flex-col gap-6">
                         <h4 className="font-semibold text-white text-[15px]">Information</h4>
                         <ul className="flex flex-col gap-3 text-[13px] text-[#848E9C] font-medium">
+                            <li><button onClick={() => setCurrentView('about')} className="hover:text-white transition-colors">About Us</button></li>
                             <li><button className="hover:text-white transition-colors">Customer Support</button></li>
                             <li><button className="hover:text-white transition-colors">Fees & Limits</button></li>
                             <li><button className="hover:text-white transition-colors">Settings</button></li>

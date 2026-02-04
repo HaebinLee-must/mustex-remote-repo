@@ -20,6 +20,7 @@ import TradeLayout from './features/trade/TradeLayout';
 import WalletPage from './pages/WalletPage';
 import SwapPage from './pages/SwapPage';
 import MyPage from './pages/MyPage';
+import AboutPage from './pages/AboutPage';
 import P2PPage from './features/p2p/P2PPage';
 import { useAuth } from './features/auth/AuthContext';
 import { useUI } from './features/shared/UIContext';
@@ -96,6 +97,8 @@ function App() {
                 return <SwapPage />;
             case 'p2p':
                 return <P2PPage />;
+            case 'about':
+                return <AboutPage />;
             case 'mypage':
                 return (
                     <MyPage
