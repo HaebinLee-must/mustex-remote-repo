@@ -5,7 +5,8 @@ import Hero from './features/landing/components/Hero';
 import Hero2 from './features/landing/components/Hero2';
 import Hero3 from './features/landing/components/Hero3';
 import Hero4 from './features/landing/components/Hero4';
-import AuroraBorealis from './features/landing/components/AuroraBorealis';
+import AuroraBorealisV5 from './features/landing/components/AuroraBorealisV5';
+import AuroraBorealisV6 from './features/landing/components/AuroraBorealisV6';
 import HeroBorealis from './features/landing/components/HeroBorealis';
 import MarketData from './features/landing/components/MarketData';
 import Blog from './features/landing/components/Blog';
@@ -27,10 +28,17 @@ const LandingPage = ({ variant = 1 }: { variant?: number }) => {
     const renderHero = () => {
         console.log('Rendering LandingPage with variant:', variant);
         switch (variant) {
+            case 6:
+                return (
+                    <div className="relative overflow-hidden bg-[#070112]">
+                        <AuroraBorealisV6 className="z-0" />
+                        <HeroBorealis />
+                    </div>
+                );
             case 5:
                 return (
-                    <div className="relative overflow-hidden bg-[#050508]">
-                        <AuroraBorealis className="z-0" />
+                    <div className="relative overflow-hidden bg-[#010308]">
+                        <AuroraBorealisV5 className="z-0" />
                         <HeroBorealis />
                     </div>
                 );

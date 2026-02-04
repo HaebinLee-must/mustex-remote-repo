@@ -25,7 +25,7 @@ interface AuroraBeam {
     waveOffset: number; // Unique wave starting point
 }
 
-const AuroraBorealis: React.FC<AuroraBackgroundProps> = ({ className }) => {
+const AuroraBorealisV6: React.FC<AuroraBackgroundProps> = ({ className }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     const targetMouse = useRef({ x: 0, y: 0 });
@@ -228,4 +228,4 @@ const AuroraBorealis: React.FC<AuroraBackgroundProps> = ({ className }) => {
     );
 };
 
-export default AuroraBorealis;
+export default AuroraBorealisV6;
