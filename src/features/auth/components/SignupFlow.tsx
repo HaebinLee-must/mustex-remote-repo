@@ -20,11 +20,13 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
     const { lang, setLang } = useUI();
     const [step, setStep] = useState<Step>('email');
     const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState<string | null>(null); // State for email validation error
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [agreeTerms, setAgreeTerms] = useState(false);
+    const [agreeMarketing, setAgreeMarketing] = useState(false); // Add state for marketing agreement
     const [error, setError] = useState('');
     const [countdown, setCountdown] = useState(30);
 
@@ -38,14 +40,33 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
         return () => clearInterval(timer);
     }, [step, countdown]);
 
+    // Email validation function
+    const validateEmail = (inputEmail: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!inputEmail) {
+            return '이메일 주소를 입력해주세요.';
+        }
+        if (!emailRegex.test(inputEmail)) {
+            return '알맞은 형식의 이메일을 써주세요';
+        }
+        return null;
+    };
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newEmail = e.target.value;
+        setEmail(newEmail);
+        setEmailError(validateEmail(newEmail)); // Validate on change
+    };
+
     const handleEmailSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!email) {
-            setError('Email is required');
+        const errorMsg = validateEmail(email);
+        if (errorMsg) {
+            setEmailError(errorMsg);
             return;
         }
         if (!agreeTerms) {
-            setError('You must agree to the Terms & Privacy');
+            setError('You must agree to the Terms & Privacy'); // This error is still relevant for terms
             return;
         }
         setError('');
@@ -126,8 +147,8 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                                     type="email"
                                     placeholder="Enter your email"
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className={`h-14 sm:h-14 border-white/[0.08] bg-white/[0.05] pr-10 text-white transition-all placeholder:text-gray-500 focus:bg-white/[0.08] focus:ring-2 focus:ring-[#5e5ce6]/50 ${error && !email ? 'border-red-500/50 focus:ring-red-500/50' : ''
+                                    onChange={handleEmailChange}
+                                    className={`h-14 sm:h-14 border-white/[0.08] bg-white/[0.05] pr-10 text-white transition-all placeholder:text-gray-500 focus:bg-white/[0.08] focus:ring-2 focus:ring-[#5e5ce6]/50 ${emailError ? 'border-red-500/50 focus:ring-red-500/50' : ''
                                         }`}
                                 />
                                 {email && (
@@ -140,6 +161,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                                     </button>
                                 )}
                             </div>
+                            {emailError && <p className="text-sm font-medium text-red-500 mt-1">{emailError}</p>}
                         </div>
 
                         <div className="space-y-4">
@@ -159,13 +181,28 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                                     <span className="text-gray-300 underline underline-offset-4 hover:text-white">Privacy Policy</span>
                                 </Label>
                             </div>
+                            {/* Add marketing agreement checkbox */}
+                            <div className="flex items-center space-x-3">
+                                <Checkbox
+                                    id="marketing"
+                                    checked={agreeMarketing}
+                                    onCheckedChange={(checked) => setAgreeMarketing(checked as boolean)}
+                                    className="border-white/20 bg-white/5 data-[state=checked]:bg-[#5e5ce6] data-[state=checked]:border-[#5e5ce6]"
+                                />
+                                <Label
+                                    htmlFor="marketing"
+                                    className="text-sm font-medium leading-none text-gray-300 cursor-pointer"
+                                >
+                                    I agree to receive marketing communications. (Optional)
+                                </Label>
+                            </div>
                         </div>
 
                         {error && <p className="text-sm font-medium text-red-500">{error}</p>}
 
                         <Button
                             type="submit"
-                            disabled={!agreeTerms}
+                            disabled={!agreeTerms || emailError !== null || !email}
                             className="group relative w-full overflow-hidden rounded-2xl bg-[#5e5ce6] py-7 text-lg font-bold text-white transition-all hover:bg-[#4b4ac2] disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <span className="relative z-10">Create Account</span>
@@ -195,6 +232,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                             <div className="text-center space-y-2">
                                 <p className="text-[#848E9C]">A 6-digit code has been sent to</p>
                                 <p className="text-white font-bold">{email}</p>
+                                <p className="text-sm text-gray-400 mt-2">이메일함을 확인해주세요. 이메일을 발견하시지 못했다면 스팸함을 확인해주세요</p>
                             </div>
                             <div className="flex justify-center gap-2 sm:gap-3" onPaste={handleOtpPaste}>
                                 {otp.map((digit, idx) => (
@@ -243,6 +281,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                         <div className="space-y-6">
                             <div className="space-y-2">
                                 <Label className="text-white">Set Password</Label>
+                                <p className="text-sm text-gray-400 mb-2">Your password must contain at least 8 characters, an upper case letter, a number, and a special character.</p>
                                 <div className="relative">
                                     <Input
                                         type={showPassword ? 'text' : 'password'}
@@ -282,13 +321,25 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
 
                             <div className="space-y-2">
                                 <Label className="text-white">Confirm Password</Label>
-                                <Input
-                                    type="password"
-                                    placeholder="Repeat password"
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="h-14 border-white/[0.08] bg-white/[0.05] text-white"
-                                />
+                                <div className="relative">
+                                    <Input
+                                        type={showPassword ? 'text' : 'password'}
+                                        placeholder="Repeat password"
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        className="h-14 border-white/[0.08] bg-white/[0.05] text-white"
+                                    />
+                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                                        {confirmPassword && (
+                                            <button type="button" onClick={() => setConfirmPassword('')} className="text-gray-400 hover:text-white">
+                                                <X className="h-4 w-4" />
+                                            </button>
+                                        )}
+                                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="text-gray-400 hover:text-white">
+                                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <Button
@@ -317,8 +368,15 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                             onClick={handleFinalize}
                             className="w-full rounded-2xl bg-[#5e5ce6] py-7 text-lg font-bold hover:bg-[#4b4ac2] group"
                         >
-                            Verify Identity
+                            Verify to Unlock Trading
                             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            onClick={() => onViewChange?.('exchange')}
+                            className="w-full rounded-2xl text-lg font-bold text-gray-400 hover:text-white"
+                        >
+                            Go to look around
                         </Button>
                     </div>
                 );

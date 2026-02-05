@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Header from './layout/Header';
-import Footer from './layout/Footer';
+import Header from './components/common/Header';
+import Footer from './components/common/Footer';
 import Hero from './features/landing/components/Hero';
 import MarketData from './features/landing/components/MarketData';
 import Features from './features/landing/components/Features';
@@ -73,11 +73,11 @@ function App() {
                 );
             case 'onboarding':
                 return (
-                    <VerificationFlow onComplete={() => setCurrentView('landing')} />
+                    <VerificationFlow onComplete={() => setCurrentView('landing')} onExit={() => setCurrentView('landing')} />
                 );
             case 'verification':
                 return (
-                    <VerificationFlow onComplete={() => setCurrentView('mypage')} />
+                    <VerificationFlow onComplete={() => setCurrentView('mypage')} onExit={() => setCurrentView('mypage')} />
                 );
             case 'landing':
             default:
@@ -87,7 +87,7 @@ function App() {
 
     return (
         <div className="min-h-screen bg-[#0B0E11] text-white font-sans selection:bg-indigo-500/30 flex flex-col">
-            {currentView !== 'signup' && currentView !== 'onboarding' && currentView !== 'verification' && (
+            {(currentView !== 'onboarding' && currentView !== 'verification') && (
                 <Header
                     currentView={currentView}
                     onViewChange={setCurrentView}
