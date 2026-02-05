@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AssetOverview from './components/AssetOverview';
 import AssetTable from './components/AssetTable';
+import AssetDetailSidebar from './components/AssetDetailSidebar';
 import DepositModal from './components/DepositModal';
 import WithdrawModal from './components/WithdrawModal';
 import TransactionHistory from './components/TransactionHistory';
+import FullTransactionHistory from './components/FullTransactionHistory';
 import { useWallet } from './hooks/useWallet';
+import { LayoutDashboard, History, Wallet, ChevronRight } from 'lucide-react';
 
 const WalletPage: React.FC = () => {
     const {
@@ -17,19 +20,98 @@ const WalletPage: React.FC = () => {
         closeWithdraw
     } = useWallet();
 
-    return (
-        <div className="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-8">
-            <AssetOverview
-                onDepositClick={() => openDeposit()}
-                onWithdrawClick={() => openWithdraw()}
-            />
+    const [walletView, setWalletView] = useState<'overview' | 'history'>('overview');
+    const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
 
-            <AssetTable
+    const handleAssetClick = (symbol: string) => {
+        setSelectedAsset(symbol);
+    };
+
+    const handleCloseSidebar = () => {
+        setSelectedAsset(null);
+    };
+
+    return (
+        <div className="flex w-full min-h-[calc(100vh-80px)] bg-[#0B0E11]">
+            {/* Wallet Sidebar */}
+            <aside className="w-64 border-r border-border/10 bg-[#161A1E]/50 backdrop-blur-md hidden lg:flex flex-col p-6 space-y-8">
+                <div className="flex items-center space-x-2 px-2 py-4">
+                    <div className="p-2 bg-primary/20 rounded-lg">
+                        <Wallet className="w-5 h-5 text-primary" />
+                    </div>
+                    <span className="font-black text-lg tracking-tight">Wallet</span>
+                </div>
+
+                <nav className="flex-1 space-y-1">
+                    <button
+                        onClick={() => setWalletView('overview')}
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all group ${walletView === 'overview'
+                                ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
+                                : 'text-muted-foreground hover:bg-accent/20 hover:text-foreground'
+                            }`}
+                    >
+                        <div className="flex items-center space-x-3">
+                            <LayoutDashboard className="w-5 h-5" />
+                            <span className="font-bold text-sm">Asset Overview</span>
+                        </div>
+                        {walletView === 'overview' && <ChevronRight className="w-4 h-4" />}
+                    </button>
+
+                    <button
+                        onClick={() => setWalletView('history')}
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all group ${walletView === 'history'
+                                ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
+                                : 'text-muted-foreground hover:bg-accent/20 hover:text-foreground'
+                            }`}
+                    >
+                        <div className="flex items-center space-x-3">
+                            <History className="w-5 h-5" />
+                            <span className="font-bold text-sm">History</span>
+                        </div>
+                        {walletView === 'history' && <ChevronRight className="w-4 h-4" />}
+                    </button>
+
+                    <div className="pt-8 px-2">
+                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest leading-loose opacity-40">Account Details</p>
+                        <div className="mt-4 space-y-4 opacity-50 hover:opacity-100 transition-opacity">
+                            <div className="flex items-center justify-between text-[11px] font-bold">
+                                <span>Security Level</span>
+                                <span className="text-success">High</span>
+                            </div>
+                            <div className="flex items-center justify-between text-[11px] font-bold">
+                                <span>Identity Verification</span>
+                                <span className="text-success">Verified</span>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </aside>
+
+            {/* Main Content Area */}
+            <main className="flex-1 overflow-y-auto bg-gradient-to-br from-background via-[#0B0E11] to-[#0B0E11]">
+                <div className="max-w-6xl mx-auto p-4 md:p-8 md:px-12 space-y-8 animate-in fade-in duration-700">
+                    {walletView === 'overview' ? (
+                        <>
+                            <AssetOverview
+                                onDepositClick={() => openDeposit()}
+                                onWithdrawClick={() => openWithdraw()}
+                            />
+                            <AssetTable onAssetClick={handleAssetClick} />
+                            <TransactionHistory onMoreClick={() => setWalletView('history')} />
+                        </>
+                    ) : (
+                        <FullTransactionHistory />
+                    )}
+                </div>
+            </main>
+
+            <AssetDetailSidebar
+                symbol={selectedAsset}
+                isOpen={!!selectedAsset}
+                onClose={handleCloseSidebar}
                 onDeposit={(symbol) => openDeposit(symbol)}
                 onWithdraw={(symbol) => openWithdraw(symbol)}
             />
-
-            <TransactionHistory />
 
             <DepositModal
                 isOpen={isDepositOpen}

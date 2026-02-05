@@ -4,6 +4,7 @@ import NumericStepperInput from '../../shared/components/NumericStepperInput';
 import { useAuth } from '../../auth/AuthContext';
 import { useWallet } from '../../wallet/hooks/useWallet';
 import { useUI } from '../../shared/UIContext';
+import { UX_CONSTRAINT_MESSAGES } from '@/constants/policy';
 
 interface OrderPanelProps {
   symbol: string;
@@ -19,9 +20,12 @@ interface OrderPanelProps {
 }
 
 const OrderPanel: React.FC<OrderPanelProps> = ({ symbol, marketStats, onSubmit, price: externalPrice, onPriceChange }) => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, permissions } = useAuth();
   const { balances, openDeposit } = useWallet();
   const { setCurrentView } = useUI();
+
+  // Get security level for permission checks
+  const securityLevel = user?.securityLevel || 0;
 
   const [type, setType] = useState<OrderType>('limit');
   const [status, setStatus] = useState<OrderSubmitStatus>('IDLE');
@@ -53,13 +57,25 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ symbol, marketStats, onSubmit, 
   const sellAvailable = getAvailableBalance('sell');
 
   const handleAction = async (side: Side) => {
+    // Check authentication
     if (!isAuthenticated) {
       setCurrentView('login');
       return;
     }
 
-    if (user?.kycStatus === 'unverified') {
-      if (confirm('인증이 필요합니다. 거래를 진행하려면 신원 인증을 완료해 주세요. 지금 인증하시겠습니까?')) {
+    // Level 0: Email not verified - cannot deposit
+    if (securityLevel === 0) {
+      const msg = UX_CONSTRAINT_MESSAGES.depositAttemptShowsEmailVerificationRequired;
+      if (confirm(`${msg.title}\n\n${msg.message}\n\n인증을 진행하시겠습니까?`)) {
+        setCurrentView('verification');
+      }
+      return;
+    }
+
+    // Level 1: Email verified but no KYC - cannot trade
+    if (securityLevel === 1 || !permissions.canTrade) {
+      const msg = UX_CONSTRAINT_MESSAGES.tradeAttemptShowsKycBasicRequired;
+      if (confirm(`${msg.title}\n\n${msg.message}\n\n인증을 진행하시겠습니까?`)) {
         setCurrentView('verification');
       }
       return;

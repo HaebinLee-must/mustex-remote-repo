@@ -7,7 +7,7 @@ interface StepCardProps {
 
 export const StepCard: React.FC<StepCardProps> = ({ children, footer }) => {
     return (
-        <div className="w-full bg-[#1E2329]/60 backdrop-blur-2xl border border-white/[0.08] rounded-[32px] overflow-hidden shadow-2xl">
+        <div className="w-full bg-[#1E2329]/60 backdrop-blur-2xl border border-white/[0.08] rounded-3xl overflow-hidden shadow-2xl">
             <div className="p-8 sm:p-12">
                 {children}
             </div>

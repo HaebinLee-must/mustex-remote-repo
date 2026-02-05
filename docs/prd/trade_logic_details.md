@@ -1,5 +1,7 @@
 # CEX Trade Logic & Order UX Details
 
+@/docs/instructions/kyc_compliance.md를 참조한다. 
+
 > **Status:** Draft (v1.0)  
 > **Last Updated:** 2026-01-20  
 > **Related PRD:** [Trade UI PRD](./trade.md)

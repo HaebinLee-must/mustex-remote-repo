@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { User, FileText, Camera, MapPin, CheckCircle, Clock, Upload, AlertCircle, Shield, XCircle, Loader2, ChevronLeft, ChevronDown, Search } from 'lucide-react';
+import { User, FileText, Camera, MapPin, CheckCircle, Clock, Upload, AlertCircle, Shield, XCircle, Loader2, ChevronLeft, ChevronDown, Search, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { StepCard } from '../components/StepCard';
 import { Button } from '@/components/ui/button';
@@ -59,7 +59,7 @@ export const KYC01_Intro: React.FC<KycScreenProps> = ({ onNext, onCountrySelect 
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            className="w-full max-w-md bg-[#1e1e3f] border border-white/10 rounded-[32px] p-8 shadow-2xl space-y-8"
+                            className="w-full max-w-md bg-[#1e1e3f] border border-white/10 rounded-3xl p-8 shadow-2xl space-y-8"
                         >
                             <div className="flex justify-center">
                                 <div className="w-20 h-20 bg-[#5e5ce6]/20 rounded-3xl flex items-center justify-center text-[#5e5ce6]">
@@ -313,6 +313,7 @@ export const KYC02_PersonalInfo: React.FC<KycScreenProps> = ({ onNext }) => {
 
 export const KYC03_IdUpload: React.FC<KycScreenProps> = ({ onNext }) => {
     const [file, setFile] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -321,8 +322,11 @@ export const KYC03_IdUpload: React.FC<KycScreenProps> = ({ onNext }) => {
             const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
             if (allowedTypes.includes(selectedFile.type)) {
                 setFile(selectedFile);
+                setPreviewUrl(URL.createObjectURL(selectedFile));
             } else {
                 alert('Supports JPG, PNG, PDF only.');
+                setFile(null);
+                setPreviewUrl(null);
             }
         }
     };
@@ -344,20 +348,34 @@ export const KYC03_IdUpload: React.FC<KycScreenProps> = ({ onNext }) => {
                 />
                 <div
                     onClick={triggerFileInput}
-                    className={`aspect-[16/10] bg-white/5 border-2 border-dashed rounded-[32px] flex flex-col items-center justify-center gap-4 transition-all cursor-pointer group ${file ? 'border-green-500/50 bg-green-500/5' : 'border-white/10 hover:border-[#5e5ce6]'}`}
+                    className={`aspect-[16/10] bg-white/5 border-2 border-dashed rounded-3xl flex flex-col items-center justify-center gap-4 transition-all cursor-pointer group ${file ? 'border-green-500/50 bg-green-500/5' : 'border-white/10 hover:border-[#5e5ce6]'}`}
                 >
-                    {file ? (
-                        <>
-                            <div className="w-16 h-16 bg-green-500/20 rounded-3xl flex items-center justify-center text-green-500">
-                                <CheckCircle className="w-8 h-8" />
+                    {file && previewUrl ? (
+                        <div className="relative w-full h-full">
+                            {file.type.startsWith('image/') ? (
+                                <img src={previewUrl} alt="ID Preview" className="w-full h-full object-cover rounded-3xl" />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-white/5 rounded-3xl text-white text-lg font-bold">
+                                    PDF Document
+                                </div>
+                            )}
+                            <button
+                                onClick={() => {
+                                    setFile(null);
+                                    setPreviewUrl(null);
+                                    if (fileInputRef.current) fileInputRef.current.value = '';
+                                }}
+                                className="absolute top-3 right-3 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
+                                aria-label="Remove image"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-xs truncate max-w-[calc(100%-20px)]">
+                                {file.name}
                             </div>
-                            <div className="text-center">
-                                <p className="text-sm font-bold text-white truncate max-w-[200px]">{file.name}</p>
-                                <p className="text-[10px] text-green-500 font-black uppercase mt-1 tracking-widest">Ready to upload</p>
-                            </div>
-                        </>
+                        </div>
                     ) : (
-                        <>
+                        <div className="w-full h-full flex flex-col items-center justify-center gap-4">
                             <div className="w-16 h-16 bg-white/5 rounded-3xl flex items-center justify-center text-[#848E9C] group-hover:text-[#5e5ce6] group-hover:scale-110 transition-all duration-500">
                                 <Upload className="w-7 h-7" />
                             </div>
@@ -365,7 +383,7 @@ export const KYC03_IdUpload: React.FC<KycScreenProps> = ({ onNext }) => {
                                 <p className="text-sm text-white font-bold">Upload a photo of your ID</p>
                                 <p className="text-[10px] text-[#848E9C] uppercase font-bold tracking-widest">Supports JPG, PNG, PDF</p>
                             </div>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
@@ -476,7 +494,7 @@ export const KYC05_ProofOfAddress: React.FC<KycScreenProps> = ({ onNext }) => {
 
     return (
         <div className="space-y-8">
-            <div className="bg-white/5 border border-white/10 rounded-[40px] p-8 space-y-8 shadow-2xl backdrop-blur-xl relative">
+            <div className="bg-white/5 border border-white/10 rounded-3xl p-8 space-y-8 shadow-2xl backdrop-blur-xl relative">
                 <button
                     onClick={() => { }} // Handle back in VerificationFlow
                     className="absolute left-6 top-6 p-2 text-[#848E9C] hover:text-white transition-colors"
@@ -503,7 +521,7 @@ export const KYC05_ProofOfAddress: React.FC<KycScreenProps> = ({ onNext }) => {
                     />
                     <div
                         onClick={() => fileInputRef.current?.click()}
-                        className={`aspect-[16/10] bg-white/[0.02] border-2 border-dashed rounded-[32px] flex flex-col items-center justify-center gap-4 transition-all cursor-pointer group ${file ? 'border-green-500/50 bg-green-500/5' : 'border-white/10 hover:border-[#5e5ce6]'}`}
+                        className={`aspect-[16/10] bg-white/[0.02] border-2 border-dashed rounded-3xl flex flex-col items-center justify-center gap-4 transition-all cursor-pointer group ${file ? 'border-green-500/50 bg-green-500/5' : 'border-white/10 hover:border-[#5e5ce6]'}`}
                     >
                         {file ? (
                             <>
@@ -544,7 +562,7 @@ export const KYC05_ProofOfAddress: React.FC<KycScreenProps> = ({ onNext }) => {
 export const KYC06_Status: React.FC<KycScreenProps> = ({ onNext }) => {
     return (
         <div className="space-y-8">
-            <div className="bg-white/10 border border-white/10 rounded-[40px] p-8 space-y-10 shadow-2xl backdrop-blur-xl flex flex-col items-center text-center">
+            <div className="bg-white/10 border border-white/10 rounded-3xl p-8 space-y-10 shadow-2xl backdrop-blur-xl flex flex-col items-center text-center">
                 <div className="relative">
                     <div className="w-24 h-24 bg-[#5e5ce6]/10 rounded-full flex items-center justify-center text-[#5e5ce6]">
                         <Clock className="w-12 h-12" />

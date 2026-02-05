@@ -1,5 +1,7 @@
+import { fontFamily } from './src/design-system/typography';
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
     darkMode: ["class"],
     content: [
         "./index.html",
@@ -69,14 +71,22 @@ module.exports = {
                 },
             },
             fontFamily: {
-                sans: ['Roboto', 'Inter', 'sans-serif'],
-                display: ['Poppins', 'sans-serif'],
-                roboto: ['Roboto', 'sans-serif'],
+                sans: fontFamily.sans,
+                display: fontFamily.display,
+                mono: fontFamily.mono,
             },
             borderRadius: {
-                lg: "var(--radius)",
-                md: "calc(var(--radius) - 2px)",
-                sm: "calc(var(--radius) - 4px)",
+                // Unified Radius System
+                // Use semantic names for consistency across components
+                'none': '0',
+                'sm': '6px',      // Small elements: tags, tiny badges
+                'DEFAULT': '8px', // Base radius
+                'md': '8px',      // Same as default
+                'lg': '12px',     // Buttons, inputs, dropdowns
+                'xl': '16px',     // Cards, panels, list items
+                '2xl': '20px',    // Large cards, modals
+                '3xl': '24px',    // Hero cards, special containers
+                'full': '9999px', // Circular: avatars, dots, pills
             },
             keyframes: {
                 "accordion-down": {

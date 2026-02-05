@@ -31,12 +31,13 @@ function App() {
 
     const handleSignupComplete = (userData: { email: string }) => {
         signup(userData);
-        setCurrentView('onboarding');
+        setCurrentView('mypage');
+        setShowKycPromotion(true); // Activate KYC promotion after signup completes
     };
 
     const handleLogin = (userData: { email: string }) => {
         login(userData);
-        setCurrentView('landing');
+        setCurrentView('mypage');
     };
 
     const renderContent = () => {
@@ -73,11 +74,11 @@ function App() {
                 );
             case 'onboarding':
                 return (
-                    <VerificationFlow onComplete={() => setCurrentView('landing')} onExit={() => setCurrentView('landing')} />
+                    <VerificationFlow onComplete={() => { setCurrentView('mypage'); setShowKycPromotion(true); }} onExit={() => setCurrentView('landing')} />
                 );
             case 'verification':
                 return (
-                    <VerificationFlow onComplete={() => setCurrentView('mypage')} onExit={() => setCurrentView('mypage')} />
+                    <VerificationFlow onComplete={() => { setCurrentView('mypage'); setShowKycPromotion(true); }} onExit={() => setCurrentView('mypage')} />
                 );
             case 'landing':
             default:
@@ -87,14 +88,12 @@ function App() {
 
     return (
         <div className="min-h-screen bg-[#0B0E11] text-white font-sans selection:bg-indigo-500/30 flex flex-col">
-            {(currentView !== 'onboarding' && currentView !== 'verification') && (
-                <Header
-                    currentView={currentView}
-                    onViewChange={setCurrentView}
-                    isAuthenticated={isAuthenticated}
-                />
-            )}
-            <main className="flex-1">{renderContent()}</main>
+            <Header
+                currentView={currentView}
+                onViewChange={setCurrentView}
+                isAuthenticated={isAuthenticated}
+            />
+            <main className="flex-1 pt-[10vh]">{renderContent()}</main>
             {currentView !== 'exchange' && currentView !== 'signup' && currentView !== 'onboarding' && currentView !== 'verification' && <Footer />}
         </div>
     );

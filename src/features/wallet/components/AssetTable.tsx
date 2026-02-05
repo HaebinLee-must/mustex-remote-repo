@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { MOCK_ASSETS } from '../services/mockWalletData';
-import { Asset } from '../types/wallet';
-import Card from '../../shared/components/Card';
+import { useUI } from '../../shared/UIContext';
+import { Search, Info, RotateCw, ChevronUp, ChevronDown } from 'lucide-react';
 
 interface AssetTableProps {
-    onDeposit: (symbol: string) => void;
-    onWithdraw: (symbol: string) => void;
+    onAssetClick: (symbol: string) => void;
 }
 
-const AssetTable: React.FC<AssetTableProps> = ({ onDeposit, onWithdraw }) => {
+const AssetTable: React.FC<AssetTableProps> = ({ onAssetClick }) => {
+    const { setCurrentView } = useUI();
     const [searchTerm, setSearchTerm] = useState('');
+    const [activeTab, setActiveTab] = useState<'coin' | 'account'>('coin');
     const [hideLowBalance, setHideLowBalance] = useState(false);
 
     const filteredAssets = MOCK_ASSETS.filter((asset) => {
@@ -20,100 +21,164 @@ const AssetTable: React.FC<AssetTableProps> = ({ onDeposit, onWithdraw }) => {
     });
 
     return (
-        <Card className="shadow-2xl mb-8">
-            <div className="p-6 border-b border-dark-border flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center space-x-6">
-                    <h3 className="font-extrabold text-lg">Fiat and Spot</h3>
-                    <div className="flex items-center space-x-2">
-                        <input
-                            type="checkbox"
-                            id="hide-low"
-                            checked={hideLowBalance}
-                            onChange={(e) => setHideLowBalance(e.target.checked)}
-                            className="accent-[#6366F1] w-4 h-4 rounded cursor-pointer"
-                        />
-                        <label htmlFor="hide-low"
-                            className="text-xs font-bold text-[#848E9C] cursor-pointer hover:text-[#EAECEF] transition">
-                            Hide Low Balance
-                        </label>
+        <div className="bg-card/40 backdrop-blur-sm rounded-xl border border-border overflow-hidden">
+            {/* Header Section */}
+            <div className="px-6 pt-6 pb-2">
+                <h2 className="text-xl font-bold mb-6 text-foreground">My Assets</h2>
+                <div className="flex items-center justify-between border-b border-border">
+                    <div className="flex space-x-8">
+                        <button
+                            onClick={() => setActiveTab('coin')}
+                            className={`pb-3 text-sm font-bold relative transition-colors ${activeTab === 'coin' ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+                                }`}
+                        >
+                            Coin View
+                            {activeTab === 'coin' && (
+                                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-primary"></div>
+                            )}
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('account')}
+                            className={`pb-3 text-sm font-bold relative transition-colors ${activeTab === 'account' ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+                                }`}
+                        >
+                            Account View
+                            {activeTab === 'account' && (
+                                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-primary"></div>
+                            )}
+                        </button>
                     </div>
-                </div>
-                <div className="relative w-full sm:w-64 group">
-                    <input
-                        type="text"
-                        placeholder="Search Asset"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-dark-main border border-dark-border rounded-xl px-10 py-2.5 text-sm outline-none focus:border-[#6366F1] transition group-hover:border-[#848E9C]"
-                    />
-                    <svg className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#848E9C] group-focus-within:text-[#6366F1] transition"
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
+                    <div className="flex items-center space-x-6 pb-3">
+                        <div className="flex items-center text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
+                            <Search className="w-4 h-4" />
+                        </div>
+                        <div className="flex items-center space-x-2 text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
+                            <RotateCw className="w-4 h-4" />
+                            <span className="text-xs font-bold">Small Amount Exchange</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                id="small-exchange-check"
+                                checked={hideLowBalance}
+                                onChange={(e) => setHideLowBalance(e.target.checked)}
+                                className="accent-primary w-4 h-4 rounded border-border bg-transparent cursor-pointer"
+                            />
+                            <label htmlFor="small-exchange-check" className="text-xs font-bold text-muted-foreground cursor-pointer">
+                                Small Amount Exchange
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            {/* Table Section */}
             <div className="overflow-x-auto">
                 <table className="w-full text-sm tabular-nums">
-                    <thead className="text-[#848E9C] bg-dark-main/30 border-b border-dark-border">
-                        <tr className="text-left font-bold text-[11px] uppercase tracking-wider">
-                            <th className="p-5">Coin</th>
-                            <th className="p-5 text-right">Total</th>
-                            <th className="p-5 text-right">Available</th>
-                            <th className="p-5 text-right">In Order</th>
-                            <th className="p-5 text-right">BTC Value</th>
-                            <th className="p-5 text-right">Action</th>
+                    <thead>
+                        <tr className="text-muted-foreground text-[12px] font-medium border-b border-border">
+                            <th className="px-6 py-4 text-left font-normal">
+                                <div className="flex items-center space-x-1">
+                                    <span>Coin</span>
+                                    <Info className="w-3 h-3 cursor-help" />
+                                </div>
+                            </th>
+                            <th className="px-6 py-4 text-right font-normal">
+                                <div className="flex items-center justify-end space-x-1 group/header cursor-pointer">
+                                    <span>Amount</span>
+                                    <div className="flex flex-col -space-y-1 ml-1 opacity-40 group-hover/header:opacity-100 transition">
+                                        <ChevronUp className="w-2.5 h-2.5" />
+                                        <ChevronDown className="w-2.5 h-2.5" />
+                                    </div>
+                                    <Info className="w-3 h-3 cursor-help" />
+                                </div>
+                            </th>
+                            <th className="px-6 py-4 text-right font-normal">
+                                <div className="flex items-center justify-end space-x-1 group/header cursor-pointer">
+                                    <span>Coin Price / Cost Price</span>
+                                    <div className="flex flex-col -space-y-1 ml-1 opacity-40 group-hover/header:opacity-100 transition">
+                                        <ChevronUp className="w-2.5 h-2.5" />
+                                        <ChevronDown className="w-2.5 h-2.5" />
+                                    </div>
+                                    <Info className="w-3 h-3 cursor-help" />
+                                </div>
+                            </th>
+                            <th className="px-6 py-4 text-right font-normal">
+                                <div className="flex items-center justify-end space-x-1 group/header cursor-pointer">
+                                    <span>Today's PnL</span>
+                                    <div className="flex flex-col -space-y-1 ml-1 opacity-40 group-hover/header:opacity-100 transition">
+                                        <ChevronUp className="w-2.5 h-2.5" />
+                                        <ChevronDown className="w-2.5 h-2.5" />
+                                    </div>
+                                    <Info className="w-3 h-3 cursor-help" />
+                                </div>
+                            </th>
+                            <th className="px-6 py-4 text-right font-normal">Action</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-dark-border">
+                    <tbody className="divide-y divide-border/30">
                         {filteredAssets.length > 0 ? (
                             filteredAssets.map((asset) => (
-                                <tr key={asset.coin.symbol} className="hover:bg-[#0B0E11]/50 transition cursor-pointer group">
-                                    <td className="p-5 flex items-center space-x-4">
-                                        <div
-                                            style={{ backgroundColor: `${asset.coin.color}20`, color: asset.coin.color }}
-                                            className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-black"
-                                        >
-                                            {asset.coin.symbol[0]}
-                                        </div>
-                                        <div>
-                                            <span className="font-extrabold block text-[#EAECEF] group-hover:text-[#6366F1] transition">{asset.coin.symbol}</span>
-                                            <span className="text-[10px] font-bold text-[#848E9C] uppercase">{asset.coin.name}</span>
+                                <tr
+                                    key={asset.coin.symbol}
+                                    onClick={() => onAssetClick(asset.coin.symbol)}
+                                    className="hover:bg-accent/20 transition-colors cursor-pointer group"
+                                >
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center space-x-3">
+                                            <div
+                                                className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold overflow-hidden"
+                                                style={{ backgroundColor: `${asset.coin.color}` }}
+                                            >
+                                                <span className="text-white drop-shadow-sm">{asset.coin.symbol[0]}</span>
+                                            </div>
+                                            <div>
+                                                <div className="font-bold text-foreground group-hover:text-primary transition-colors">{asset.coin.symbol}</div>
+                                                <div className="text-[11px] text-muted-foreground">{asset.coin.name}</div>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className="p-5 text-right font-bold text-[#EAECEF]">{asset.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}</td>
-                                    <td className="p-5 text-right font-medium text-[#848E9C]">{asset.available.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}</td>
-                                    <td className="p-5 text-right font-medium text-[#848E9C]">{asset.inOrder.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}</td>
-                                    <td className="p-5 text-right font-bold text-[#EAECEF] tracking-tight">{asset.btcValue.toFixed(8)}</td>
-                                    <td className="p-5 text-right space-x-4 text-xs">
+                                    <td className="px-6 py-4 text-right">
+                                        <div className="font-medium text-foreground font-mono">{asset.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}</div>
+                                        <div className="text-[11px] text-muted-foreground font-mono">≈ ${(asset.total * (asset.coin.symbol === 'BTC' ? 43000 : 1)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                                    </td>
+                                    <td className="px-6 py-4 text-right">
+                                        <div className="font-medium text-foreground font-mono">${(asset.coin.symbol === 'BTC' ? 43125.50 : 1.00).toLocaleString()}</div>
+                                        <div className="text-[11px] text-muted-foreground font-mono text-center">-</div>
+                                    </td>
+                                    <td className="px-6 py-4 text-right">
+                                        <div className={`font-medium font-mono ${(asset.change24h ?? 0) >= 0 ? 'text-success' : 'text-danger'}`}>
+                                            {(asset.change24h ?? 0) >= 0 ? '+' : ''}${((asset.total * (asset.change24h ?? 0)) / 100).toFixed(2)}
+                                        </div>
+                                        <div className={`text-[11px] font-mono ${(asset.change24h ?? 0) >= 0 ? 'text-success' : 'text-danger'}`}>
+                                            ({(asset.change24h ?? 0) >= 0 ? '+' : ''}{(asset.change24h ?? 0).toFixed(2)}%)
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 text-right">
                                         <button
-                                            onClick={() => onDeposit(asset.coin.symbol)}
-                                            className="text-[#6366F1] font-black hover:text-[#818cf8] transition"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setCurrentView('exchange');
+                                            }}
+                                            className="bg-primary hover:opacity-90 text-primary-foreground px-4 py-1.5 rounded-md text-xs font-bold transition-all active:scale-95 shadow-sm shadow-primary/10"
                                         >
-                                            Deposit
+                                            Trade
                                         </button>
-                                        <button
-                                            onClick={() => onWithdraw(asset.coin.symbol)}
-                                            className="text-[#6366F1] font-black hover:text-[#818cf8] transition"
-                                        >
-                                            Withdraw
-                                        </button>
-                                        <button className="text-[#848E9C] font-black hover:text-white transition">Trade</button>
                                     </td>
                                 </tr>
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={6} className="p-10 text-center text-[#848E9C] font-medium">
+                                <td colSpan={5} className="p-12 text-center text-muted-foreground font-medium">
                                     No assets found.
                                 </td>
                             </tr>
                         )}
+
                     </tbody>
                 </table>
             </div>
-        </Card>
+        </div>
     );
 };
 

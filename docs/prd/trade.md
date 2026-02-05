@@ -1,5 +1,7 @@
 # CEX Trade UI PRD
 
+@/docs/instructions/kyc_compliance.md를 참조한다. 
+
 > **Status:** Draft  
 > **Last Updated:** 2026-01-20  
 > **Depends On:**  

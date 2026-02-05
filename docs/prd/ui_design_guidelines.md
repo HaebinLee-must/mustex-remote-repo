@@ -16,48 +16,92 @@
     - **Dark Mode (Default):** `#0B0E11` (Main), `#1E2329` (Surface/Cards).
     - **Light Mode:** `#FFFFFF` (Main), `#F5F5F5` (Surface).
 
-### 1.2 Typography
-- **Primary Font (Body/Data):** Roboto, Inter, sans-serif.
-    - Optimized for high-density trading data and numerical legibility.
-- **Display Font (Headlines/Brand):** Poppins, sans-serif.
-    - Used for Hero sections, headings, and primary CTA buttons to provide a modern, geometric aesthetic.
-- **Data Tables & Pricing:** 
-    - Always use `font-variant-numeric: tabular-nums;` (Tailwind: `tabular-nums`) for price lists, orderbooks, and any vertical numerical alignment.
-    - Letter spacing for Roboto should be slightly adjusted (`tracking-tight` or `tracking-tighter`) in dense tables if needed.
+
+## 2. Unified Border Radius System
+
+A consistent border radius system ensures visual harmony across all UI components. This system maps semantic names to pixel values in `tailwind.config.cjs`.
+
+### 2.1 Radius Tokens
+
+| Token | Pixel Value | Use Case | Examples |
+|-------|-------------|----------|----------|
+| `rounded-none` | 0px | Sharp corners | Borders, dividers |
+| `rounded-sm` | 6px | Small elements | Tags, tiny badges |
+| `rounded` / `rounded-md` | 8px | Base radius | Small buttons, tabs |
+| `rounded-lg` | 12px | Standard interactive | Buttons, inputs, dropdowns |
+| `rounded-xl` | 16px | Container elements | Cards, panels, list items |
+| `rounded-2xl` | 20px | Large containers | Large cards, modals |
+| `rounded-3xl` | 24px | Hero elements | Feature cards, onboarding screens |
+| `rounded-full` | 9999px | Circular only | Avatars, status dots, icon buttons |
+
+### 2.2 Usage Guidelines
+
+**Buttons & Inputs:**
+- Primary/Standard buttons: `rounded-lg`
+- Small buttons: `rounded-md`
+- Input fields: `rounded-lg`
+- Dropdown menus: `rounded-lg`
+
+**Cards & Containers:**
+- Standard cards: `rounded-xl`
+- Modal dialogs: `rounded-xl` to `rounded-2xl`
+- Feature/Hero cards: `rounded-2xl` to `rounded-3xl`
+
+**Small Elements:**
+- Tags/Badges: `rounded-sm` to `rounded-md`
+- Status indicators: `rounded-full`
+- Avatars: `rounded-full`
+
+### 2.3 Implementation in Tailwind
+
+```javascript
+// tailwind.config.cjs
+borderRadius: {
+    'none': '0',
+    'sm': '6px',
+    'DEFAULT': '8px',
+    'md': '8px',
+    'lg': '12px',
+    'xl': '16px',
+    '2xl': '20px',
+    '3xl': '24px',
+    'full': '9999px',
+}
+```
 
 ---
 
-## 2. Component Design Principles
+## 3. Component Design Principles
 
-### 2.1 High-Density Data
+### 3.1 High-Density Data
 - Trade pages should prioritize information density.
 - Tabular data should use consistent row heights (e.g., 32px or 40px).
 
-### 2.2 Responsive Layout (PC First, Mobile Friendly)
+### 3.2 Responsive Layout (PC First, Mobile Friendly)
 - **Desktop:** Multi-column grid for Trade (Market | Chart | Orderbook | Panel).
 - **Mobile:** Single-column stacked or tab-based navigation.
 - **Container:** Max-width 1440px for wide screens.
 
 ---
 
-## 3. Module Specific UX Rules
+## 4. Module Specific UX Rules
 
-### 3.1 Onboarding Flow
+### 4.1 Onboarding Flow
 - **Layout:** Centered card (max-width: 480px).
 - **Visuals:** Step indicators, clear CTA, live password strength validation.
 
-### 3.2 Trade Interface
+### 4.2 Trade Interface
 - **Layout:** "Dashboard" style.
 - **Panels:** Draggable or collapsible panels to maximize screen real estate.
 - **Interactions:** One-click price entry from Orderbook to Order Panel.
 
-### 3.3 Wallet & Assets
+### 4.3 Wallet & Assets
 - **Visuals:** Doughnut charts for asset distribution.
 - **Security:** Blurring balance option (Privacy mode).
 
 ---
 
-## 4. Implementation Roadmap
+## 5. Implementation Roadmap
 
 - [ ] Define global Tailwind config (Colors, Fonts).
 - [ ] Build Onboarding Shell & Screens (Login/Signup/KYC).

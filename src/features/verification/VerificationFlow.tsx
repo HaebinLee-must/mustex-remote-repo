@@ -57,7 +57,7 @@ const VerificationFlow: React.FC<VerificationFlowProps> = ({ onComplete, onExit 
                 stepComponent = <KYC.KYC05_ProofOfAddress onNext={() => setCurrentStep('STATUS_CHECK')} />;
                 break;
             case 'STATUS_CHECK':
-                stepComponent = <KYC.KYC06_Status onNext={() => setCurrentStep('SECURITY_2FA')} />;
+                stepComponent = <KYC.KYC06_Status onNext={onExit} />;
                 break;
             case 'SECURITY_2FA':
                 stepComponent = <Security.SEC01_Security2FA onNext={() => setCurrentStep('FEATURE_UNLOCK')} />;
@@ -119,7 +119,7 @@ const VerificationFlow: React.FC<VerificationFlowProps> = ({ onComplete, onExit 
     return (
         <VerificationLayout
             currentStep={currentStep}
-            onBack={currentStep !== 'INTRO' && currentStep !== 'STATUS_CHECK' ? handleBack : undefined}
+            onBack={currentStep === 'INTRO' ? onExit : handleBack}
             onExit={onExit}
             title={getTitle()}
             isEU={isEU}

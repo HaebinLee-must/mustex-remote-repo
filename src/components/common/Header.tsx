@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import logoLight from '../assets/finora_bi_light.png';
+import logoLight from '../../assets/finora_bi_light.png';
 import { Globe, Sun, Moon, ChevronDown, Check, User, Wallet, Shield, LogOut, Menu, X, ArrowRight } from 'lucide-react';
-import { useUI } from '../features/shared/UIContext';
-import { Language } from '../constants/translations';
+import { useUI } from '../../features/shared/UIContext';
+import { Language } from '../../constants/translations';
 
 interface HeaderProps {
     isAuthenticated?: boolean;
@@ -41,7 +41,7 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated = false, onViewChange: 
     }, [isMenuOpen]);
 
     const navItems = [
-        { label: t('wallet'), view: 'wallet' },
+        { label: t('myAssets'), view: 'wallet' },
         { label: t('exchange'), view: 'exchange' },
         { label: t('swap'), view: 'swap' },
         { label: 'P2P', view: 'p2p' },
@@ -50,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated = false, onViewChange: 
     const languages: { code: Language; label: string }[] = [
         { code: 'en', label: 'English' },
         { code: 'ko', label: '한국어' },
-        { code: 'mn', label: 'Монгол' },
+        { code: 'mn', label: 'Мон골' },
     ];
 
     const isLanding = currentView === 'landing';
@@ -198,7 +198,7 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated = false, onViewChange: 
                                                     className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-[#EAECEF] hover:bg-white/5 transition-colors"
                                                 >
                                                     <Wallet className="w-4 h-4 text-[#848E9C]" />
-                                                    <span>{t('wallet')}</span>
+                                                    <span>{t('myAssets')}</span>
                                                 </button>
 
                                                 <button

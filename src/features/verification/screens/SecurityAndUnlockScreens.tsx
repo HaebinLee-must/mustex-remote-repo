@@ -79,7 +79,7 @@ export const FEA01_FeatureUnlock: React.FC<StepProps> = ({ onNext }) => {
 
                 <div className="space-y-3">
                     {privileges.map((p, i) => (
-                        <div key={i} className="flex items-center gap-5 p-5 bg-white/[0.02] border border-white/[0.05] rounded-[24px] hover:bg-white/[0.04] transition-all">
+                        <div key={i} className="flex items-center gap-5 p-5 bg-white/[0.02] border border-white/[0.05] rounded-2xl hover:bg-white/[0.04] transition-all">
                             <div className={`w-14 h-14 rounded-2xl ${p.bg} flex items-center justify-center ${p.color} shrink-0 shadow-inner`}>
                                 <p.icon className="w-7 h-7" />
                             </div>

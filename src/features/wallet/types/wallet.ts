@@ -1,5 +1,7 @@
 export type HistoryStatus = 'PENDING' | 'COMPLETED' | 'FAILED';
 
+export type DisplayCurrency = 'USD' | 'USDT' | 'BTC' | 'PHP';
+
 export interface Coin {
     symbol: string;
     name: string;
@@ -21,6 +23,19 @@ export interface Asset {
     available: number;
     inOrder: number;
     btcValue: number;
+    change24h?: number;
+    usdValue?: number;
+}
+
+export interface TransactionDetails {
+    txId: string;
+    network: string;
+    fromAddress?: string;
+    toAddress?: string;
+    confirmations: number;
+    requiredConfirmations: number;
+    fee?: number;
+    feeAsset?: string;
 }
 
 export interface Transaction {
@@ -32,6 +47,7 @@ export interface Transaction {
     address: string;
     network: string;
     date: string;
+    details?: TransactionDetails;
 }
 
 export interface WalletSummary {

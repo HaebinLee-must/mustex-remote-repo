@@ -1,5 +1,6 @@
 # CEX My Page / Account Management Structure PRD (Skills용)
 
+@/docs/instructions/kyc_compliance.md를 참조한다. 
 ## 1. 문서 역할
 본 문서는 CEX Core PRD 및 Onboarding / Trade / Wallet Structure PRD를 전제로 한  
 **마이페이지(My Page) 및 계정 관리(Account Management) 모듈의 구조적 기준**을 정의한다.

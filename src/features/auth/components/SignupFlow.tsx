@@ -6,7 +6,7 @@ import { useUI } from '@/features/shared/UIContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
+import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator';
 
 interface SignupFlowProps {
@@ -32,13 +32,6 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
 
     const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-    useEffect(() => {
-        let timer: NodeJS.Timeout;
-        if (step === 'verify' && countdown > 0) {
-            timer = setInterval(() => setCountdown(prev => prev - 1), 1000);
-        }
-        return () => clearInterval(timer);
-    }, [step, countdown]);
 
     // Email validation function
     const validateEmail = (inputEmail: string) => {
@@ -47,7 +40,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
             return '이메일 주소를 입력해주세요.';
         }
         if (!emailRegex.test(inputEmail)) {
-            return '알맞은 형식의 이메일을 써주세요';
+            return 'Invalid email address';
         }
         return null;
     };
@@ -58,7 +51,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
         setEmailError(validateEmail(newEmail)); // Validate on change
     };
 
-    const handleEmailSubmit = (e: React.FormEvent) => {
+    const handleEmailSubmit = React.useCallback((e: React.FormEvent) => {
         e.preventDefault();
         const errorMsg = validateEmail(email);
         if (errorMsg) {
@@ -66,12 +59,12 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
             return;
         }
         if (!agreeTerms) {
-            setError('You must agree to the Terms & Privacy'); // This error is still relevant for terms
+            setError('You must agree to the Terms & Privacy');
             return;
         }
         setError('');
         setStep('verify');
-    };
+    }, [email, emailError, agreeTerms]); // Add dependencies to useCallback
 
     const handleVerifySubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -134,6 +127,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
     };
 
     const renderStep = () => {
+        console.log('Current step in renderStep:', step); // Debug log
         let content;
         switch (step) {
             case 'email':
@@ -148,6 +142,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                                     placeholder="Enter your email"
                                     value={email}
                                     onChange={handleEmailChange}
+                                    onBlur={() => setEmailError(validateEmail(email))} // Validate on blur as well
                                     className={`h-14 sm:h-14 border-white/[0.08] bg-white/[0.05] pr-10 text-white transition-all placeholder:text-gray-500 focus:bg-white/[0.08] focus:ring-2 focus:ring-[#5e5ce6]/50 ${emailError ? 'border-red-500/50 focus:ring-red-500/50' : ''
                                         }`}
                                 />
@@ -232,7 +227,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                             <div className="text-center space-y-2">
                                 <p className="text-[#848E9C]">A 6-digit code has been sent to</p>
                                 <p className="text-white font-bold">{email}</p>
-                                <p className="text-sm text-gray-400 mt-2">이메일함을 확인해주세요. 이메일을 발견하시지 못했다면 스팸함을 확인해주세요</p>
+                                <p className="text-sm text-gray-400 mt-2">Please check your inbox. If you don't find the email, please check your spam folder.</p>
                             </div>
                             <div className="flex justify-center gap-2 sm:gap-3" onPaste={handleOtpPaste}>
                                 {otp.map((digit, idx) => (
@@ -383,19 +378,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                 break;
         }
 
-        return (
-            <AnimatePresence mode="wait">
-                <motion.div
-                    key={step}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
-                >
-                    {content}
-                </motion.div>
-            </AnimatePresence>
-        );
+        return content;
     };
 
     const getTitle = () => {
@@ -413,12 +396,6 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
 
             <Card className="relative z-10 w-full max-w-[520px] overflow-hidden rounded-[32px] border-white/10 bg-white/10 shadow-2xl backdrop-blur-2xl animate-in fade-in slide-in-from-bottom-6 duration-700">
                 <CardHeader className="space-y-6 pb-8 pt-10">
-                    <div
-                        className="text-[#6366F1] font-black text-2xl tracking-tighter cursor-pointer select-none active:scale-95 transition inline-block"
-                        onClick={() => onViewChange?.('landing')}
-                    >
-                        MUSTEX
-                    </div>
                     <div className="space-y-2">
                         <h1 className="text-4xl font-extrabold tracking-tight text-white leading-tight">
                             {getTitle()}
@@ -430,16 +407,18 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                     {renderStep()}
 
                     <CardFooter className="flex flex-col items-center justify-center pt-4 pb-0">
-                        <div className="text-sm text-gray-400">
-                            Already have an account?{' '}
-                            <Button
-                                variant="link"
-                                className="h-auto p-0 font-bold text-white hover:underline"
-                                onClick={() => onViewChange?.('login')}
-                            >
-                                Log In
-                            </Button>
-                        </div>
+                        {step === 'email' && (
+                            <div className="text-sm text-gray-400">
+                                Already have an account?{' '}
+                                <Button
+                                    variant="link"
+                                    className="h-auto p-0 font-bold text-white hover:underline"
+                                    onClick={() => onViewChange?.('login')}
+                                >
+                                    Log In
+                                </Button>
+                            </div>
+                        )}
                     </CardFooter>
                 </CardContent>
             </Card>

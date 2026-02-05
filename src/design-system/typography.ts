@@ -22,7 +22,7 @@ export const fontFamily = {
     'Arial',
     'sans-serif',
   ],
-  // Display font for headlines and brand elements
+  // Display font for headlines and brand elements (Poppins for headers)
   display: [
     'Poppins',
     'system-ui',

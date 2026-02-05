@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronLeft, Info, ShieldCheck } from 'lucide-react';
+import { ChevronLeft, Info, ShieldCheck, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { StepId } from '../types';
 
@@ -51,6 +51,15 @@ export const VerificationLayout: React.FC<VerificationLayoutProps> = ({
             {/* Top Navigation Bar */}
             <header className="sticky top-0 z-[1001] h-20 px-4 sm:px-12 flex items-center justify-between border-b border-white/[0.05] bg-[#12122b]/80 backdrop-blur-xl">
                 <div className="flex items-center gap-6 min-w-[120px]">
+                    {onExit && (
+                        <button
+                            className="p-2 -ml-2 text-[#848E9C] hover:text-white transition-colors flex items-center gap-2 group"
+                            onClick={onExit}
+                        >
+                            <X className="w-5 h-5 group-hover:rotate-90 transition-transform" />
+                            <span className="text-xs font-bold uppercase tracking-widest">Exit</span>
+                        </button>
+                    )}
                     <div
                         className="flex items-center gap-3 cursor-pointer active:scale-95 transition-transform group"
                         onClick={onExit}
@@ -102,9 +111,9 @@ export const VerificationLayout: React.FC<VerificationLayoutProps> = ({
                             </h1>
                             <p className="text-sm text-[#848E9C] font-medium max-w-[320px] mx-auto leading-relaxed">
                                 {currentStep === 'INTRO' && "This helps keep your account secure and compliant."}
-                                {['ID_UPLOAD', 'LIVENESS'].includes(currentStep) && "제출된 정보는 암호화되어 안전하게 처리됩니다."}
-                                {currentStep === 'PERSONAL_INFO' && "안내에 따라 진행하시면 인증이 완료됩니다."}
-                                {currentStep === 'STATUS_CHECK' && "약 1분에서 2분 정도 소요됩니다."}
+                                {['ID_UPLOAD', 'LIVENESS'].includes(currentStep) && "Submitted information is encrypted and processed securely."}
+                                {currentStep === 'PERSONAL_INFO' && "Please proceed according to the instructions to complete verification."}
+                                {currentStep === 'STATUS_CHECK' && "This usually takes about 1-2 minutes. (For pilot stage, may take up to 24 hours)."}
                             </p>
                         </div>
                     )}

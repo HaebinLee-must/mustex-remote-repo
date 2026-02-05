@@ -1,4 +1,6 @@
 # CEX Wallet Structure PRD (Skills용)
+@/docs/instructions/kyc_compliance.md를 참조한다. 
+
 
 ## 1. 문서 역할
 본 문서는 CEX Core PRD 및 Onboarding / Trade Structure PRD를 전제로 한  

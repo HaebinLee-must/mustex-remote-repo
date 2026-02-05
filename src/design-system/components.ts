@@ -1,11 +1,20 @@
 /**
  * Design System - Component Style Tokens
  * Based on shadcn/ui component patterns using cva (class-variance-authority)
+ *
+ * === UNIFIED RADIUS SYSTEM ===
+ * rounded-sm   (6px)  - Small elements: tags, tiny badges
+ * rounded-md   (8px)  - Base radius, small interactive elements
+ * rounded-lg   (12px) - Buttons, inputs, dropdowns, table cells
+ * rounded-xl   (16px) - Cards, panels, list items, modals
+ * rounded-2xl  (20px) - Large cards, feature sections
+ * rounded-3xl  (24px) - Hero cards, special containers (use sparingly)
+ * rounded-full        - Circular only: avatars, status dots, icon buttons
  */
 
 // Button component styles
 export const buttonStyles = {
-  base: 'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  base: 'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
 
   variants: {
     variant: {
@@ -19,14 +28,14 @@ export const buttonStyles = {
     },
     size: {
       default: 'h-9 px-4 py-2',
-      xs: 'h-7 rounded px-2 text-xs',
-      sm: 'h-8 rounded-md px-3 text-xs',
-      lg: 'h-10 rounded-md px-8',
-      xl: 'h-12 rounded-md px-10 text-base',
-      icon: 'h-9 w-9',
-      'icon-xs': 'h-7 w-7',
-      'icon-sm': 'h-8 w-8',
-      'icon-lg': 'h-10 w-10',
+      xs: 'h-7 rounded-md px-2 text-xs',
+      sm: 'h-8 rounded-lg px-3 text-xs',
+      lg: 'h-10 rounded-lg px-8',
+      xl: 'h-12 rounded-lg px-10 text-base',
+      icon: 'h-9 w-9 rounded-lg',
+      'icon-xs': 'h-7 w-7 rounded-md',
+      'icon-sm': 'h-8 w-8 rounded-lg',
+      'icon-lg': 'h-10 w-10 rounded-lg',
     },
   },
 
@@ -38,7 +47,7 @@ export const buttonStyles = {
 
 // Card component styles
 export const cardStyles = {
-  root: 'rounded-xl border border-border bg-card text-card-foreground shadow',
+  root: 'rounded-xl border border-border bg-card text-card-foreground shadow', // Use rounded-xl (16px) for cards
   header: 'flex flex-col space-y-1.5 p-6',
   title: 'font-semibold leading-none tracking-tight',
   description: 'text-sm text-muted-foreground',
@@ -55,13 +64,13 @@ export const cardStyles = {
 
 // Input component styles
 export const inputStyles = {
-  base: 'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+  base: 'flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm', // Use rounded-lg (12px) for inputs
 
   variants: {
     size: {
       default: 'h-9',
-      sm: 'h-8 text-xs',
-      lg: 'h-11 text-base',
+      sm: 'h-8 text-xs rounded-md',
+      lg: 'h-11 text-base rounded-lg',
     },
     state: {
       default: '',
@@ -79,21 +88,21 @@ export const inputStyles = {
 export const dialogStyles = {
   overlay: 'fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
 
-  content: 'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-border bg-card p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg',
+  content: 'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-border bg-card p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-xl', // Use rounded-xl (16px) for modals
 
   header: 'flex flex-col space-y-1.5 text-center sm:text-left',
   footer: 'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2',
   title: 'text-lg font-semibold leading-none tracking-tight',
   description: 'text-sm text-muted-foreground',
 
-  closeButton: 'absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground',
+  closeButton: 'absolute right-4 top-4 rounded-md opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground',
 } as const;
 
 // Tabs component styles
 export const tabsStyles = {
-  list: 'inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground',
+  list: 'inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground', // Use rounded-lg (12px)
 
-  trigger: 'inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow',
+  trigger: 'inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow', // Use rounded-md (8px) for tabs
 
   content: 'mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
 
@@ -104,7 +113,7 @@ export const tabsStyles = {
 
 // Badge component styles
 export const badgeStyles = {
-  base: 'inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+  base: 'inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2', // Use rounded-md (8px) for badges
 
   variants: {
     variant: {
@@ -119,7 +128,7 @@ export const badgeStyles = {
 
 // Alert component styles
 export const alertStyles = {
-  base: 'relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7',
+  base: 'relative w-full rounded-xl border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7', // Use rounded-xl (16px) for alerts
 
   variants: {
     variant: {

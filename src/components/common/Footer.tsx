@@ -1,5 +1,5 @@
 import React from 'react';
-import logoLight from '../assets/finora_bi_light.png';
+import logoLight from '../../assets/finora_bi_light.png';
 
 const Footer: React.FC = () => {
     return (
