@@ -1,0 +1,242 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /*
+   * Mongolia Blue Sky Theme
+   * Based on UI Design Guidelines (CEX Global)
+   * Primary: #0066B3 (Mongolian Blue - "Eternal Blue Sky")
+   * Success: #00C087 (Emerald Green)
+   * Danger: #FF4D4F (Cinnabar Red)
+   */
+
+  :root {
+    /* Light Mode */
+    --background: 0 0% 100%;           /* #FFFFFF */
+    --foreground: 215 14% 11%;         /* Dark text */
+
+    --card: 0 0% 96%;                  /* #F5F5F5 */
+    --card-foreground: 215 14% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 14% 11%;
+
+    --primary: 204 100% 35%;           /* #0066B3 - Mongolian Blue */
+    --primary-foreground: 0 0% 100%;   /* White text on blue */
+
+    --secondary: 215 12% 84%;
+    --secondary-foreground: 215 14% 11%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 215 12% 47%;
+
+    --accent: 204 100% 95%;            /* Light blue accent */
+    --accent-foreground: 204 100% 35%;
+
+    --destructive: 359 100% 65%;       /* #FF4D4F - Cinnabar Red */
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 160 100% 38%;           /* #00C087 - Emerald Green */
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 9%;
+
+    --border: 215 12% 87%;
+    --input: 215 12% 87%;
+    --ring: 204 100% 35%;              /* Mongolian Blue for focus ring */
+
+    --radius: 0.5rem;
+
+    /* Chart Colors */
+    --chart-1: 160 100% 38%;           /* Green (Success) */
+    --chart-2: 359 100% 65%;           /* Red (Danger) */
+    --chart-3: 204 100% 35%;           /* Blue (Primary) */
+    --chart-4: 38 92% 50%;             /* Warning */
+    --chart-5: 280 65% 60%;            /* Purple */
+  }
+
+  .dark {
+    /* Dark Mode (Default for CEX) */
+    --background: 215 14% 5%;          /* #0B0E11 - Main dark */
+    --foreground: 220 13% 91%;         /* #EAECEF - Light text */
+
+    --card: 215 12% 14%;               /* #1E2329 - Surface/Cards */
+    --card-foreground: 220 13% 91%;
+
+    --popover: 215 12% 14%;
+    --popover-foreground: 220 13% 91%;
+
+    --primary: 204 100% 35%;           /* #0066B3 - Mongolian Blue */
+    --primary-foreground: 0 0% 100%;   /* White text on blue */
+
+    --secondary: 215 12% 28%;          /* #474D57 */
+    --secondary-foreground: 220 13% 91%;
+
+    --muted: 215 12% 14%;              /* #1E2329 */
+    --muted-foreground: 215 12% 55%;   /* #848E9C */
+
+    --accent: 215 12% 18%;
+    --accent-foreground: 220 13% 91%;
+
+    --destructive: 359 100% 65%;       /* #FF4D4F - Cinnabar Red */
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 160 100% 38%;           /* #00C087 - Emerald Green */
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 9%;
+
+    --border: 215 12% 22%;             /* #2F343C */
+    --input: 215 12% 22%;
+    --ring: 204 100% 35%;              /* Mongolian Blue for focus ring */
+
+    /* Chart Colors */
+    --chart-1: 160 100% 38%;           /* Green (Success) */
+    --chart-2: 359 100% 65%;           /* Red (Danger) */
+    --chart-3: 204 100% 35%;           /* Blue (Primary) */
+    --chart-4: 38 92% 50%;             /* Warning */
+    --chart-5: 280 65% 60%;            /* Purple */
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+
+  .touch-target {
+    @apply min-w-11 min-h-11 flex items-center justify-center;
+  }
+
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) hsl(var(--background));
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border));
+    border-radius: 4px;
+    border: 2px solid hsl(var(--background));
+  }
+
+  .price-up {
+    @apply text-success;
+  }
+
+  .price-down {
+    @apply text-destructive;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Global override for shadcn/ui default button text color to ensure contrast */
+  .btn-primary {
+    @apply bg-primary hover:bg-primary/90 font-bold py-3 px-6 rounded-lg transition duration-300;
+    color: var(--primary-foreground) !important;
+    /* Enforce dark text */
+  }
+}
+
+@layer utilities {
+
+  .animate-in {
+    animation-name: animate-in;
+    animation-duration: 200ms;
+    animation-fill-mode: both;
+  }
+
+  .animate-out {
+    animation-name: animate-out;
+    animation-duration: 200ms;
+    animation-fill-mode: both;
+  }
+
+  .fade-in-0 {
+    --tw-enter-opacity: 0;
+  }
+
+  .fade-out-0 {
+    --tw-exit-opacity: 0;
+  }
+
+  .zoom-in-95 {
+    --tw-enter-scale: 0.95;
+  }
+
+  .zoom-out-95 {
+    --tw-exit-scale: 0.95;
+  }
+
+  .slide-in-from-top-\[48\%\] {
+    --tw-enter-translate-y: -48%;
+  }
+
+  .slide-in-from-left-1\/2 {
+    --tw-enter-translate-x: -50%;
+  }
+
+  .slide-out-to-top-\[48\%\] {
+    --tw-exit-translate-y: -48%;
+  }
+
+  .slide-out-to-left-1\/2 {
+    --tw-exit-translate-x: -50%;
+  }
+
+  @keyframes animate-in {
+    from {
+      opacity: var(--tw-enter-opacity, 1);
+      transform: translate3d(var(--tw-enter-translate-x, 0),
+          var(--tw-enter-translate-y, 0),
+          0) scale3d(var(--tw-enter-scale, 1),
+          var(--tw-enter-scale, 1),
+          var(--tw-enter-scale, 1));
+    }
+  }
+
+  @keyframes animate-out {
+    to {
+      opacity: var(--tw-exit-opacity, 1);
+      transform: translate3d(var(--tw-exit-translate-x, 0),
+          var(--tw-exit-translate-y, 0),
+          0) scale3d(var(--tw-exit-scale, 1),
+          var(--tw-exit-scale, 1),
+          var(--tw-exit-scale, 1));
+    }
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
