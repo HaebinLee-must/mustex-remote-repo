@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Eye, EyeOff, CheckCircle2, Check, ShieldCheck, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardHeader, CardContent, CardFooter } from '@/components_2/ui/card';
+import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { useUI } from '@/features/shared/UIContext';
-import { Button } from '@/components_2/ui/button';
-import { Input } from '@/components_2/ui/input';
-import { Checkbox } from '@/components_2/ui/checkbox';
-import { Label } from '@/components_2/ui/label';
-import { Separator } from '@/components_2/ui/separator';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 
 interface SignupFlowProps {
     onComplete?: (userData: { email: string }) => void;

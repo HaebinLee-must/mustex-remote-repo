@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Header from './layouts/Header';
-import Footer from './layouts/Footer';
+import Header from './layout/Header';
+import Footer from './layout/Footer';
 import Hero from './features/landing/components/Hero';
 import MarketData from './features/landing/components/MarketData';
 import Features from './features/landing/components/Features';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ToastProps } from '@/components_2/ui/toast';
+import { ToastProps } from '@/components/ui/toast';
 
 const TOAST_LIMIT = 1;
 // NOTE: If you are using this component in a production environment, you should consider

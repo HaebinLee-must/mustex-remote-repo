@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { X, Globe, Eye, EyeOff } from 'lucide-react';
-import { Card, CardHeader, CardContent, CardFooter } from '@/components_2/ui/card';
+import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { useUI } from '@/features/shared/UIContext';
-import { Button } from '@/components_2/ui/button';
-import { Input } from '@/components_2/ui/input';
-import { Label } from '@/components_2/ui/label';
-import { Separator } from '@/components_2/ui/separator';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 
 interface LoginFormProps {
     onLogin?: (userData: { email: string }) => void;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Shield, Smartphone, QrCode, Copy, CheckCircle, Lock, ArrowUpRight, Wallet, TrendingUp, Zap } from 'lucide-react';
 import { StepCard } from '../components/StepCard';
-import { Button } from '@/components_2/ui/button';
+import { Button } from '@/components/ui/button';
 
 interface StepProps {
     onNext: () => void;

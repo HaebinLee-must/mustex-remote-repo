@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button as ShadcnButton, ButtonProps as ShadcnButtonProps } from '@/components_2/ui/button';
+import { Button as ShadcnButton, ButtonProps as ShadcnButtonProps } from '@/components/ui/button';
 
 interface ButtonProps extends ShadcnButtonProps {
     variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive';

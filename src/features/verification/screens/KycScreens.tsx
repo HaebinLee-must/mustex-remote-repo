@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { User, FileText, Camera, MapPin, CheckCircle, Clock, Upload, AlertCircle, Shield, XCircle, Loader2, ChevronLeft, ChevronDown, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { StepCard } from '../components/StepCard';
-import { Button } from '@/components_2/ui/button';
-import { Input } from '@/components_2/ui/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 interface KycScreenProps {
     onNext: () => void;
