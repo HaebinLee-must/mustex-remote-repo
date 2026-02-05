@@ -51,12 +51,7 @@ const LandingPage = ({ variant = 1 }: { variant?: number }) => {
                 return <Hero2 />;
             case 1:
             default:
-                return (
-                    <div className="relative overflow-hidden bg-[#070112]">
-                        <AuroraBorealisV6 className="z-0" />
-                        <HeroBorealis />
-                    </div>
-                );
+                return <Hero />;
         }
     };
 
