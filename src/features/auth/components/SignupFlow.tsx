@@ -8,13 +8,14 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator';
+import { useAuth } from '@/features/auth/AuthContext'; // Import useAuth
 
 interface SignupFlowProps {
-    onComplete?: (userData: { email: string }) => void;
+    onComplete?: (userData: { email: string; uid: string }) => void; // Update onComplete signature
     onViewChange?: (view: string) => void;
 }
 
-type Step = 'email' | 'verify' | 'password' | 'complete';
+type Step = 'email' | 'verify' | 'phoneNumber' | 'password' | 'complete'; // Add 'phoneNumber' step
 
 const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
     const { lang, setLang } = useUI();
@@ -22,6 +23,8 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState<string | null>(null); // State for email validation error
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
+    const [phoneNumber, setPhoneNumber] = useState(''); // State for phone number
+    const [phoneNumberError, setPhoneNumberError] = useState<string | null>(null); // State for phone number validation error
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -29,9 +32,9 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
     const [agreeMarketing, setAgreeMarketing] = useState(false); // Add state for marketing agreement
     const [error, setError] = useState('');
     const [countdown, setCountdown] = useState(30);
+    const { signup } = useAuth(); // Destructure signup from useAuth()
 
     const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
-
 
     // Email validation function
     const validateEmail = (inputEmail: string) => {
@@ -40,7 +43,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
             return '이메일 주소를 입력해주세요.';
         }
         if (!emailRegex.test(inputEmail)) {
-            return 'Invalid email address';
+            return '유효하지 않은 이메일 주소입니다.';
         }
         return null;
     };
@@ -48,23 +51,30 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newEmail = e.target.value;
         setEmail(newEmail);
-        setEmailError(validateEmail(newEmail)); // Validate on change
+        // Only show error if email is not empty and validation fails
+        if (newEmail) {
+            setEmailError(validateEmail(newEmail));
+        } else {
+            setEmailError(null); // Clear error if email input is empty
+        }
     };
 
     const handleEmailSubmit = React.useCallback((e: React.FormEvent) => {
         e.preventDefault();
-        const errorMsg = validateEmail(email);
-        if (errorMsg) {
-            setEmailError(errorMsg);
+        const validationError = validateEmail(email);
+        if (validationError) {
+            setEmailError(validationError);
             return;
         }
-        if (!agreeTerms) {
-            setError('You must agree to the Terms & Privacy');
-            return;
-        }
-        setError('');
+        // Proceed to next step or API call
+        // For now, let's move to the verify step
         setStep('verify');
-    }, [email, emailError, agreeTerms]); // Add dependencies to useCallback
+        // In a real app, you'd send an OTP to the email here
+        // Temporarily bypass email validation and directly finalize for testing header
+        // const dummyUid = `user_${Date.now()}`;
+        // signup({ email, uid: dummyUid });
+        // onComplete?.({ email, uid: dummyUid });
+    }, [email]);
 
     const handleVerifySubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -74,7 +84,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
             return;
         }
         setError('');
-        setStep('password');
+        setStep('phoneNumber'); // Transition to the new 'phoneNumber' step
     };
 
     const handleOtpChange = (index: number, value: string) => {
@@ -123,7 +133,10 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
     };
 
     const handleFinalize = () => {
-        onComplete?.({ email });
+        // Generate a dummy UID for now; in a real app, this would come from a backend auth service.
+        const dummyUid = `user_${Date.now()}`;
+        signup({ email, uid: dummyUid }); // Call signup from AuthContext
+        onComplete?.({ email, uid: dummyUid });
     };
 
     const renderStep = () => {
@@ -264,6 +277,81 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                     </form>
                 );
                 break;
+            case 'phoneNumber':
+                const validatePhoneNumber = (inputNumber: string) => {
+                    // Simple validation for numbers, can be extended for specific formats
+                    const phoneRegex = /^\d{10,11}$/; // Assuming 10 or 11 digits for a phone number
+                    if (!inputNumber) {
+                        return '휴대전화 번호를 입력해주세요.';
+                    }
+                    if (!phoneRegex.test(inputNumber)) {
+                        return '유효하지 않은 휴대전화 번호입니다.';
+                    }
+                    return null;
+                };
+
+                const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+                    const newNumber = e.target.value;
+                    setPhoneNumber(newNumber);
+                    if (newNumber) {
+                        setPhoneNumberError(validatePhoneNumber(newNumber));
+                    } else {
+                        setPhoneNumberError(null);
+                    }
+                };
+
+                const handlePhoneNumberSubmit = (e: React.FormEvent) => {
+                    e.preventDefault();
+                    const validationError = validatePhoneNumber(phoneNumber);
+                    if (validationError) {
+                        setPhoneNumberError(validationError);
+                        return;
+                    }
+                    setError('');
+                    setStep('password');
+                };
+
+                content = (
+                    <form onSubmit={handlePhoneNumberSubmit} className="space-y-6" noValidate>
+                        <div className="space-y-2">
+                            <Label htmlFor="phoneNumber" className="text-white">휴대전화 번호</Label>
+                            <div className="relative">
+                                <Input
+                                    id="phoneNumber"
+                                    type="tel"
+                                    placeholder="휴대전화 번호를 입력해주세요"
+                                    value={phoneNumber}
+                                    onChange={handlePhoneNumberChange}
+                                    onBlur={() => setPhoneNumberError(validatePhoneNumber(phoneNumber))}
+                                    className={`h-14 sm:h-14 border-white/[0.08] bg-white/[0.05] pr-10 text-white transition-all placeholder:text-gray-500 focus:bg-white/[0.08] focus:ring-2 focus:ring-[#5e5ce6]/50 ${phoneNumberError ? 'border-red-500/50 focus:ring-red-500/50' : ''
+                                        }`}
+                                />
+                                {phoneNumber && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setPhoneNumber('')}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </button>
+                                )}
+                            </div>
+                            {phoneNumberError && <p className="text-sm font-medium text-red-500 mt-1">{phoneNumberError}</p>}
+                        </div>
+
+                        {error && <p className="text-sm font-medium text-red-500">{error}</p>}
+
+                        <Button
+                            type="submit"
+                            disabled={phoneNumberError !== null || !phoneNumber}
+                            className="group relative w-full overflow-hidden rounded-2xl bg-[#5e5ce6] py-7 text-lg font-bold text-white transition-all hover:bg-[#4b4ac2] disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <span className="relative z-10">계속</span>
+                            <div className="absolute inset-0 z-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                        </Button>
+                    </form>
+                );
+                break;
             case 'password':
                 const hasLength = password.length >= 8;
                 const hasUpper = /[A-Z]/.test(password);
@@ -385,13 +473,14 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
         switch (step) {
             case 'email': return 'Create Your Account';
             case 'verify': return 'Verify Your Email';
+            case 'phoneNumber': return '휴대전화 번호 입력'; // Add title for phone number step
             case 'password': return 'Secure Your Account';
             case 'complete': return 'Registration Complete';
         }
     };
 
     return (
-        <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#12122b] p-4 font-sans text-left">
+        <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#000000] p-4 font-sans text-left">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,#5e5ce6,transparent_50%)] opacity-10" />
 
             <Card className="relative z-10 w-full max-w-[520px] overflow-hidden rounded-[32px] border-white/10 bg-white/10 shadow-2xl backdrop-blur-2xl animate-in fade-in slide-in-from-bottom-6 duration-700">
@@ -400,7 +489,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                         <h1 className="text-4xl font-extrabold tracking-tight text-white leading-tight">
                             {getTitle()}
                         </h1>
-                        {step === 'email' && <p className="text-sm text-gray-400">Welcome to MUSTEX</p>}
+                        {step === 'email' && <p className="text-sm text-gray-400">Welcome to Finora</p>}
                     </div>
                 </CardHeader>
                 <CardContent className="pb-10">
