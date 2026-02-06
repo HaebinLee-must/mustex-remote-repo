@@ -123,6 +123,7 @@ type ToastProps = React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
     VariantProps<typeof toastVariants> & {
         title?: React.ReactNode;
         description?: React.ReactNode;
+        action?: React.ReactNode; // Added action prop
     };
 
 type ToastActionElement = React.ReactElement<typeof ToastAction>;

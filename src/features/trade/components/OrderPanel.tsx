@@ -96,13 +96,13 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ symbol, marketStats, onSubmit, 
 
     const orderTotal = type === 'limit' ? (Number(price) * Number(amount)) : (marketStats?.lastPrice || 0) * Number(amount);
     if (side === 'buy' && orderTotal > available) {
-      if (confirm(`${quoteAsset} 잔고가 부족합니다. 입금 후 다시 시도해 주세요. 입금 페이지로 이동하시겠습니까?`)) {
+      if (confirm(`Insufficient ${quoteAsset} balance. Please deposit and try again. Go to deposit page?`)) {
         openDeposit(quoteAsset);
       }
       return;
     }
     if (side === 'sell' && Number(amount) > available) {
-      if (confirm(`${baseAsset} 잔고가 부족합니다. 입금 후 다시 시도해 주세요. 입금 페이지로 이동하시겠습니까?`)) {
+      if (confirm(`Insufficient ${baseAsset} balance. Please deposit and try again. Go to deposit page?`)) {
         openDeposit(baseAsset);
       }
       return;
@@ -220,7 +220,7 @@ const OrderPanel: React.FC<OrderPanelProps> = ({ symbol, marketStats, onSubmit, 
   };
 
   return (
-    <div className="bg-[#1E2329] p-3 font-roboto flex flex-col gap-3">
+    <div className="bg-[#1E2329] p-3 font-sans flex flex-col gap-3">
       {/* Type Selection */}
       <div className="flex gap-4 border-b border-white/5 pb-2">
         {['limit', 'market', 'stop_limit'].map((t) => (

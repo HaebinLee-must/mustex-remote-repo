@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import Hero from './features/landing/components/Hero';
@@ -14,6 +14,7 @@ import SwapPage from './features/swap/SwapPage';
 import MyPage from './features/mypage/MyPage';
 import { useAuth } from './features/auth/AuthContext';
 import { useUI } from './features/shared/UIContext';
+import { MyPageTab } from './features/mypage/MyPage'; // Import MyPageTab type
 
 const LandingPage = () => (
     <>
@@ -27,17 +28,36 @@ const LandingPage = () => (
 function App() {
     const { isAuthenticated, signup, login } = useAuth();
     const { currentView, setCurrentView } = useUI();
-    const [showKycPromotion, setShowKycPromotion] = useState(false);
+    const [showSignupSuccess, setShowSignupSuccess] = React.useState(false);
+    const [myPageActiveTab, setMyPageActiveTab] = React.useState<MyPageTab>('dashboard');
+    const [myPageActiveSubTab, setMyPageActiveSubTab] = React.useState<string | null>(null);
 
     const handleSignupComplete = (userData: { email: string }) => {
-        signup(userData);
+        const dummyUid = `user_${Date.now()}`;
+        signup({ ...userData, uid: dummyUid });
+        setShowSignupSuccess(true);
         setCurrentView('mypage');
-        setShowKycPromotion(true); // Activate KYC promotion after signup completes
+        setMyPageActiveTab('dashboard'); // Default to dashboard after signup
+        setMyPageActiveSubTab(null);
     };
 
     const handleLogin = (userData: { email: string }) => {
-        login(userData);
+        const dummyUid = `user_login_${Date.now()}`;
+        login({ ...userData, uid: dummyUid });
         setCurrentView('mypage');
+        setMyPageActiveTab('dashboard'); // Default to dashboard after login
+        setMyPageActiveSubTab(null);
+    };
+
+    const handleViewChange = (view: string, tab?: MyPageTab, subTab?: string) => {
+        setCurrentView(view);
+        if (view === 'mypage') {
+            setMyPageActiveTab(tab || 'dashboard');
+            setMyPageActiveSubTab(subTab || null);
+        } else {
+            setMyPageActiveTab('dashboard'); // Reset for other views
+            setMyPageActiveSubTab(null);
+        }
     };
 
     const renderContent = () => {
@@ -51,34 +71,38 @@ function App() {
             case 'mypage':
                 return (
                     <MyPage
-                        showPromotion={showKycPromotion}
-                        onPromotionShown={() => setShowKycPromotion(false)}
                         onStartKyc={() => {
-                            setCurrentView('verification');
+                            handleViewChange('verification');
                         }}
+                        showSuccessPopup={showSignupSuccess}
+                        onCloseSuccessPopup={() => setShowSignupSuccess(false)}
+                        activeTab={myPageActiveTab}
+                        activeSubTab={myPageActiveSubTab}
+                        onTabChange={setMyPageActiveTab}
+                        onSubTabChange={setMyPageActiveSubTab}
                     />
                 );
             case 'signup':
                 return (
                     <SignupFlow
                         onComplete={handleSignupComplete}
-                        onViewChange={setCurrentView}
+                        onViewChange={handleViewChange}
                     />
                 );
             case 'login':
                 return (
                     <LoginForm
                         onLogin={() => handleLogin({ email: 'user@example.com' })}
-                        onViewChange={setCurrentView}
+                        onViewChange={handleViewChange}
                     />
                 );
             case 'onboarding':
                 return (
-                    <VerificationFlow onComplete={() => { setCurrentView('mypage'); setShowKycPromotion(true); }} onExit={() => setCurrentView('landing')} />
+                    <VerificationFlow onComplete={() => handleViewChange('mypage')} onExit={() => handleViewChange('landing')} />
                 );
             case 'verification':
                 return (
-                    <VerificationFlow onComplete={() => { setCurrentView('mypage'); setShowKycPromotion(true); }} onExit={() => setCurrentView('mypage')} />
+                    <VerificationFlow onComplete={() => handleViewChange('mypage')} onExit={() => handleViewChange('mypage')} />
                 );
             case 'landing':
             default:
@@ -87,11 +111,12 @@ function App() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0B0E11] text-white font-sans selection:bg-indigo-500/30 flex flex-col">
+        <div className="min-h-screen bg-[#000000] text-white font-sans selection:bg-indigo-500/30 flex flex-col">
             <Header
                 currentView={currentView}
-                onViewChange={setCurrentView}
-                isAuthenticated={isAuthenticated}
+                onViewChange={handleViewChange} // Use the new handleViewChange
+                activeTab={myPageActiveTab}
+                activeSubTab={myPageActiveSubTab}
             />
             <main className="flex-1 pt-[10vh]">{renderContent()}</main>
             {currentView !== 'exchange' && currentView !== 'signup' && currentView !== 'onboarding' && currentView !== 'verification' && <Footer />}

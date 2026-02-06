@@ -86,7 +86,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, initialC
                                     <select
                                         value={selectedCoin.symbol}
                                         onChange={(e) => setSelectedCoin(MOCK_COINS.find(c => c.symbol === e.target.value)!)}
-                                        className="w-full bg-[#0B0E11] border border-[#2B3139] rounded-xl px-4 py-3 text-sm font-bold appearance-none outline-none focus:border-[#6366F1] transition"
+                                        className="w-full bg-[#000000] border border-[#2B3139] rounded-xl px-4 py-3 text-sm font-bold appearance-none outline-none focus:border-[#6366F1] transition"
                                     >
                                         {MOCK_COINS.map(coin => (
                                             <option key={coin.symbol} value={coin.symbol}>{coin.symbol} - {coin.name}</option>
@@ -105,7 +105,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, initialC
                                             onClick={() => setSelectedNetwork(network)}
                                             className={`w-full p-4 rounded-xl border transition text-left flex justify-between items-center ${selectedNetwork?.id === network.id
                                                     ? 'bg-[#6366F1]/10 border-[#6366F1]'
-                                                    : 'bg-[#0B0E11] border-[#2B3139] hover:border-[#848E9C]'
+                                                    : 'bg-[#000000] border-[#2B3139] hover:border-[#848E9C]'
                                                 }`}
                                         >
                                             <div>
@@ -123,7 +123,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, initialC
                             </div>
 
                             {/* Balance Info */}
-                            <div className="bg-[#0B0E11]/50 p-4 rounded-xl border border-[#2B3139]">
+                            <div className="bg-[#000000]/50 p-4 rounded-xl border border-[#2B3139]">
                                 <div className="flex justify-between items-center mb-1">
                                     <span className="text-[10px] font-bold text-[#848E9C] uppercase">Available Balance</span>
                                     <span className="text-xs font-bold text-[#EAECEF]">{availableBalance.toLocaleString()} {selectedCoin.symbol}</span>
@@ -144,7 +144,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, initialC
                                     placeholder="Enter or paste address"
                                     value={address}
                                     onChange={(e) => setAddress(e.target.value)}
-                                    className="w-full bg-[#0B0E11] border border-[#2B3139] rounded-xl px-4 py-3 text-sm outline-none focus:border-[#6366F1] transition"
+                                    className="w-full bg-[#000000] border border-[#2B3139] rounded-xl px-4 py-3 text-sm outline-none focus:border-[#6366F1] transition"
                                 />
                             </div>
 
@@ -157,7 +157,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, initialC
                                         placeholder="0.00"
                                         value={amount}
                                         onChange={(e) => setAmount(e.target.value)}
-                                        className="w-full bg-[#0B0E11] border border-[#2B3139] rounded-xl px-4 py-3 text-sm outline-none focus:border-[#6366F1] transition tabular-nums"
+                                        className="w-full bg-[#000000] border border-[#2B3139] rounded-xl px-4 py-3 text-sm outline-none focus:border-[#6366F1] transition tabular-nums"
                                     />
                                     <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center space-x-2">
                                         <span className="text-xs font-bold text-[#848E9C]">{selectedCoin.symbol}</span>
@@ -195,7 +195,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, initialC
                                 <label className="block text-xs font-bold text-[#848E9C] uppercase mb-3">Recent Withdrawals</label>
                                 <div className="space-y-2">
                                     {MOCK_HISTORY.filter(h => h.type === 'WITHDRAW').slice(0, 2).map(tx => (
-                                        <div key={tx.id} className="bg-[#0B0E11]/50 p-3 rounded-xl border border-[#2B3139] flex justify-between items-center">
+                                        <div key={tx.id} className="bg-[#000000]/50 p-3 rounded-xl border border-[#2B3139] flex justify-between items-center">
                                             <div>
                                                 <div className="text-[11px] font-bold text-[#EAECEF]">{tx.amount} {tx.coin}</div>
                                                 <div className="text-[9px] text-[#848E9C]">{tx.date}</div>

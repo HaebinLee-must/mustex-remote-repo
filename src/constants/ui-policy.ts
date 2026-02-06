@@ -227,6 +227,12 @@ export const TRADE_COLUMN_RATIOS = {
 } as const;
 
 // Type exports for TypeScript support
+export const BRANDING_POLICIES = {
+    PRIMARY_COLOR_APPLICATION: 'Primary branding color (blue) should be preferentially applied to all UI elements, especially interactive components and highlights. Avoid using other highlight colors like yellow unless specifically required for semantic purposes (e.g., warnings).',
+} as const;
+
+// Type exports for TypeScript support
 export type TradeLayoutStructure = typeof TRADE_LAYOUT_STRUCTURE;
 export type TradeGridColumns = typeof TRADE_GRID_COLUMNS;
 export type TradeDesignPrinciples = typeof TRADE_DESIGN_PRINCIPLES;
+export type BrandingPolicies = typeof BRANDING_POLICIES;

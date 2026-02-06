@@ -23,8 +23,13 @@ const TradeLayout: React.FC = () => {
         submitOrder
     } = useMarketData(symbol);
     const { openDeposit, openWithdraw } = useWallet();
+
+    const handleAssetClick = (symbol: string) => {
+        setSymbol(symbol); // Assuming this changes the displayed asset
+    };
+
     const [favorites, setFavorites] = useState<string[]>(() => {
-        const saved = localStorage.getItem('mustex_favorites');
+        const saved = localStorage.getItem('finora_favorites');
         return saved ? JSON.parse(saved) : [];
     });
 
@@ -34,7 +39,7 @@ const TradeLayout: React.FC = () => {
     const [bottomTab, setBottomTab] = useState<'open_orders' | 'order_history' | 'funds' | 'bots'>('open_orders');
 
     useEffect(() => {
-        localStorage.setItem('mustex_favorites', JSON.stringify(favorites));
+        localStorage.setItem('finora_favorites', JSON.stringify(favorites));
     }, [favorites]);
 
     // Initialize order price with market price
@@ -51,7 +56,7 @@ const TradeLayout: React.FC = () => {
     };
 
     return (
-        <div className="bg-[#0B0E11] min-h-screen p-1 sm:p-2 font-sans text-[#EAECEF]">
+        <div className="bg-[#000000] min-h-screen p-1 sm:p-2 font-sans text-[#EAECEF]">
             {/* Phase 2: Information Intensive Header (Ticker) */}
             <div className="mb-2">
                 {marketStats && (
@@ -114,7 +119,7 @@ const TradeLayout: React.FC = () => {
                                 )}
                                 {mainTab === 'square' && (
                                     <div className="p-6 text-dark-muted">
-                                        <h3 className="text-white font-bold mb-4">Mustex Square</h3>
+                                        <h3 className="text-white font-bold mb-4">Finora Square</h3>
                                         <p className="text-sm leading-relaxed">Real-time social feed and news for {symbol}...</p>
                                     </div>
                                 )}
@@ -190,7 +195,7 @@ const TradeLayout: React.FC = () => {
                             {bottomTab === 'funds' && (
                                 <div className="overflow-auto h-full">
                                     <div className="p-4">
-                                        <AssetTable onDeposit={openDeposit} onWithdraw={openWithdraw} />
+                                        <AssetTable onDeposit={openDeposit} onWithdraw={openWithdraw} onAssetClick={handleAssetClick} />
                                     </div>
                                 </div>
                             )}

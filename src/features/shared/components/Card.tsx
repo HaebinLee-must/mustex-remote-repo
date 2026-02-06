@@ -6,6 +6,7 @@ interface CardProps {
     className?: string;
     extra?: React.ReactNode;
     noOverflow?: boolean;
+    variant?: 'flat' | 'default'; // Added for custom styling
 }
 
 const Card: React.FC<CardProps> = ({ title, children, className = '', extra, noOverflow }) => {

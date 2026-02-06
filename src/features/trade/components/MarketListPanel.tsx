@@ -56,7 +56,7 @@ const MarketListPanel: React.FC<MarketListPanelProps> = ({
   });
 
   return (
-    <div className="flex flex-col h-full bg-[#0B0E11] font-roboto select-none">
+    <div className="flex flex-col h-full bg-[#000000] font-sans select-none">
       {/* Search & Tabs - Fixed at Top */}
       <div className="p-3 border-b border-dark-border flex flex-col gap-3 bg-dark-main sticky top-0 z-10">
         {/* Search Input */}

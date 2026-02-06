@@ -14,7 +14,7 @@ const OpenOrdersPanel: React.FC<OpenOrdersPanelProps> = ({ orders, loading, onCa
   }
 
   return (
-    <div className="w-full h-full bg-[#0B0E11] flex flex-col font-roboto">
+    <div className="w-full h-full bg-[#000000] flex flex-col font-sans">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-3 bg-dark-surface/10 border-b border-dark-border">
         <div className="grid grid-cols-8 flex-1 text-[10px] font-black text-dark-muted tracking-widest gap-4">

@@ -11,14 +11,13 @@ interface KycScreenProps {
 }
 
 export const KYC01_Intro: React.FC<KycScreenProps> = ({ onNext, onCountrySelect }) => {
-    const [showModal, setShowModal] = useState(true);
-    const [residence, setResidence] = useState('South Korea (대한민국)');
-    const [issuingCountry, setIssuingCountry] = useState('South Korea (대한민국)');
+    const [residence, setResidence] = useState('South Korea');
+    const [issuingCountry, setIssuingCountry] = useState('South Korea');
     const [activeDropdown, setActiveDropdown] = useState<'residence' | 'issuing' | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
 
     const countries = [
-        { name: 'South Korea (대한민국)', code: 'KR', flag: '🇰🇷' },
+        { name: 'South Korea', code: 'KR', flag: '🇰🇷' },
         { name: 'United States', code: 'US', flag: '🇺🇸' },
         { name: 'Japan', code: 'JP', flag: '🇯🇵' },
         { name: 'United Kingdom', code: 'GB', flag: '🇬🇧' },
@@ -51,190 +50,158 @@ export const KYC01_Intro: React.FC<KycScreenProps> = ({ onNext, onCountrySelect 
     ];
 
     return (
-        <>
-            <AnimatePresence>
-                {showModal && (
-                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-[#12122b]/80 backdrop-blur-sm">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="w-full max-w-md bg-[#1e1e3f] border border-white/10 rounded-3xl p-8 shadow-2xl space-y-8"
-                        >
-                            <div className="flex justify-center">
-                                <div className="w-20 h-20 bg-[#5e5ce6]/20 rounded-3xl flex items-center justify-center text-[#5e5ce6]">
-                                    <Shield className="w-10 h-10" />
-                                </div>
-                            </div>
-                            <div className="text-center space-y-2">
-                                <h2 className="text-2xl font-black text-white">Identity Verification</h2>
-                                <p className="text-[#848E9C] text-sm leading-relaxed">
-                                    To ensure a secure trading environment and comply with regulations, please complete your identity verification.
-                                </p>
-                            </div>
-                            <Button
-                                onClick={() => setShowModal(false)}
-                                className="w-full bg-[#5e5ce6] hover:bg-[#4b4ac2] h-14 rounded-2xl text-lg font-black"
+
+        <div className="space-y-10">
+            <div className="space-y-4">
+                <label className="text-xs font-bold text-[#848E9C] uppercase tracking-widest px-1">Residence</label>
+                <div className="relative">
+                    <button
+                        onClick={() => setActiveDropdown(activeDropdown === 'residence' ? null : 'residence')}
+                        className="w-full flex items-center justify-between bg-[#000000] border border-white/10 h-14 rounded-2xl px-5 text-sm text-white focus:border-[#5e5ce6] transition-all"
+                    >
+                        <div className="flex items-center gap-3">
+                            <span className="text-lg">{countries.find(c => c.name === residence)?.flag}</span>
+                            <span>{residence}</span>
+                        </div>
+                        <ChevronDown className={`w-4 h-4 text-[#848E9C] transition-transform ${activeDropdown === 'residence' ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    <AnimatePresence>
+                        {activeDropdown === 'residence' && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 10 }}
+                                className="absolute top-full left-0 right-0 mt-2 z-[60] bg-[#000000] border border-white/10 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-2xl"
                             >
-                                Get Started
-                            </Button>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
-
-            <div className="space-y-10">
-                <div className="space-y-4">
-                    <label className="text-xs font-bold text-[#848E9C] uppercase tracking-widest px-1">Residence</label>
-                    <div className="relative">
-                        <button
-                            onClick={() => setActiveDropdown(activeDropdown === 'residence' ? null : 'residence')}
-                            className="w-full flex items-center justify-between bg-[#1e1e3f] border border-white/10 h-14 rounded-2xl px-5 text-sm text-white focus:border-[#5e5ce6] transition-all"
-                        >
-                            <div className="flex items-center gap-3">
-                                <span className="text-lg">{countries.find(c => c.name === residence)?.flag}</span>
-                                <span>{residence}</span>
-                            </div>
-                            <ChevronDown className={`w-4 h-4 text-[#848E9C] transition-transform ${activeDropdown === 'residence' ? 'rotate-180' : ''}`} />
-                        </button>
-
-                        <AnimatePresence>
-                            {activeDropdown === 'residence' && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: 10 }}
-                                    className="absolute top-full left-0 right-0 mt-2 z-[60] bg-[#12122b] border border-white/10 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-2xl"
-                                >
-                                    <div className="p-2 space-y-1">
-                                        <div className="relative mb-2">
-                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#848E9C]" />
-                                            <input
-                                                type="text"
-                                                placeholder="Search country"
-                                                value={searchQuery}
-                                                onChange={(e) => setSearchQuery(e.target.value)}
-                                                className="w-full bg-white/5 border border-white/5 rounded-xl h-10 pl-9 pr-4 text-xs text-white focus:border-[#5e5ce6] outline-none transition-all"
-                                            />
-                                        </div>
-                                        <div className="max-h-48 overflow-y-auto custom-scrollbar scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-                                            {filteredCountries.map((country) => (
-                                                <button
-                                                    key={country.code}
-                                                    onClick={() => handleCountrySelect(country.name)}
-                                                    className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-all hover:bg-white/5 ${residence === country.name ? 'text-[#5e5ce6] font-bold bg-[#5e5ce6]/10' : 'text-white'}`}
-                                                >
-                                                    <span className="text-lg">{country.flag}</span>
-                                                    <span>{country.name}</span>
-                                                </button>
-                                            ))}
-                                            {filteredCountries.length === 0 && (
-                                                <div className="p-4 text-center text-xs text-[#848E9C]">No results found</div>
-                                            )}
-                                        </div>
+                                <div className="p-2 space-y-1">
+                                    <div className="relative mb-2">
+                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#848E9C]" />
+                                        <input
+                                            type="text"
+                                            placeholder="Search country"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                            className="w-full bg-white/5 border border-white/5 rounded-xl h-10 pl-9 pr-4 text-xs text-white focus:border-[#5e5ce6] outline-none transition-all"
+                                        />
                                     </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-                </div>
-
-                <div className="space-y-4">
-                    <label className="text-xs font-bold text-[#848E9C] uppercase tracking-widest px-1">Document Issuing Country/Region</label>
-                    <div className="relative">
-                        <button
-                            onClick={() => setActiveDropdown(activeDropdown === 'issuing' ? null : 'issuing')}
-                            className="w-full flex items-center justify-between bg-[#1e1e3f] border border-white/10 h-14 rounded-2xl px-5 text-sm text-white focus:border-[#5e5ce6] transition-all"
-                        >
-                            <div className="flex items-center gap-3">
-                                <span className="text-lg">{countries.find(c => c.name === issuingCountry)?.flag}</span>
-                                <span>{issuingCountry}</span>
-                            </div>
-                            <ChevronDown className={`w-4 h-4 text-[#848E9C] transition-transform ${activeDropdown === 'issuing' ? 'rotate-180' : ''}`} />
-                        </button>
-
-                        <AnimatePresence>
-                            {activeDropdown === 'issuing' && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: 10 }}
-                                    className="absolute top-full left-0 right-0 mt-2 z-[60] bg-[#12122b] border border-white/10 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-2xl"
-                                >
-                                    <div className="p-2 space-y-1">
-                                        <div className="relative mb-2">
-                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#848E9C]" />
-                                            <input
-                                                type="text"
-                                                placeholder="Search country"
-                                                value={searchQuery}
-                                                onChange={(e) => setSearchQuery(e.target.value)}
-                                                className="w-full bg-white/5 border border-white/5 rounded-xl h-10 pl-9 pr-4 text-xs text-white focus:border-[#5e5ce6] outline-none transition-all"
-                                            />
-                                        </div>
-                                        <div className="max-h-48 overflow-y-auto custom-scrollbar scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-                                            {filteredCountries.map((country) => (
-                                                <button
-                                                    key={country.code}
-                                                    onClick={() => handleCountrySelect(country.name)}
-                                                    className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-all hover:bg-white/5 ${issuingCountry === country.name ? 'text-[#5e5ce6] font-bold bg-[#5e5ce6]/10' : 'text-white'}`}
-                                                >
-                                                    <span className="text-lg">{country.flag}</span>
-                                                    <span>{country.name}</span>
-                                                </button>
-                                            ))}
-                                            {filteredCountries.length === 0 && (
-                                                <div className="p-4 text-center text-xs text-[#848E9C]">No results found</div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-                </div>
-
-                <div className="space-y-4">
-                    <label className="text-xs font-bold text-[#848E9C] uppercase tracking-widest px-1">Document Type</label>
-                    <div className="space-y-3">
-                        {[
-                            { id: 'id_card', label: 'ID Card', recommended: true },
-                            { id: 'driver_license', label: "Driver's License", sub: 'Korean Nationals Only (Example)' },
-                            { id: 'passport', label: 'Passport' },
-                            { id: 'residence_permit', label: 'Residence Permit' },
-                        ].map((doc) => (
-                            <button
-                                key={doc.id}
-                                onClick={() => { }}
-                                className={`w-full flex items-center justify-between p-5 rounded-2xl border transition-all ${doc.id === 'id_card' ? 'border-[#5e5ce6] bg-[#5e5ce6]/5' : 'border-white/10 bg-white/5 hover:bg-white/[0.08]'}`}
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${doc.id === 'id_card' ? 'bg-[#5e5ce6] text-white' : 'bg-white/5 text-[#848E9C]'}`}>
-                                        <FileText className="w-5 h-5" />
-                                    </div>
-                                    <div className="text-left">
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-sm font-bold text-white">{doc.label}</span>
-                                            {doc.recommended && (
-                                                <span className="text-[10px] font-black bg-green-500/10 text-green-500 px-2 py-0.5 rounded-md uppercase">Recommended</span>
-                                            )}
-                                        </div>
-                                        {doc.sub && <p className="text-[10px] text-[#474D57] font-medium">{doc.sub}</p>}
+                                    <div className="max-h-48 overflow-y-auto custom-scrollbar scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+                                        {filteredCountries.map((country) => (
+                                            <button
+                                                key={country.code}
+                                                onClick={() => handleCountrySelect(country.name)}
+                                                className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-all hover:bg-white/5 ${residence === country.name ? 'text-[#5e5ce6] font-bold bg-[#5e5ce6]/10' : 'text-white'}`}
+                                            >
+                                                <span className="text-lg">{country.flag}</span>
+                                                <span>{country.name}</span>
+                                            </button>
+                                        ))}
+                                        {filteredCountries.length === 0 && (
+                                            <div className="p-4 text-center text-xs text-[#848E9C]">No results found</div>
+                                        )}
                                     </div>
                                 </div>
-                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${doc.id === 'id_card' ? 'border-[#5e5ce6]' : 'border-white/20'}`}>
-                                    {doc.id === 'id_card' && <div className="w-2.5 h-2.5 rounded-full bg-[#5e5ce6]" />}
-                                </div>
-                            </button>
-                        ))}
-                    </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
-
-                <Button onClick={onNext} className="w-full bg-[#5e5ce6] hover:bg-[#4b4ac2] h-14 rounded-2xl text-lg font-black mt-6">
-                    Continue
-                </Button>
             </div>
-        </>
+
+            <div className="space-y-4">
+                <label className="text-xs font-bold text-[#848E9C] uppercase tracking-widest px-1">Document Issuing Country/Region</label>
+                <div className="relative">
+                    <button
+                        onClick={() => setActiveDropdown(activeDropdown === 'issuing' ? null : 'issuing')}
+                        className="w-full flex items-center justify-between bg-[#000000] border border-white/10 h-14 rounded-2xl px-5 text-sm text-white focus:border-[#5e5ce6] transition-all"
+                    >
+                        <div className="flex items-center gap-3">
+                            <span className="text-lg">{countries.find(c => c.name === issuingCountry)?.flag}</span>
+                            <span>{issuingCountry}</span>
+                        </div>
+                        <ChevronDown className={`w-4 h-4 text-[#848E9C] transition-transform ${activeDropdown === 'issuing' ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    <AnimatePresence>
+                        {activeDropdown === 'issuing' && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 10 }}
+                                className="absolute top-full left-0 right-0 mt-2 z-[60] bg-[#000000] border border-white/10 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-2xl"
+                            >
+                                <div className="p-2 space-y-1">
+                                    <div className="relative mb-2">
+                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#848E9C]" />
+                                        <input
+                                            type="text"
+                                            placeholder="Search country"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                            className="w-full bg-white/5 border border-white/5 rounded-xl h-10 pl-9 pr-4 text-xs text-white focus:border-[#5e5ce6] outline-none transition-all"
+                                        />
+                                    </div>
+                                    <div className="max-h-48 overflow-y-auto custom-scrollbar scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+                                        {filteredCountries.map((country) => (
+                                            <button
+                                                key={country.code}
+                                                onClick={() => handleCountrySelect(country.name)}
+                                                className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-all hover:bg-white/5 ${issuingCountry === country.name ? 'text-[#5e5ce6] font-bold bg-[#5e5ce6]/10' : 'text-white'}`}
+                                            >
+                                                <span className="text-lg">{country.flag}</span>
+                                                <span>{country.name}</span>
+                                            </button>
+                                        ))}
+                                        {filteredCountries.length === 0 && (
+                                            <div className="p-4 text-center text-xs text-[#848E9C]">No results found</div>
+                                        )}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </div>
+
+            <div className="space-y-4">
+                <label className="text-xs font-bold text-[#848E9C] uppercase tracking-widest px-1">Document Type</label>
+                <div className="space-y-3">
+                    {[
+                        { id: 'id_card', label: 'ID Card', recommended: true },
+                        { id: 'driver_license', label: "Driver's License", sub: 'Korean Nationals Only (Example)' },
+                        { id: 'passport', label: 'Passport' },
+                        { id: 'residence_permit', label: 'Residence Permit' },
+                    ].map((doc) => (
+                        <button
+                            key={doc.id}
+                            onClick={() => { }}
+                            className={`w-full flex items-center justify-between p-5 rounded-2xl border transition-all ${doc.id === 'id_card' ? 'border-[#5e5ce6] bg-[#5e5ce6]/5' : 'border-white/10 bg-white/5 hover:bg-white/[0.08]'}`}
+                        >
+                            <div className="flex items-center gap-4">
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${doc.id === 'id_card' ? 'bg-[#5e5ce6] text-white' : 'bg-white/5 text-[#848E9C]'}`}>
+                                    <FileText className="w-5 h-5" />
+                                </div>
+                                <div className="text-left">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-sm font-bold text-white">{doc.label}</span>
+                                        {doc.recommended && (
+                                            <span className="text-[10px] font-black bg-green-500/10 text-green-500 px-2 py-0.5 rounded-md uppercase">Recommended</span>
+                                        )}
+                                    </div>
+                                    {doc.sub && <p className="text-[10px] text-[#474D57] font-medium">{doc.sub}</p>}
+                                </div>
+                            </div>
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${doc.id === 'id_card' ? 'border-[#5e5ce6]' : 'border-white/20'}`}>
+                                {doc.id === 'id_card' && <div className="w-2.5 h-2.5 rounded-full bg-[#5e5ce6]" />}
+                            </div>
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            <Button onClick={onNext} className="w-full bg-[#5e5ce6] hover:bg-[#4b4ac2] h-14 rounded-2xl text-lg font-black mt-6">
+                Continue
+            </Button>
+        </div>
     );
 };
 
@@ -417,19 +384,50 @@ export const KYC03_IdUpload: React.FC<KycScreenProps> = ({ onNext }) => {
 
 export const KYC04_Liveness: React.FC<KycScreenProps> = ({ onNext }) => {
     const [cameraActive, setCameraActive] = useState(false);
+    const [permissionError, setPermissionError] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const streamRef = useRef<MediaStream | null>(null);
 
     const startCamera = async () => {
         try {
+            // Clear previous error state
+            setPermissionError(false);
+
+            // Stop any existing stream before requesting new one
+            if (streamRef.current) {
+                streamRef.current.getTracks().forEach(track => track.stop());
+                streamRef.current = null;
+            }
+
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            streamRef.current = stream;
+
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
                 setCameraActive(true);
             }
         } catch (err) {
-            alert('Unable to access camera. Please check permissions.');
+            console.error('Camera access error:', err);
+            setPermissionError(true);
+            setCameraActive(false);
+
+            // Show user-friendly error message
+            const errorMessage = err instanceof Error && err.name === 'NotAllowedError'
+                ? 'Camera access was denied. Please allow camera access and try again.'
+                : 'Unable to access camera. Please check your camera permissions in browser settings and try again.';
+
+            alert(errorMessage);
         }
     };
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            if (streamRef.current) {
+                streamRef.current.getTracks().forEach(track => track.stop());
+            }
+        };
+    }, []);
 
     return (
         <div className="space-y-8">

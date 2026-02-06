@@ -2,24 +2,24 @@
  * Design System - Color Tokens
  * Mongolia Blue Sky Theme (CEX Global)
  *
- * Primary: #0066B3 (Mongolian Blue - "Eternal Blue Sky")
+ * Primary: #593FFF (Brand Action Color)
  * Success: #00C087 (Emerald Green)
  * Danger: #FF4D4F (Cinnabar Red)
- * Dark BG: #0B0E11 (Main), #1E2329 (Surface)
+ * Dark BG: #000000 (Main), #1E2329 (Surface)
  * Light BG: #FFFFFF (Main), #F5F5F5 (Surface)
  */
 
 // Hex color values for reference
 export const colorPalette = {
   // Brand - Mongolia Blue Sky
-  mongolianBlue: '#0066B3',
+  // mongolianBlue: '#9E6AFF', // Removed as it's no longer the primary
 
   // Status colors (Trading)
   emeraldGreen: '#00C087',  // Success / Price Up
   cinnabarRed: '#FF4D4F',   // Danger / Price Down
 
   // Dark mode backgrounds
-  darkMain: '#0B0E11',
+  darkMain: '#000000',
   darkSurface: '#1E2329',
   darkBorder: '#2F343C',
   darkMuted: '#848E9C',
@@ -36,7 +36,7 @@ export const darkThemeVariables = {
   '--radius': '0.5rem',
 
   // Core colors - Dark Mode
-  '--background': '#0B0E11',              // Deep dark main
+  '--background': '#000000',              // Deep dark main
   '--foreground': '#EAECEF',              // Light text
 
   // Card surfaces
@@ -48,7 +48,7 @@ export const darkThemeVariables = {
   '--popover-foreground': '#EAECEF',
 
   // Primary - Mongolian Blue
-  '--primary': '#0066B3',                 // Mongolian Blue
+  '--primary': '#593FFF',                 // Brand Action Color
   '--primary-foreground': '#FFFFFF',      // White text on blue
 
   // Secondary
@@ -73,17 +73,17 @@ export const darkThemeVariables = {
 
   // Warning
   '--warning': '#F0B90B',
-  '--warning-foreground': '#0B0E11',
+  '--warning-foreground': '#000000',
 
   // Border and Input
   '--border': '#2F343C',
   '--input': '#2F343C',
-  '--ring': '#0066B3',                    // Mongolian Blue for focus
+  '--ring': '#593FFF',                    // Brand Action Color for focus
 
   // Chart colors
   '--chart-1': '#00C087',                 // Green (Success)
   '--chart-2': '#FF4D4F',                 // Red (Danger)
-  '--chart-3': '#0066B3',                 // Blue (Primary)
+  '--chart-3': '#593FFF',                 // Blue (Primary - Brand Action)
   '--chart-4': '#F0B90B',                 // Yellow (Warning)
   '--chart-5': '#A855F7',                 // Purple
 } as const;
@@ -94,23 +94,23 @@ export const lightThemeVariables = {
 
   // Core colors - Light Mode
   '--background': '#FFFFFF',
-  '--foreground': '#0B0E11',
+  '--foreground': '#000000',
 
   // Card surfaces
   '--card': '#F5F5F5',
-  '--card-foreground': '#0B0E11',
+  '--card-foreground': '#000000',
 
   // Popover surfaces
   '--popover': '#FFFFFF',
-  '--popover-foreground': '#0B0E11',
+  '--popover-foreground': '#000000',
 
   // Primary - Mongolian Blue
-  '--primary': '#0066B3',
+  '--primary': '#593FFF',
   '--primary-foreground': '#FFFFFF',
 
   // Secondary
   '--secondary': '#E5E7EB',
-  '--secondary-foreground': '#0B0E11',
+  '--secondary-foreground': '#000000',
 
   // Muted
   '--muted': '#F5F5F5',
@@ -118,7 +118,7 @@ export const lightThemeVariables = {
 
   // Accent
   '--accent': '#E0F2FE',                  // Light blue
-  '--accent-foreground': '#0066B3',
+  '--accent-foreground': '#593FFF',
 
   // Destructive - Cinnabar Red
   '--destructive': '#FF4D4F',
@@ -130,17 +130,17 @@ export const lightThemeVariables = {
 
   // Warning
   '--warning': '#F0B90B',
-  '--warning-foreground': '#0B0E11',
+  '--warning-foreground': '#000000',
 
   // Border and Input
   '--border': '#E5E7EB',
   '--input': '#E5E7EB',
-  '--ring': '#0066B3',
+  '--ring': '#593FFF',
 
   // Chart colors
   '--chart-1': '#00C087',
   '--chart-2': '#FF4D4F',
-  '--chart-3': '#0066B3',
+  '--chart-3': '#593FFF',
   '--chart-4': '#F0B90B',
   '--chart-5': '#A855F7',
 } as const;

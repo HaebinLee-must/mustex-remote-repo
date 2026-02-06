@@ -31,10 +31,10 @@ export const VerticalStepper: React.FC<VerticalStepperProps> = ({
                     let labelClasses = 'text-muted-foreground';
 
                     if (isCompleted) {
-                        circleClasses = 'bg-yellow-500 text-black';
-                        labelClasses = 'text-yellow-500';
+                        circleClasses = 'bg-primary text-primary-foreground';
+                        labelClasses = 'text-primary';
                     } else if (isCurrent && !step.inactive) {
-                        circleClasses = 'border-2 border-yellow-500 text-yellow-500 bg-yellow-500/10';
+                        circleClasses = 'border-2 border-primary text-primary bg-primary/10';
                         labelClasses = 'text-foreground';
                     } else if (isCurrent && step.inactive) {
                         circleClasses = 'border-2 border-border text-muted-foreground bg-background';
@@ -54,7 +54,7 @@ export const VerticalStepper: React.FC<VerticalStepperProps> = ({
                                 <div
                                     className={cn(
                                         'absolute left-[19px] top-10 bottom-0 w-0.5 bg-border transition-colors duration-200',
-                                        isCompleted && 'bg-yellow-500'
+                                        isCompleted && 'bg-primary'
                                     )}
                                 />
                             )}

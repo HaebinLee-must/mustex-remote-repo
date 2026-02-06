@@ -23,7 +23,7 @@ const OrderBookPanel: React.FC<OrderBookPanelProps> = ({ asks, bids, loading, on
   );
 
   return (
-    <div className="flex flex-col h-full bg-[#0B0E11] text-[11px] font-medium tabular-nums font-roboto select-none">
+    <div className="flex flex-col h-full bg-[#000000] text-[11px] font-medium tabular-nums font-sans select-none">
       {/* View Switch Icons & Step Dropdown */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-dark-border bg-dark-main">
         <div className="flex items-center gap-1.5">

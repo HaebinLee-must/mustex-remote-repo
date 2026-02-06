@@ -7,9 +7,9 @@ const Highlight: React.FC = () => {
 
     return (
         <section id="why" className="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
-            <div className="bg-gradient-to-r from-primary/20 to-indigo-900/40 border border-primary/20 rounded-3xl p-8 md:p-16 relative overflow-hidden text-left">
+            <div className="bg-black border border-white/10 rounded-3xl p-8 md:p-16 relative overflow-hidden text-left">
                 {/* Background Patterns */}
-                <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[radial-gradient(hsl(var(--primary))_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[radial-gradient(hsl(var(--primary))_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
                 <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
                     <div className="space-y-8">
@@ -42,26 +42,26 @@ const Highlight: React.FC = () => {
 
                     {/* Abstract Visual Right */}
                     <div className="relative hidden md:block">
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/30 rounded-full blur-[80px]"></div>
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/20 rounded-full blur-[80px]"></div>
                         <div className="relative grid grid-cols-2 gap-4">
                             <div className="space-y-4 mt-12">
-                                <div className="bg-slate-900/80 backdrop-blur border border-slate-700/50 p-6 rounded-2xl h-40 w-full animate-pulse-slow">
+                                <div className="bg-black backdrop-blur border border-white/10 p-6 rounded-2xl h-40 w-full animate-pulse-slow">
                                     <div className="w-10 h-10 bg-primary/20 rounded-lg mb-4"></div>
-                                    <div className="w-full h-2 bg-slate-700 rounded mb-2"></div>
-                                    <div className="w-2/3 h-2 bg-slate-700 rounded"></div>
+                                    <div className="w-full h-2 bg-white/5 rounded mb-2"></div>
+                                    <div className="w-2/3 h-2 bg-white/5 rounded"></div>
                                 </div>
                             </div>
                             <div className="space-y-4">
-                                <div className="bg-slate-800/80 backdrop-blur border border-slate-700/50 p-6 rounded-2xl h-48 w-full shadow-2xl">
+                                <div className="bg-black backdrop-blur border border-white/10 p-6 rounded-2xl h-48 w-full shadow-2xl">
                                     <div className="flex justify-between items-center mb-6">
                                         <div className="w-8 h-8 rounded-full bg-green-500/20"></div>
                                         <span className="text-green-400 text-xs">+12.5%</span>
                                     </div>
                                     <div className="space-y-2">
-                                        <div className="w-full h-16 bg-gradient-to-t from-green-500/20 to-transparent rounded-lg border-b border-green-500/30"></div>
+                                        <div className="w-full h-16 bg-gradient-to-t from-green-500/10 to-transparent rounded-lg border-b border-green-500/20"></div>
                                     </div>
                                 </div>
-                                <div className="bg-slate-900/60 backdrop-blur border border-slate-700/50 p-4 rounded-2xl h-24 w-full"></div>
+                                <div className="bg-black backdrop-blur border border-white/10 p-4 rounded-2xl h-24 w-full"></div>
                             </div>
                         </div>
                     </div>

@@ -19,7 +19,7 @@ export default {
             colors: {
                 // 기존 커스텀 색상 유지 및 HSL 변수 연결
                 primary: {
-                    DEFAULT: "hsl(var(--primary))",
+                    DEFAULT: "hsl(247 100% 62%)", // Updated to #593FFF
                     foreground: "hsl(var(--primary-foreground))",
                 },
                 secondary: {

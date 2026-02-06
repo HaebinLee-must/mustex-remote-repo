@@ -24,7 +24,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
             case 1:
                 return (
                     <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-500">
-                        <h2 className="text-2xl font-bold text-white">Welcome to MUSTEX!</h2>
+                        <h2 className="text-2xl font-bold text-white">Welcome to Finora!</h2>
                         <p className="text-gray-400">Let's set up your account for the best experience.</p>
                         <div className="bg-white/5 p-4 rounded-xl border border-white/10">
                             <p className="text-sm text-indigo-300 font-semibold mb-2">Step 1: Security Setup</p>

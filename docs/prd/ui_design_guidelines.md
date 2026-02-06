@@ -9,7 +9,7 @@
 ## 1. Visual Identity & Color System
 
 ### 1.1 Brand Colors (Mongolia Blue Sky Theme)
-- **Primary (Action):** `#0066B3` (Mongolian Blue) - Symbolizing the "Eternal Blue Sky," used for primary actions.
+- **Primary (Action):** `#593FFF` (Mongolian Blue) - Symbolizing the "Eternal Blue Sky," used for primary actions.
 - **Success (Up):** `#00C087` (Emerald Green) - Positive price movement.
 - **Danger (Down):** `#FF4D4F` (Cinnabar Red) - Negative price movement, Error, Delete. (Standard Trading Colors)
 - **Backgrounds:**
@@ -101,9 +101,43 @@ borderRadius: {
 
 ---
 
-## 5. Implementation Roadmap
+## 5. Typography System
 
-- [ ] Define global Tailwind config (Colors, Fonts).
+### 5.1 Font Families
+
+| Role | Font | Use Case |
+|------|------|----------|
+| **Primary (Body/Data)** | Inter | Body text, trading data, tables, forms |
+| **Display (Headlines)** | Poppins | Hero sections, headings, brand elements |
+| **Monospace** | JetBrains Mono, Fira Code | Price data, code blocks |
+
+### 5.2 Font Loading (Google Fonts)
+
+```html
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+```
+
+### 5.3 Tailwind Configuration
+
+```javascript
+fontFamily: {
+  sans: ['Inter', 'system-ui', ...], // Body text
+  display: ['Poppins', 'system-ui', 'sans-serif'], // Headlines
+  mono: ['JetBrains Mono', 'Fira Code', ...], // Trading data
+}
+```
+
+### 5.4 Usage Guidelines
+
+- **Body Text**: Use `font-sans` (Inter) for all general content
+- **Headlines**: Use `font-display` (Poppins) for hero sections and major headings
+- **Trading Data**: Use `font-mono` with `tabular-nums` for price and numerical data
+
+---
+
+## 6. Implementation Roadmap
+
+- [x] Define global Tailwind config (Colors, Fonts).
 - [ ] Build Onboarding Shell & Screens (Login/Signup/KYC).
 - [ ] Build Trade Dashboard (Responsive Grid Layout).
 - [ ] Build Wallet & Assets list.

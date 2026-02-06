@@ -5,6 +5,8 @@ import { Search, Info, RotateCw, ChevronUp, ChevronDown } from 'lucide-react';
 
 interface AssetTableProps {
     onAssetClick: (symbol: string) => void;
+    onDeposit: (symbol?: string) => void;
+    onWithdraw: (symbol?: string) => void;
 }
 
 const AssetTable: React.FC<AssetTableProps> = ({ onAssetClick }) => {

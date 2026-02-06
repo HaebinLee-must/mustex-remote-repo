@@ -24,6 +24,7 @@ function Calendar({
     return (
         <DayPicker
             showOutsideDays={showOutsideDays}
+            {...(props as any)}
             className={cn("p-3", className)}
             captionLayout="dropdown"
             fromYear={hundredYearsAgo.getFullYear()}
@@ -67,12 +68,11 @@ function Calendar({
                 ...classNames,
             }}
             components={{
-                Chevron: ({ orientation }) => {
+                Chevron: ({ orientation }: { orientation: 'left' | 'right' }) => {
                     const Icon = orientation === "left" ? ChevronLeft : ChevronRight;
                     return <Icon className="h-4 w-4" />;
                 },
             }}
-            {...props}
         />
     )
 }

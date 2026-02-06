@@ -6,9 +6,13 @@ import { useUI } from '@/features/shared/UIContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label'
+import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/features/auth/AuthContext'; // Import useAuth
+import CountryCodeSelector from '@/components/ui/CountryCodeSelector'; // Import CountryCodeSelector
+import { COUNTRIES, DEFAULT_COUNTRY_CODE, Country } from '@/constants/countries'; // Import Country and DEFAULT_COUNTRY_CODE
+
+import { cn } from '@/design-system/cn';
 
 interface SignupFlowProps {
     onComplete?: (userData: { email: string; uid: string }) => void; // Update onComplete signature
@@ -18,11 +22,12 @@ interface SignupFlowProps {
 type Step = 'email' | 'verify' | 'phoneNumber' | 'password' | 'complete'; // Add 'phoneNumber' step
 
 const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
-    const { lang, setLang } = useUI();
+    const { t, lang, setLang } = useUI();
     const [step, setStep] = useState<Step>('email');
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState<string | null>(null); // State for email validation error
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
+    const [selectedCountryCode, setSelectedCountryCode] = useState(DEFAULT_COUNTRY_CODE); // New state for country code
     const [phoneNumber, setPhoneNumber] = useState(''); // State for phone number
     const [phoneNumberError, setPhoneNumberError] = useState<string | null>(null); // State for phone number validation error
     const [password, setPassword] = useState('');
@@ -40,10 +45,10 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
     const validateEmail = (inputEmail: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!inputEmail) {
-            return '이메일 주소를 입력해주세요.';
+            return 'Please enter your email address.';
         }
         if (!emailRegex.test(inputEmail)) {
-            return '유효하지 않은 이메일 주소입니다.';
+            return 'Please enter a valid email address.';
         }
         return null;
     };
@@ -129,7 +134,7 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
             return;
         }
         setError('');
-        setStep('complete');
+        handleFinalize();
     };
 
     const handleFinalize = () => {
@@ -147,12 +152,12 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                 content = (
                     <form onSubmit={handleEmailSubmit} className="space-y-6" noValidate>
                         <div className="space-y-2">
-                            <Label htmlFor="email" className="text-white">Email</Label>
+                            <Label htmlFor="email" className="text-white text-base font-bold">{t('email')}</Label>
                             <div className="relative">
                                 <Input
                                     id="email"
                                     type="email"
-                                    placeholder="Enter your email"
+                                    placeholder={t('enter_your_email')}
                                     value={email}
                                     onChange={handleEmailChange}
                                     onBlur={() => setEmailError(validateEmail(email))} // Validate on blur as well
@@ -211,9 +216,9 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                         <Button
                             type="submit"
                             disabled={!agreeTerms || emailError !== null || !email}
-                            className="group relative w-full overflow-hidden rounded-2xl bg-[#5e5ce6] py-7 text-lg font-bold text-white transition-all hover:bg-[#4b4ac2] disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="group relative w-full overflow-hidden rounded-2xl bg-[#5e5ce6] py-7 text-lg font-bold text-white transition-all hover:bg-[#4b4ac2] disabled:opacity-50 disabled:bg-white/10 disabled:text-gray-500 disabled:cursor-not-allowed"
                         >
-                            <span className="relative z-10">Create Account</span>
+                            <span className="relative z-10">{t('create_account')}</span>
                             <div className="absolute inset-0 z-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
                         </Button>
 
@@ -278,20 +283,39 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                 );
                 break;
             case 'phoneNumber':
+                const currentCountry = COUNTRIES.find(country => country.code === selectedCountryCode);
+                const maxLen = currentCountry ? Math.max(...currentCountry.phone_length) : 15;
+
                 const validatePhoneNumber = (inputNumber: string) => {
-                    // Simple validation for numbers, can be extended for specific formats
-                    const phoneRegex = /^\d{10,11}$/; // Assuming 10 or 11 digits for a phone number
                     if (!inputNumber) {
-                        return '휴대전화 번호를 입력해주세요.';
+                        return 'Please enter your mobile number.';
                     }
-                    if (!phoneRegex.test(inputNumber)) {
-                        return '유효하지 않은 휴대전화 번호입니다.';
+
+                    if (!currentCountry) {
+                        return 'Please select a valid country code.';
                     }
+
+                    // Remove all non-digit characters for validation
+                    const cleanNumber = inputNumber.replace(/\D/g, '');
+
+                    if (currentCountry.phone_length.length > 0) {
+                        if (!currentCountry.phone_length.includes(cleanNumber.length)) {
+                            const lengths = currentCountry.phone_length.join(' or ');
+                            return `Mobile number must be ${lengths} digits.`;
+                        }
+                    } else {
+                        // Fallback to a generic regex if phone_length is not defined for the country
+                        const genericPhoneRegex = /^\d{7,15}$/; // Common range for international phone numbers
+                        if (!genericPhoneRegex.test(cleanNumber)) {
+                            return 'Invalid mobile number.';
+                        }
+                    }
+
                     return null;
                 };
 
                 const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-                    const newNumber = e.target.value;
+                    const newNumber = e.target.value.replace(/\D/g, ''); // Keep only digits
                     setPhoneNumber(newNumber);
                     if (newNumber) {
                         setPhoneNumberError(validatePhoneNumber(newNumber));
@@ -313,30 +337,48 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
 
                 content = (
                     <form onSubmit={handlePhoneNumberSubmit} className="space-y-6" noValidate>
-                        <div className="space-y-2">
-                            <Label htmlFor="phoneNumber" className="text-white">휴대전화 번호</Label>
-                            <div className="relative">
-                                <Input
-                                    id="phoneNumber"
-                                    type="tel"
-                                    placeholder="휴대전화 번호를 입력해주세요"
-                                    value={phoneNumber}
-                                    onChange={handlePhoneNumberChange}
-                                    onBlur={() => setPhoneNumberError(validatePhoneNumber(phoneNumber))}
-                                    className={`h-14 sm:h-14 border-white/[0.08] bg-white/[0.05] pr-10 text-white transition-all placeholder:text-gray-500 focus:bg-white/[0.08] focus:ring-2 focus:ring-[#5e5ce6]/50 ${phoneNumberError ? 'border-red-500/50 focus:ring-red-500/50' : ''
-                                        }`}
-                                />
-                                {phoneNumber && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setPhoneNumber('')}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
-                                    >
-                                        <X className="h-4 w-4" />
-                                    </button>
-                                )}
+                        <div className="space-y-4">
+                            <Label htmlFor="phoneNumber" className="text-white text-base font-bold">{t('phone_number')}</Label>
+                            <div className="flex flex-col space-y-4">
+                                <div className="flex items-center space-x-2">
+                                    <CountryCodeSelector selectedCode={selectedCountryCode} onSelectCode={setSelectedCountryCode} />
+                                    <div className="relative flex-grow">
+                                        <Input
+                                            id="phoneNumber"
+                                            type="tel"
+                                            placeholder={t('enter_mobile_number')}
+                                            value={phoneNumber}
+                                            maxLength={maxLen}
+                                            onChange={handlePhoneNumberChange}
+                                            onBlur={() => setPhoneNumberError(validatePhoneNumber(phoneNumber))}
+                                            className={`h-14 border-white/10 bg-white/5 pr-10 text-white transition-all placeholder:text-gray-500 focus:bg-white/10 focus:ring-2 focus:ring-primary/50 ${phoneNumberError ? 'border-red-500/50 focus:ring-red-500/50' : ''
+                                                }`}
+                                        />
+                                        {phoneNumber && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setPhoneNumber('')}
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                                <p className="text-[11px] leading-relaxed text-[#848E9C] font-medium italic">
+                                    By providing your phone number, you agree to receive SMS messages for verification and security purposes.
+                                </p>
                             </div>
-                            {phoneNumberError && <p className="text-sm font-medium text-red-500 mt-1">{phoneNumberError}</p>}
+                            {phoneNumberError && (
+                                <motion.p
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="text-sm font-medium text-red-500 mt-1 flex items-center gap-1"
+                                >
+                                    <X className="w-3 h-3" />
+                                    {phoneNumberError}
+                                </motion.p>
+                            )}
                         </div>
 
                         {error && <p className="text-sm font-medium text-red-500">{error}</p>}
@@ -344,9 +386,9 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                         <Button
                             type="submit"
                             disabled={phoneNumberError !== null || !phoneNumber}
-                            className="group relative w-full overflow-hidden rounded-2xl bg-[#5e5ce6] py-7 text-lg font-bold text-white transition-all hover:bg-[#4b4ac2] disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="group relative w-full overflow-hidden rounded-2xl bg-[#5e5ce6] py-7 text-lg font-bold text-white transition-all hover:bg-[#4b4ac2] disabled:opacity-50 disabled:bg-white/10 disabled:text-gray-500 disabled:cursor-not-allowed"
                         >
-                            <span className="relative z-10">계속</span>
+                            <span className="relative z-10">{t('_continue')}</span>
                             <div className="absolute inset-0 z-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
                         </Button>
                     </form>
@@ -435,47 +477,30 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                     </form>
                 );
                 break;
-            case 'complete':
-                content = (
-                    <div className="space-y-8 text-center py-6">
-                        <div className="flex justify-center">
-                            <div className="w-24 h-24 rounded-3xl bg-green-500/10 flex items-center justify-center text-green-500">
-                                <CheckCircle2 className="h-14 w-14" />
-                            </div>
-                        </div>
-                        <div className="space-y-2">
-                            <h2 className="text-3xl font-black text-white">All set!</h2>
-                            <p className="text-gray-400">Your account has been created successfully.</p>
-                        </div>
-                        <Button
-                            onClick={handleFinalize}
-                            className="w-full rounded-2xl bg-[#5e5ce6] py-7 text-lg font-bold hover:bg-[#4b4ac2] group"
-                        >
-                            Verify to Unlock Trading
-                            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            onClick={() => onViewChange?.('exchange')}
-                            className="w-full rounded-2xl text-lg font-bold text-gray-400 hover:text-white"
-                        >
-                            Go to look around
-                        </Button>
-                    </div>
-                );
-                break;
         }
 
-        return content;
+        return (
+            <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                    key={step}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                    {content}
+                </motion.div>
+            </AnimatePresence>
+        );
     };
 
     const getTitle = () => {
         switch (step) {
-            case 'email': return 'Create Your Account';
-            case 'verify': return 'Verify Your Email';
-            case 'phoneNumber': return '휴대전화 번호 입력'; // Add title for phone number step
-            case 'password': return 'Secure Your Account';
-            case 'complete': return 'Registration Complete';
+            case 'email': return t('create_account');
+            case 'verify': return t('verify_your_email');
+            case 'phoneNumber': return t('phone_number_input');
+            case 'password': return t('secure_your_account');
+            case 'complete': return t('registration_complete');
         }
     };
 

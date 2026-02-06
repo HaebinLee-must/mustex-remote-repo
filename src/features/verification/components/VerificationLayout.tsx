@@ -2,6 +2,7 @@ import React from 'react';
 import { ChevronLeft, Info, ShieldCheck, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { StepId } from '../types';
+import logoLight from '../../../assets/finora_bi_light.png';
 
 interface VerificationLayoutProps {
     children: React.ReactNode;
@@ -47,9 +48,9 @@ export const VerificationLayout: React.FC<VerificationLayoutProps> = ({
     isEU
 }) => {
     return (
-        <div className="fixed inset-0 z-[1000] bg-[#12122b] text-[#EAECEF] font-sans selection:bg-indigo-500/30 overflow-y-auto custom-scrollbar">
+        <div className="fixed inset-0 z-[1000] bg-[#000000] text-[#EAECEF] font-sans selection:bg-indigo-500/30 overflow-y-auto custom-scrollbar">
             {/* Top Navigation Bar */}
-            <header className="sticky top-0 z-[1001] h-20 px-4 sm:px-12 flex items-center justify-between border-b border-white/[0.05] bg-[#12122b]/80 backdrop-blur-xl">
+            <header className="sticky top-0 z-[1001] h-20 px-4 sm:px-12 flex items-center justify-between border-b border-white/[0.05] bg-[#000000]/80 backdrop-blur-xl">
                 <div className="flex items-center gap-6 min-w-[120px]">
                     {onExit && (
                         <button
@@ -57,17 +58,13 @@ export const VerificationLayout: React.FC<VerificationLayoutProps> = ({
                             onClick={onExit}
                         >
                             <X className="w-5 h-5 group-hover:rotate-90 transition-transform" />
-                            <span className="text-xs font-bold uppercase tracking-widest">Exit</span>
                         </button>
                     )}
                     <div
-                        className="flex items-center gap-3 cursor-pointer active:scale-95 transition-transform group"
+                        className="cursor-pointer select-none active:scale-95 transition"
                         onClick={onExit}
                     >
-                        <div className="w-10 h-10 bg-[#5e5ce6] rounded-xl flex items-center justify-center shadow-lg shadow-[#5e5ce6]/20 group-hover:shadow-[#5e5ce6]/40 transition-all">
-                            <ShieldCheck className="w-6 h-6 text-white" />
-                        </div>
-                        <span className="text-xl font-black tracking-tighter text-white uppercase italic">Mustex</span>
+                        <img src={logoLight} alt="FINORA" className="h-[22px] w-auto" />
                     </div>
                 </div>
 
@@ -87,7 +84,7 @@ export const VerificationLayout: React.FC<VerificationLayoutProps> = ({
             </header>
 
             {/* Mobile Stepper (Condensed) */}
-            <div className="md:hidden px-6 py-4 border-b border-white/[0.03] bg-[#12122b]/50">
+            <div className="md:hidden px-6 py-4 border-b border-white/[0.03] bg-[#000000]/50">
                 <Stepper currentStep={currentStep} isEU={isEU} />
             </div>
 
@@ -122,9 +119,9 @@ export const VerificationLayout: React.FC<VerificationLayoutProps> = ({
             </main>
 
             {/* Minimal Footer */}
-            <footer className="py-10 border-t border-white/[0.05] text-center bg-[#12122b]/40 mt-auto">
+            <footer className="py-10 border-t border-white/[0.05] text-center bg-[#000000]/40 mt-auto">
                 <p className="text-[#848E9C] text-xs font-medium">
-                    © 2026 MUSTEX. Enterprise-grade crypto exchange.
+                    © 2026 FINORA. Enterprise-grade crypto exchange.
                     <span className="mx-2 text-white/10">|</span>
                     <a href="#" className="text-[#5e5ce6] hover:text-[#5e5ce6]/80 transition-colors font-bold">Privacy Policy</a>
                 </p>

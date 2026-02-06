@@ -6,14 +6,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { useAuth } from '@/features/auth/AuthContext'; // Import useAuth
 
 interface LoginFormProps {
-    onLogin?: (userData: { email: string }) => void;
+    onLogin?: (userData: { email: string; uid: string }) => void; // Update onLogin signature
     onViewChange?: (view: string) => void;
 }
 
 const LoginForm = ({ onLogin, onViewChange }: LoginFormProps) => {
     const { lang, setLang } = useUI();
+    const { login } = useAuth(); // Destructure login from useAuth()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -37,12 +39,15 @@ const LoginForm = ({ onLogin, onViewChange }: LoginFormProps) => {
 
         if (Object.keys(newErrors).length === 0) {
             console.log('Logging in with:', { email, password });
-            onLogin?.({ email });
+            // Generate a dummy UID for now; in a real app, this would come from a backend auth service.
+            const dummyUid = `user_${Date.now()}`;
+            login({ email, uid: dummyUid }); // Call login from AuthContext
+            onLogin?.({ email, uid: dummyUid });
         }
     };
 
     return (
-        <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#12122b] p-4 font-sans">
+        <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#000000] p-4 font-sans">
             {/* Background Pattern Sync with Landing */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,#5e5ce6,transparent_50%)] opacity-10" />
 
@@ -52,13 +57,13 @@ const LoginForm = ({ onLogin, onViewChange }: LoginFormProps) => {
                         className="text-[#6366F1] font-black text-2xl tracking-tighter cursor-pointer select-none active:scale-95 transition inline-block"
                         onClick={() => onViewChange?.('landing')}
                     >
-                        MUSTEX
+                        Finora
                     </div>
                     <div className="space-y-2">
                         <h1 className="text-4xl font-extrabold tracking-tight text-white uppercase">
                             LOG IN
                         </h1>
-                        <p className="text-sm text-gray-400">WELCOME BACK TO MUSTEX</p>
+                        <p className="text-sm text-gray-400">WELCOME BACK TO Finora</p>
                     </div>
                 </CardHeader>
                 <CardContent className="px-8 pb-8">

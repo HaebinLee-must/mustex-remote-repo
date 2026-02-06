@@ -38,13 +38,13 @@ const Blog: React.FC = () => {
             <div className="grid md:grid-cols-3 gap-8 text-left">
                 {posts.map((post, i) => (
                     <div key={i} className="group cursor-pointer">
-                        <div className="relative aspect-video rounded-xl overflow-hidden mb-6 bg-slate-800 border border-slate-700/50">
+                        <div className="relative aspect-video rounded-xl overflow-hidden mb-6 bg-black border border-white/10">
                             <img
                                 src={post.image}
                                 alt={post.title}
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         </div>
                         <div className="space-y-3">
                             <span className="text-slate-500 text-sm font-medium">{post.date}</span>

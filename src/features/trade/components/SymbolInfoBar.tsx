@@ -34,7 +34,7 @@ const SymbolInfoBar: React.FC<SymbolInfoBarProps> = ({
     const isPositive = change24hPercent >= 0;
 
     return (
-        <div className="flex items-center h-12 px-4 bg-dark-main border-b border-dark-border select-none overflow-x-auto scrollbar-hide font-roboto">
+        <div className="flex items-center h-12 px-4 bg-dark-main border-b border-dark-border select-none overflow-x-auto scrollbar-hide font-sans">
             {/* Left: Identity */}
             <div className="flex items-center gap-3 pr-4 border-r border-dark-border mr-4 flex-shrink-0">
                 <button

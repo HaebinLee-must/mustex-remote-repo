@@ -8,6 +8,8 @@ export type SecurityLevel = 0 | 1 | 2 | 3;
 
 export interface User {
     email: string;
+    uid: string; // Add uid to User interface
+    profilePicture?: string; // Add profilePicture to User interface
     kycStatus: KycStatus;
     securityLevel: SecurityLevel;
     residenceCountry?: string;
@@ -99,8 +101,8 @@ interface AuthContextType {
     isAuthenticated: boolean;
     user: User | null;
     permissions: Permissions;
-    login: (userData: Partial<User> & { email: string }) => void;
-    signup: (userData: Partial<User> & { email: string }) => void;
+    login: (userData: Partial<User> & { email: string; uid: string }) => void; // Update login signature
+    signup: (userData: Partial<User> & { email: string; uid: string }) => void; // Update signup signature
     logout: () => void;
     updateKycStatus: (status: KycStatus) => void;
     setResidenceCountry: (country: string, isPOARequired: boolean) => void;
@@ -114,21 +116,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const permissions = user ? getPermissions(user.securityLevel) : getPermissions(0);
 
-    const login = (userData: Partial<User> & { email: string }) => {
+    const login = (userData: Partial<User> & { email: string; uid: string }) => { // Update login to require uid
         setIsAuthenticated(true);
         const kycStatus = userData.kycStatus || 'L0';
         setUser({
             securityLevel: getSecurityLevelFromKycStatus(kycStatus),
             kycStatus,
+            profilePicture: userData.profilePicture || `https://api.dicebear.com/8.x/initials/svg?seed=${userData.email}`, // Default profile picture
             ...userData
         } as User);
     };
 
-    const signup = (userData: Partial<User> & { email: string }) => {
+    const signup = (userData: Partial<User> & { email: string; uid: string }) => { // Update signup to require uid
         setIsAuthenticated(true);
         setUser({
             kycStatus: 'L0',
             securityLevel: 0,
+            profilePicture: userData.profilePicture || `https://api.dicebear.com/8.x/initials/svg?seed=${userData.email}`, // Default profile picture
             ...userData
         } as User);
     };

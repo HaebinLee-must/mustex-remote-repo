@@ -234,7 +234,7 @@ const AssetDetailPage: React.FC<AssetDetailPageProps> = ({ symbol, onBack, onDep
                                         assetTransactions.map((tx) => (
                                             <div
                                                 key={tx.id}
-                                                className="flex items-center justify-between p-4 bg-[#0B0E11]/50 rounded-lg hover:bg-[#0B0E11] transition"
+                                                className="flex items-center justify-between p-4 bg-[#000000]/50 rounded-lg hover:bg-[#000000] transition"
                                             >
                                                 <div className="flex items-center gap-4">
                                                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
@@ -297,7 +297,7 @@ const AssetDetailPage: React.FC<AssetDetailPageProps> = ({ symbol, onBack, onDep
                                     <button
                                         key={market.pair}
                                         onClick={() => handleTradeClick(market.pair)}
-                                        className="w-full flex items-center justify-between p-3 bg-[#0B0E11]/50 rounded-lg hover:bg-[#0B0E11] transition group"
+                                        className="w-full flex items-center justify-between p-3 bg-[#000000]/50 rounded-lg hover:bg-[#000000] transition group"
                                     >
                                         <div>
                                             <p className="text-sm font-bold text-white group-hover:text-[#6366F1] transition">

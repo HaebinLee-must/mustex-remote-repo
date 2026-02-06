@@ -62,7 +62,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, initialCoi
                                     <select
                                         value={selectedCoin.symbol}
                                         onChange={(e) => setSelectedCoin(MOCK_COINS.find(c => c.symbol === e.target.value)!)}
-                                        className="w-full bg-[#0B0E11] border border-[#2B3139] rounded-xl px-4 py-3 text-sm font-bold appearance-none outline-none focus:border-[#6366F1] transition"
+                                        className="w-full bg-[#000000] border border-[#2B3139] rounded-xl px-4 py-3 text-sm font-bold appearance-none outline-none focus:border-[#6366F1] transition"
                                     >
                                         {MOCK_COINS.map(coin => (
                                             <option key={coin.symbol} value={coin.symbol}>{coin.symbol} - {coin.name}</option>
@@ -84,7 +84,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, initialCoi
                                             onClick={() => setSelectedNetwork(network)}
                                             className={`w-full p-4 rounded-xl border transition text-left flex justify-between items-center ${selectedNetwork?.id === network.id
                                                     ? 'bg-[#6366F1]/10 border-[#6366F1]'
-                                                    : 'bg-[#0B0E11] border-[#2B3139] hover:border-[#848E9C]'
+                                                    : 'bg-[#000000] border-[#2B3139] hover:border-[#848E9C]'
                                                 }`}
                                         >
                                             <div>
@@ -108,7 +108,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, initialCoi
                             <div>
                                 <label className="block text-xs font-bold text-[#848E9C] uppercase mb-2">3. Deposit Address</label>
                                 {!selectedNetwork ? (
-                                    <div className="bg-[#0B0E11] border border-[#2B3139] border-dashed rounded-2xl p-8 text-center flex flex-col items-center justify-center space-y-3">
+                                    <div className="bg-[#000000] border border-[#2B3139] border-dashed rounded-2xl p-8 text-center flex flex-col items-center justify-center space-y-3">
                                         <svg className="w-10 h-10 text-[#2B3139]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                         </svg>
@@ -131,7 +131,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, initialCoi
                                         ) : 'Generate Address'}
                                     </button>
                                 ) : (
-                                    <div className="bg-[#0B0E11] border border-[#2B3139] rounded-2xl p-6 space-y-6">
+                                    <div className="bg-[#000000] border border-[#2B3139] rounded-2xl p-6 space-y-6">
                                         <div className="flex justify-center">
                                             <div className="w-32 h-32 bg-white p-2 rounded-xl">
                                                 {/* Mock QR Code */}
@@ -160,7 +160,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, initialCoi
                                 <label className="block text-xs font-bold text-[#848E9C] uppercase mb-3">Recent Deposits</label>
                                 <div className="space-y-2">
                                     {MOCK_HISTORY.filter(h => h.type === 'DEPOSIT').slice(0, 2).map(tx => (
-                                        <div key={tx.id} className="bg-[#0B0E11]/50 p-3 rounded-xl border border-[#2B3139] flex justify-between items-center">
+                                        <div key={tx.id} className="bg-[#000000]/50 p-3 rounded-xl border border-[#2B3139] flex justify-between items-center">
                                             <div>
                                                 <div className="text-[11px] font-bold text-[#EAECEF]">{tx.amount} {tx.coin}</div>
                                                 <div className="text-[9px] text-[#848E9C]">{tx.date}</div>

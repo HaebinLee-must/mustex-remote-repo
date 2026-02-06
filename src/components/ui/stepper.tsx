@@ -30,8 +30,8 @@ export const Stepper: React.FC<StepperProps> = ({
                 <div
                   className={cn(
                     'flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full font-medium transition-all duration-200',
-                    isCompleted && 'bg-yellow-500 text-black',
-                    isCurrent && 'border-2 border-yellow-500 text-yellow-500 bg-yellow-500/10',
+                    isCompleted && 'bg-primary text-primary-foreground',
+                    isCurrent && 'border-2 border-primary text-primary bg-primary/10',
                     isFuture && 'border-2 border-border text-muted-foreground bg-background'
                   )}
                 >
@@ -48,7 +48,7 @@ export const Stepper: React.FC<StepperProps> = ({
                     <span
                       className={cn(
                         'text-xs font-medium',
-                        isCompleted && 'text-yellow-500',
+                        isCompleted && 'text-primary',
                         isCurrent && 'text-foreground',
                         isFuture && 'text-muted-foreground'
                       )}
@@ -64,7 +64,7 @@ export const Stepper: React.FC<StepperProps> = ({
                 <div
                   className={cn(
                     'absolute top-5 left-[calc(50%+20px)] right-[calc(-50%+20px)] h-0.5 transition-colors duration-200',
-                    isCompleted ? 'bg-yellow-500' : 'bg-border'
+                    isCompleted ? 'bg-primary' : 'bg-border'
                   )}
                 />
               )}

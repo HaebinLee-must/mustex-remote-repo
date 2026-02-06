@@ -3,7 +3,6 @@
 import * as React from "react"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
-import { SelectSingleEventHandler } from "react-day-picker"
 
 import { cn } from "../../design-system/cn"
 import { Button } from "./button"
@@ -16,7 +15,8 @@ import {
 
 interface DatePickerProps {
     date: Date | undefined;
-    setDate: SelectSingleEventHandler;
+    // Using a simpler type for setDate to avoid SelectSingleEventHandler import issues
+    setDate: (date: Date | undefined) => void;
     placeholder?: string;
     className?: string;
 }
@@ -39,10 +39,10 @@ export function DatePicker({ date, setDate, placeholder = "Pick a date", classNa
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
                 <Calendar
-                    mode="single"
                     selected={date}
                     onSelect={setDate}
                     initialFocus
+                    mode="single" // Moving to end in case of prop order sensitivity
                 />
             </PopoverContent>
         </Popover>

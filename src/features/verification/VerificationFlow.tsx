@@ -92,7 +92,7 @@ const VerificationFlow: React.FC<VerificationFlowProps> = ({ onComplete, onExit 
             case 'LIVENESS': return 'Face Verification';
             case 'STATUS_CHECK': return 'Verification Pending';
             case 'SECURITY_2FA': return 'Secure Account';
-            case 'FEATURE_UNLOCK': return 'Welcome to Mustex';
+            case 'FEATURE_UNLOCK': return 'Welcome to Finora';
             default: return '';
         }
     };

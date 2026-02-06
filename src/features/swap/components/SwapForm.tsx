@@ -15,7 +15,7 @@ const SwapForm: React.FC = () => {
             </div>
 
             {/* From Section */}
-            <div className="bg-[#0B0E11] rounded-2xl p-4 border border-transparent focus-within:border-[#6366F1] transition-all mb-2">
+            <div className="bg-[#000000] rounded-2xl p-4 border border-transparent focus-within:border-[#6366F1] transition-all mb-2">
                 <div className="flex justify-between text-xs font-bold text-[#848E9C] mb-3 uppercase tracking-wider">
                     <span>From</span>
                     <span>Balance: 0.0245 BTC</span>
@@ -37,13 +37,13 @@ const SwapForm: React.FC = () => {
 
             {/* Swap Icon */}
             <div className="flex justify-center -my-3 relative z-10">
-                <button className="bg-[#1E2329] border-4 border-[#0B0E11] rounded-xl p-2 text-[#6366F1] hover:scale-110 transition-transform shadow-xl">
+                <button className="bg-[#1E2329] border-4 border-[#000000] rounded-xl p-2 text-[#6366F1] hover:scale-110 transition-transform shadow-xl">
                     <ArrowDown className="w-5 h-5" />
                 </button>
             </div>
 
             {/* To Section */}
-            <div className="bg-[#0B0E11] rounded-2xl p-4 border border-transparent focus-within:border-[#6366F1] transition-all mb-6">
+            <div className="bg-[#000000] rounded-2xl p-4 border border-transparent focus-within:border-[#6366F1] transition-all mb-6">
                 <div className="flex justify-between text-xs font-bold text-[#848E9C] mb-3 uppercase tracking-wider">
                     <span>To</span>
                     <span>Estimated</span>

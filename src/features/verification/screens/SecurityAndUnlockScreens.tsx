@@ -22,9 +22,9 @@ export const SEC01_Security2FA: React.FC<StepProps> = ({ onNext }) => {
                     <p className="text-sm text-[#848E9C]">Enable Two-Factor Authentication (2FA) to protect your assets.</p>
                 </div>
 
-                <div className="bg-[#0B0E11] p-8 rounded-3xl border border-white/10 flex flex-col items-center gap-8 shadow-inner">
+                <div className="bg-[#000000] p-8 rounded-3xl border border-white/10 flex flex-col items-center gap-8 shadow-inner">
                     <div className="p-4 bg-white rounded-2xl shadow-2xl shadow-white/10">
-                        <QrCode className="w-40 h-40 text-[#0B0E11]" />
+                        <QrCode className="w-40 h-40 text-[#000000]" />
                     </div>
                     <div className="w-full space-y-3">
                         <label className="text-[10px] uppercase tracking-[0.2em] font-black text-indigo-400">Your Secret Key</label>
@@ -44,7 +44,7 @@ export const SEC01_Security2FA: React.FC<StepProps> = ({ onNext }) => {
                     <input
                         type="text"
                         placeholder="000 000"
-                        className="w-full bg-[#0B0E11] border border-white/10 rounded-2xl h-16 text-center text-3xl font-black tracking-[0.3em] text-white focus:border-indigo-600 outline-none transition-all shadow-inner"
+                        className="w-full bg-[#000000] border border-white/10 rounded-2xl h-16 text-center text-3xl font-black tracking-[0.3em] text-white focus:border-indigo-600 outline-none transition-all shadow-inner"
                     />
                 </div>
             </div>
@@ -74,7 +74,7 @@ export const FEA01_FeatureUnlock: React.FC<StepProps> = ({ onNext }) => {
                         <span className="text-[10px] font-black text-indigo-300 uppercase tracking-widest">KYC Level 1 Active</span>
                     </div>
                     <h2 className="text-2xl font-black text-white">Privileges Unlocked</h2>
-                    <p className="text-sm text-[#848E9C]">You are now authorized to trade on Mustex.</p>
+                    <p className="text-sm text-[#848E9C]">You are now authorized to trade on Finora.</p>
                 </div>
 
                 <div className="space-y-3">

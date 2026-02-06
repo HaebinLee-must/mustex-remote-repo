@@ -17,11 +17,11 @@ const MarketData: React.FC = () => {
     ];
 
     return (
-        <div className="w-full">
-            {/* Trust Metrics Strip */}
-            <div className="border-y border-slate-800 bg-slate-900/30 backdrop-blur-sm">
+        <div className="w-full bg-black">
+            {/* Trust Metrics Strip - Black Glass */}
+            <div className="border-y border-white/5 bg-black/50 backdrop-blur-xl">
                 <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x-0 md:divide-x divide-slate-800">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x-0 md:divide-x divide-white/5">
                         {[
                             { label: "24h Volume (USDT)", value: "700,703,761" },
                             { label: "Active Users", value: "1.2M+" },
@@ -48,12 +48,12 @@ const MarketData: React.FC = () => {
                 </div>
 
                 <div className="grid lg:grid-cols-3 gap-6">
-                    {/* Left: Highlight Card */}
-                    <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 border border-slate-700 flex flex-col justify-between h-full relative overflow-hidden group hover:border-primary/50 transition-colors text-left">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110 duration-500"></div>
+                    {/* Left: Highlight Card - Black Surface */}
+                    <div className="bg-black backdrop-blur-xl rounded-2xl p-6 border border-white/5 flex flex-col justify-between h-full relative overflow-hidden group hover:border-white/10 transition-all text-left shadow-2xl">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110 duration-500"></div>
                         <div className="relative z-10">
                             <div className="text-slate-400 mb-2 flex items-center gap-2 font-medium">
-                                <div className="w-6 h-6 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-500 font-bold text-xs">₿</div>
+                                <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">₿</div>
                                 Bitcoin <span className="text-slate-600">BTC</span>
                             </div>
                             <div className="text-3xl md:text-4xl font-bold text-white mb-2">$42,500.50</div>
@@ -66,11 +66,11 @@ const MarketData: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Right: Table */}
-                    <div className="lg:col-span-2 bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden backdrop-blur-sm shadow-2xl">
+                    {/* Right: Table - Black Surface */}
+                    <div className="lg:col-span-2 bg-black backdrop-blur-xl rounded-2xl border border-white/5 overflow-hidden shadow-2xl">
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
-                                <thead className="bg-slate-950/50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-800">
+                                <thead className="bg-[#1E2329]/30 text-slate-400 text-xs uppercase tracking-wider border-b border-white/5">
                                     <tr>
                                         <th className="px-6 py-4 font-semibold">Currency</th>
                                         <th className="px-6 py-4 font-semibold">Price</th>
@@ -79,12 +79,12 @@ const MarketData: React.FC = () => {
                                         <th className="px-4 py-4"></th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-800/50">
+                                <tbody className="divide-y divide-white/5">
                                     {markets.map((row, i) => (
-                                        <tr key={i} className="hover:bg-slate-800/40 transition-colors group cursor-pointer">
+                                        <tr key={i} className="hover:bg-white/[0.03] transition-colors group cursor-pointer">
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-400 group-hover:text-white group-hover:bg-primary transition-colors">
+                                                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-xs font-bold text-slate-400 group-hover:text-white group-hover:bg-primary transition-colors">
                                                         {row.name[0]}
                                                     </div>
                                                     <div>
@@ -101,7 +101,7 @@ const MarketData: React.FC = () => {
                                                 </span>
                                             </td>
                                             <td className="px-4 py-4 text-right">
-                                                <div className="h-8 w-8 inline-flex items-center justify-center rounded-full text-slate-500 group-hover:text-white group-hover:bg-slate-800 transition-all">
+                                                <div className="h-8 w-8 inline-flex items-center justify-center rounded-full text-slate-500 group-hover:text-white group-hover:bg-white/5 transition-all">
                                                     <ChevronRight className="w-4 h-4" />
                                                 </div>
                                             </td>

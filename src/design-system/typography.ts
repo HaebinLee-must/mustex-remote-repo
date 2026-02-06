@@ -2,7 +2,7 @@
  * Design System - Typography Tokens
  * CEX Global UI Design Guidelines
  *
- * Primary Font (Body/Data): Roboto, Inter, sans-serif
+ * Primary Font (Body/Data): Inter, sans-serif
  * - Optimized for high-density trading data and numerical legibility
  *
  * Display Font (Headlines/Brand): Poppins, sans-serif
@@ -12,14 +12,13 @@
 export const fontFamily = {
   // Primary font for body text and data
   sans: [
-    'Roboto',
     'Inter',
     'system-ui',
     '-apple-system',
     'BlinkMacSystemFont',
     'Segoe UI',
     'Helvetica Neue',
-    'Arial',
+    'Poppins',
     'sans-serif',
   ],
   // Display font for headlines and brand elements (Poppins for headers)
@@ -31,7 +30,7 @@ export const fontFamily = {
   // Monospace for code and trading data
   mono: [
     'JetBrains Mono',
-    'Roboto Mono',
+    'Fira Code',
     'Menlo',
     'Monaco',
     'Consolas',

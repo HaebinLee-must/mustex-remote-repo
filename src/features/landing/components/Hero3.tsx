@@ -43,7 +43,7 @@ const Hero3: React.FC = () => {
     };
 
     return (
-        <section id="hero-v3" className="relative overflow-hidden bg-[#0B0E11] font-sans min-h-screen flex items-center">
+        <section id="hero-v3" className="relative overflow-hidden bg-[#000000] font-sans min-h-screen flex items-center">
             {/* Three.js Wave Background - Lowest Z-index - Adjusted to prevent clipping */}
             <div className="absolute inset-x-0 bottom-0 top-0 z-0 opacity-80">
                 <div className="absolute inset-0 h-full w-full">
@@ -52,7 +52,7 @@ const Hero3: React.FC = () => {
             </div>
 
             {/* Subtle Overlay to ensure content readability - Mid Z-index */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0B0E11]/40 via-transparent to-[#0B0E11]/80 z-[1] pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#000000]/40 via-transparent to-[#000000]/80 z-[1] pointer-events-none" />
 
             {/* Main Content - Highest Z-index */}
             <div className="relative mx-auto w-full max-w-[1600px] px-8 sm:px-12 lg:px-20 py-12 md:py-24 z-10 pointer-events-none">
@@ -107,7 +107,7 @@ const Hero3: React.FC = () => {
                                         {[
                                             { symbol: 'BTC', name: 'Bitcoin', stats: btcStats, color: 'bg-orange-500' },
                                             { symbol: 'ETH', name: 'Ethereum', stats: ethStats, color: 'bg-blue-500' },
-                                            { symbol: 'BNB', name: 'BNB', stats: { lastPrice: 312.45, change24h: 1.25 }, color: 'bg-yellow-500' }
+                                            { symbol: 'BNB', name: 'BNB', stats: { lastPrice: 312.45, change24h: 1.25 }, color: 'bg-primary' }
                                         ].map((market) => (
                                             <div key={market.symbol} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group">
                                                 <div className="flex items-center gap-4">

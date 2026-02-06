@@ -29,7 +29,7 @@ const ChartPanel: React.FC<ChartPanelProps> = ({ data, loading }) => {
       width: initialWidth,
       height: initialHeight,
       layout: {
-        background: { type: ColorType.Solid, color: '#0B0E11' },
+        background: { type: ColorType.Solid, color: '#000000' },
         textColor: '#848E9C',
         fontSize: 11,
       },
@@ -186,7 +186,7 @@ const ChartPanel: React.FC<ChartPanelProps> = ({ data, loading }) => {
   };
 
   const containerClass = isFullscreen
-    ? "fixed inset-0 z-[2000] bg-[#0B0E11] w-full h-full flex flex-col p-4"
+    ? "fixed inset-0 z-[2000] bg-[#000000] w-full h-full flex flex-col p-4"
     : "w-full h-full min-h-[400px] bg-[#1E2329] relative overflow-hidden flex flex-col";
 
   if (loading) {
