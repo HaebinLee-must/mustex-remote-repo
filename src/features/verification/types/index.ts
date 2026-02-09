@@ -79,6 +79,7 @@ export const validateAge = (birthDate: Date, minAge: number = 18): { valid: bool
 export type StepId =
     | 'INTRO'
     | 'PERSONAL_INFO'
+    | 'DOC_TYPE_SELECT'
     | 'ID_UPLOAD'
     | 'LIVENESS'
     | 'ADDRESS_PROOF'

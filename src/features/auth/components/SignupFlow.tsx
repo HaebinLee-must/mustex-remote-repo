@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Eye, EyeOff, CheckCircle2, Check, ShieldCheck, ArrowRight } from 'lucide-react';
+import { X, Eye, EyeOff, CheckCircle2, Check, ShieldCheck, ArrowRight, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { useUI } from '@/features/shared/UIContext';
@@ -22,7 +22,7 @@ interface SignupFlowProps {
 type Step = 'email' | 'verify' | 'phoneNumber' | 'password' | 'complete'; // Add 'phoneNumber' step
 
 const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
-    const { t, lang, setLang } = useUI();
+    const { t } = useUI();
     const [step, setStep] = useState<Step>('email');
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState<string | null>(null); // State for email validation error
@@ -277,7 +277,6 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                                     {countdown > 0 ? `Resend code in ${countdown}s` : 'Resend Code'}
                                 </button>
                             </div>
-                            <Button variant="link" onClick={() => setStep('email')} className="w-full text-gray-400">Change Email</Button>
                         </div>
                     </form>
                 );
@@ -504,19 +503,48 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
         }
     };
 
+    const handleGoBack = () => {
+        switch (step) {
+            case 'verify':
+                setStep('email');
+                break;
+            case 'phoneNumber':
+                setStep('verify');
+                break;
+            case 'password':
+                setStep('phoneNumber');
+                break;
+        }
+    };
+
+    const canGoBack = step !== 'email' && step !== 'complete';
+
     return (
-        <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#000000] p-4 font-sans text-left">
+        <div className="relative flex min-h-screen flex-col overflow-hidden bg-[#000000] font-sans text-left">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,#5e5ce6,transparent_50%)] opacity-10" />
 
-            <Card className="relative z-10 w-full max-w-[520px] overflow-hidden rounded-[32px] border-white/10 bg-white/10 shadow-2xl backdrop-blur-2xl animate-in fade-in slide-in-from-bottom-6 duration-700">
-                <CardHeader className="space-y-6 pb-8 pt-10">
-                    <div className="space-y-2">
-                        <h1 className="text-4xl font-extrabold tracking-tight text-white leading-tight">
-                            {getTitle()}
-                        </h1>
-                        {step === 'email' && <p className="text-sm text-gray-400">Welcome to Finora</p>}
-                    </div>
-                </CardHeader>
+            {canGoBack && (
+                <div className="w-full px-6 md:px-10 z-10 mt-4">
+                    <button
+                        type="button"
+                        onClick={handleGoBack}
+                        className="text-gray-400 hover:text-white transition-colors"
+                    >
+                        <ArrowLeft className="h-6 w-6" />
+                    </button>
+                </div>
+            )}
+
+            <div className="relative z-10 w-full max-w-[520px] mx-auto px-4 flex-1 flex flex-col justify-center -mt-16">
+                <Card className="w-full rounded-[32px] border-white/10 bg-white/10 shadow-2xl backdrop-blur-2xl animate-in fade-in slide-in-from-bottom-6 duration-700">
+                    <CardHeader className="space-y-6 pb-8 pt-10">
+                        <div className="space-y-2">
+                            <h1 className="text-4xl font-extrabold tracking-tight text-white leading-tight">
+                                {getTitle()}
+                            </h1>
+                            {step === 'email' && <p className="text-sm text-gray-400">Welcome to Finora</p>}
+                        </div>
+                    </CardHeader>
                 <CardContent className="pb-10">
                     {renderStep()}
 
@@ -536,36 +564,10 @@ const SignupFlow = ({ onComplete, onViewChange }: SignupFlowProps) => {
                     </CardFooter>
                 </CardContent>
             </Card>
+            </div>
 
             <footer className="mt-12 flex flex-col items-center space-y-4">
                 <div className="flex items-center space-x-6 text-sm text-gray-400">
-                    <div className="flex items-center space-x-4">
-                        <button
-                            onClick={() => setLang('en')}
-                            className={`flex h-8 w-8 items-center justify-center rounded-full border border-white/10 transition-all hover:border-white/30 hover:bg-white/5 ${lang === 'en' ? 'border-[#5e5ce6] bg-[#5e5ce6]/10 text-white' : ''
-                                }`}
-                            title="English"
-                        >
-                            <span className="text-xs font-bold">EN</span>
-                        </button>
-                        <button
-                            onClick={() => setLang('ko')}
-                            className={`flex h-8 w-8 items-center justify-center rounded-full border border-white/10 transition-all hover:border-white/30 hover:bg-white/5 ${lang === 'ko' ? 'border-[#5e5ce6] bg-[#5e5ce6]/10 text-white' : ''
-                                }`}
-                            title="한국어"
-                        >
-                            <span className="text-xs font-bold">KO</span>
-                        </button>
-                        <button
-                            onClick={() => setLang('mn')}
-                            className={`flex h-8 w-8 items-center justify-center rounded-full border border-white/10 transition-all hover:border-white/30 hover:bg-white/5 ${lang === 'mn' ? 'border-[#5e5ce6] bg-[#5e5ce6]/10 text-white' : ''
-                                }`}
-                            title="Монгол"
-                        >
-                            <span className="text-xs font-bold">MN</span>
-                        </button>
-                    </div>
-                    <Separator orientation="vertical" className="h-4 bg-white/10" />
                     <button className="hover:text-white transition-colors">Cookies</button>
                     <button className="hover:text-white transition-colors">Terms</button>
                     <button className="hover:text-white transition-colors">Privacy</button>

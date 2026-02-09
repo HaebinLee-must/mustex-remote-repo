@@ -7,7 +7,7 @@ export const translations = {
         exchange: 'Exchange',
         swap: 'Quick Swap',
         fees: 'Fees',
-        login: 'Login',
+
         register: 'Register',
         deposit: 'Deposit',
         withdraw: 'Withdraw',
@@ -114,7 +114,7 @@ export const translations = {
         exchange: '거래소',
         swap: '간편 변환',
         fees: '수수료',
-        login: '로그인',
+
         register: '회원가입',
         deposit: '입금',
         withdraw: '출금',
@@ -221,7 +221,7 @@ export const translations = {
         exchange: 'Арилжаа',
         swap: 'Шуурхай солих',
         fees: 'Шимтгэл',
-        login: 'Нэвтрэх',
+
         register: 'Бүртгүүлэх',
         deposit: 'Хадгаламж',
         withdraw: 'Татан авах',

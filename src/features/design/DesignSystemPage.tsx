@@ -150,6 +150,45 @@ const DesignSystemPage = () => {
                     </div>
                 </div>
             </section>
+            {/* Sitemap Section for Capture */}
+            <section className="space-y-6">
+                <h2 className="text-2xl font-semibold border-b border-border pb-2">Screens & Sitemap</h2>
+                <p className="text-muted-foreground">Quick links to all main application screens for design capture.</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <a href="/" className="p-4 rounded-lg border border-border bg-card hover:bg-secondary/20 transition-colors">
+                        <span className="font-semibold block mb-1">Landing Page</span>
+                        <span className="text-xs text-muted-foreground font-mono">/</span>
+                    </a>
+                    <a href="/exchange" className="p-4 rounded-lg border border-border bg-card hover:bg-secondary/20 transition-colors">
+                        <span className="font-semibold block mb-1">Exchange (Trade)</span>
+                        <span className="text-xs text-muted-foreground font-mono">/exchange</span>
+                    </a>
+                    <a href="/wallet" className="p-4 rounded-lg border border-border bg-card hover:bg-secondary/20 transition-colors">
+                        <span className="font-semibold block mb-1">Wallet</span>
+                        <span className="text-xs text-muted-foreground font-mono">/wallet</span>
+                    </a>
+                    <a href="/swap" className="p-4 rounded-lg border border-border bg-card hover:bg-secondary/20 transition-colors">
+                        <span className="font-semibold block mb-1">Swap</span>
+                        <span className="text-xs text-muted-foreground font-mono">/swap</span>
+                    </a>
+                    <a href="/mypage" className="p-4 rounded-lg border border-border bg-card hover:bg-secondary/20 transition-colors">
+                        <span className="font-semibold block mb-1">My Page</span>
+                        <span className="text-xs text-muted-foreground font-mono">/mypage</span>
+                    </a>
+                    <a href="/signup" className="p-4 rounded-lg border border-border bg-card hover:bg-secondary/20 transition-colors">
+                        <span className="font-semibold block mb-1">Sign Up</span>
+                        <span className="text-xs text-muted-foreground font-mono">/signup</span>
+                    </a>
+                    <a href="/login" className="p-4 rounded-lg border border-border bg-card hover:bg-secondary/20 transition-colors">
+                        <span className="font-semibold block mb-1">Login</span>
+                        <span className="text-xs text-muted-foreground font-mono">/login</span>
+                    </a>
+                    <a href="/verification" className="p-4 rounded-lg border border-border bg-card hover:bg-secondary/20 transition-colors">
+                        <span className="font-semibold block mb-1">Verification</span>
+                        <span className="text-xs text-muted-foreground font-mono">/verification</span>
+                    </a>
+                </div>
+            </section>
         </div>
     );
 };

@@ -13,6 +13,7 @@ interface VerificationFlowProps {
 const VerificationFlow: React.FC<VerificationFlowProps> = ({ onComplete, onExit }) => {
     const [currentStep, setCurrentStep] = useState<StepId>('INTRO');
     const [selectedCountry, setSelectedCountry] = useState('South Korea (대한민국)');
+    const [selectedDocType, setSelectedDocType] = useState('ID Card');
 
     const EU_COUNTRIES = ['Germany', 'France']; // Example EU countries
     const isEU = EU_COUNTRIES.includes(selectedCountry);
@@ -24,18 +25,18 @@ const VerificationFlow: React.FC<VerificationFlowProps> = ({ onComplete, onExit 
                 stepComponent = (
                     <KYC.KYC01_Intro
                         onCountrySelect={(country) => setSelectedCountry(country)}
-                        onNext={() => {
-                            if (isEU) {
-                                setCurrentStep('PERSONAL_INFO');
-                            } else {
-                                setCurrentStep('ID_UPLOAD');
-                            }
-                        }}
+                        onNext={() => setCurrentStep('DOC_TYPE_SELECT')}
                     />
                 );
                 break;
-            case 'PERSONAL_INFO':
-                stepComponent = <KYC.KYC02_PersonalInfo onNext={() => setCurrentStep('ID_UPLOAD')} />;
+            case 'DOC_TYPE_SELECT':
+                stepComponent = (
+                    <KYC.KYC02_DocTypeSelect
+                        selectedCountry={selectedCountry}
+                        onDocTypeSelect={(docType) => setSelectedDocType(docType)}
+                        onNext={() => setCurrentStep('ID_UPLOAD')}
+                    />
+                );
                 break;
             case 'ID_UPLOAD':
                 stepComponent = <KYC.KYC03_IdUpload onNext={() => setCurrentStep('LIVENESS')} />;
@@ -86,10 +87,11 @@ const VerificationFlow: React.FC<VerificationFlowProps> = ({ onComplete, onExit 
 
     const getTitle = () => {
         switch (currentStep) {
-            case 'INTRO': return 'Verify Identity';
-            case 'PERSONAL_INFO': return 'Basic Information';
-            case 'ID_UPLOAD': return 'Upload Document';
+            case 'INTRO': return 'Personal Information';
+            case 'DOC_TYPE_SELECT': return 'Select Document Type';
+            case 'ID_UPLOAD': return `Upload ${selectedDocType}`;
             case 'LIVENESS': return 'Face Verification';
+            case 'ADDRESS_PROOF': return 'Proof of Address';
             case 'STATUS_CHECK': return 'Verification Pending';
             case 'SECURITY_2FA': return 'Secure Account';
             case 'FEATURE_UNLOCK': return 'Welcome to Finora';
@@ -98,21 +100,28 @@ const VerificationFlow: React.FC<VerificationFlowProps> = ({ onComplete, onExit 
     };
 
     const handleBack = () => {
-        const steps: StepId[] = ['INTRO', 'PERSONAL_INFO', 'ID_UPLOAD', 'LIVENESS', 'ADDRESS_PROOF', 'STATUS_CHECK', 'SECURITY_2FA', 'FEATURE_UNLOCK'];
-        const currentIndex = steps.indexOf(currentStep);
-
-        if (currentIndex > 0) {
-            let prevIndex = currentIndex - 1;
-
-            // Skip steps that are not relevant based on isEU
-            if (steps[prevIndex] === 'ADDRESS_PROOF' && !isEU) {
-                prevIndex--;
-            }
-            if (steps[prevIndex] === 'PERSONAL_INFO' && !isEU && currentStep === 'ID_UPLOAD') {
-                prevIndex = 0; // Directly to INTRO
-            }
-
-            setCurrentStep(steps[prevIndex]);
+        switch (currentStep) {
+            case 'DOC_TYPE_SELECT':
+                setCurrentStep('INTRO');
+                break;
+            case 'ID_UPLOAD':
+                setCurrentStep('DOC_TYPE_SELECT');
+                break;
+            case 'LIVENESS':
+                setCurrentStep('ID_UPLOAD');
+                break;
+            case 'ADDRESS_PROOF':
+                setCurrentStep('LIVENESS');
+                break;
+            case 'STATUS_CHECK':
+                if (isEU) {
+                    setCurrentStep('ADDRESS_PROOF');
+                } else {
+                    setCurrentStep('LIVENESS');
+                }
+                break;
+            default:
+                break;
         }
     };
 

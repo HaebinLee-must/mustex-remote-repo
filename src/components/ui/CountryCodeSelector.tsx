@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { Command, CommandInput, CommandEmpty, CommandGroup, CommandItem } from '@/components/ui/command';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/design-system/cn';
-import { Check, ChevronDown } from 'lucide-react';
-import { COUNTRIES, Country } from '@/constants/countries'; // Import Country interface
+import { Check, ChevronDown, Search } from 'lucide-react';
+import { COUNTRIES, Country } from '@/constants/countries';
 
 interface CountryCodeSelectorProps {
     selectedCode: string;
@@ -14,18 +14,24 @@ interface CountryCodeSelectorProps {
 const CountryCodeSelector: React.FC<CountryCodeSelectorProps> = ({ selectedCode, onSelectCode }) => {
     const [open, setOpen] = useState(false);
     const [searchValue, setSearchValue] = useState('');
-    const [filteredCountries, setFilteredCountries] = useState<Country[]>(COUNTRIES); // Explicitly type
+    const [filteredCountries, setFilteredCountries] = useState<Country[]>(COUNTRIES);
 
     useEffect(() => {
         setFilteredCountries(
-            COUNTRIES.filter((country: Country) => // Explicitly type
+            COUNTRIES.filter((country: Country) =>
                 country.name.toLowerCase().includes(searchValue.toLowerCase()) ||
                 country.code.includes(searchValue)
             )
         );
     }, [searchValue]);
 
-    const currentCountry = COUNTRIES.find((country: Country) => country.code === selectedCode); // Explicitly type
+    const currentCountry = COUNTRIES.find((country: Country) => country.code === selectedCode);
+
+    const handleSelectCountry = (code: string) => {
+        onSelectCode(code);
+        setOpen(false);
+        setSearchValue('');
+    };
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -48,24 +54,26 @@ const CountryCodeSelector: React.FC<CountryCodeSelectorProps> = ({ selectedCode,
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[320px] p-0 border-white/10 bg-black text-white shadow-2xl backdrop-blur-xl rounded-2xl overflow-hidden">
-                <Command className="bg-transparent">
-                    <CommandInput
+                <div className="flex items-center border-b border-white/10 px-3">
+                    <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+                    <input
+                        type="text"
                         placeholder="Search country..."
-                        className="h-14 bg-white/5 border-b border-white/10 text-white placeholder:text-gray-500 focus:ring-0"
                         value={searchValue}
-                        onValueChange={setSearchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}
+                        className="flex h-14 w-full bg-transparent py-3 text-sm outline-none placeholder:text-gray-500"
                     />
-                    <CommandEmpty className="py-6 text-center text-sm text-gray-500 font-medium">No country found.</CommandEmpty>
-                    <CommandGroup>
-                        {filteredCountries.map((country: Country) => (
-                            <CommandItem
+                </div>
+                <div className="max-h-[300px] overflow-y-auto p-1">
+                    {filteredCountries.length === 0 ? (
+                        <div className="py-6 text-center text-sm text-gray-500 font-medium">No country found.</div>
+                    ) : (
+                        filteredCountries.map((country: Country) => (
+                            <button
                                 key={country.code}
-                                onSelect={() => {
-                                    onSelectCode(country.code);
-                                    setOpen(false);
-                                    setSearchValue('');
-                                }}
-                                className="flex items-center p-3 cursor-pointer hover:bg-white/10 aria-selected:bg-white/10 transition-colors"
+                                type="button"
+                                onClick={() => handleSelectCountry(country.code)}
+                                className="flex items-center w-full p-3 rounded-lg cursor-pointer hover:bg-white/10 transition-colors"
                             >
                                 <div className="flex-1 flex items-center">
                                     <span className="mr-3 text-xl">{country.flag}</span>
@@ -80,10 +88,10 @@ const CountryCodeSelector: React.FC<CountryCodeSelectorProps> = ({ selectedCode,
                                         )}
                                     />
                                 </div>
-                            </CommandItem>
-                        ))}
-                    </CommandGroup>
-                </Command>
+                            </button>
+                        ))
+                    )}
+                </div>
             </PopoverContent>
         </Popover>
     );
