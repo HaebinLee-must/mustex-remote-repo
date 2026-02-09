@@ -7,7 +7,12 @@ import Hero3 from './features/landing/components/Hero3';
 import Hero4 from './features/landing/components/Hero4';
 import AuroraBorealisV5 from './features/landing/components/AuroraBorealisV5';
 import AuroraBorealisV6 from './features/landing/components/AuroraBorealisV6';
+import AuroraBorealisV7 from './features/landing/components/AuroraBorealisV7';
+import AuroraBorealisV8 from './features/landing/components/AuroraBorealisV8';
 import HeroBorealis from './features/landing/components/HeroBorealis';
+import HeroBorealisV6 from './features/landing/components/HeroBorealisV6';
+import HeroBorealisV7 from './features/landing/components/HeroBorealisV7';
+import HeroBorealisV8 from './features/landing/components/HeroBorealisV8';
 import MarketData from './features/landing/components/MarketData';
 import Blog from './features/landing/components/Blog';
 import Features from './features/landing/components/Features';
@@ -29,11 +34,20 @@ const LandingPage = ({ variant = 1 }: { variant?: number }) => {
     const renderHero = () => {
         console.log('Rendering LandingPage with variant:', variant);
         switch (variant) {
+            case 8:
+                return <HeroBorealisV8 />;
+            case 7:
+                return (
+                    <div className="relative overflow-hidden bg-[#000000]">
+                        <AuroraBorealisV7 className="z-0" />
+                        <HeroBorealisV7 />
+                    </div>
+                );
             case 6:
                 return (
                     <div className="relative overflow-hidden bg-[#070112]">
                         <AuroraBorealisV6 className="z-0" />
-                        <HeroBorealis />
+                        <HeroBorealisV6 />
                     </div>
                 );
             case 5:

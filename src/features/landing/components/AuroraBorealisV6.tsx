@@ -6,7 +6,7 @@ export interface RGB {
     b: number;
 }
 
-interface AuroraBackgroundProps {
+interface AuroraBorealisV6Props {
     className?: string;
 }
 
@@ -25,7 +25,7 @@ interface AuroraBeam {
     waveOffset: number; // Unique wave starting point
 }
 
-const AuroraBorealisV6: React.FC<AuroraBackgroundProps> = ({ className }) => {
+const AuroraBorealisV6: React.FC<AuroraBorealisV6Props> = ({ className }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     const targetMouse = useRef({ x: 0, y: 0 });
@@ -87,31 +87,25 @@ const AuroraBorealisV6: React.FC<AuroraBackgroundProps> = ({ className }) => {
                 const z = seededRandom(s1);
                 const sequenceIndex = i % COLOR_SEQUENCES.length;
 
-                // Structured X distribution
-                let xBase;
-                if (i < numBeams * 0.3) {
-                    xBase = getSeededRange(s2, -0.1, 0.3);
-                } else if (i < numBeams * 0.7) {
-                    xBase = getSeededRange(s2, 0.3, 0.7);
-                } else {
-                    xBase = getSeededRange(s2, 0.7, 1.1);
-                }
+                // Natural distribution centered around the middle, similar to AuroraBackground.tsx
+                // Uses a bell-curve like distribution for more organic feel
+                const rand1 = seededRandom(s2);
+                const rand2 = seededRandom(s3);
+                const xBase = (rand1 + rand2 - 1) * 0.8 + 0.5; // Concentrated around 0.5 with spread
 
                 beams.push({
                     id: i,
                     x: xBase,
-                    y: getSeededRange(s3, 0.1, 0.9),
+                    y: getSeededRange(s4, 0.2, 0.8), // Better vertical centering
                     z: z,
-                    // Slightly narrower width to expose more background
-                    width: getSeededRange(s4, 100, 280) * (0.5 + z),
-                    // Height range tuned to leave dark gaps at top and bottom
-                    height: getSeededRange(s5, 1200, 2200),
+                    // width and height influenced by depth (z) for perspective
+                    width: getSeededRange(s5, 120, 320) * (0.6 + z * 0.4),
+                    height: getSeededRange(s6, 1500, 2500),
                     colors: COLOR_SEQUENCES[sequenceIndex],
-                    angle: getSeededRange(s6, -0.05, 0.05),
-                    swingSpeed: getSeededRange(s7, 0.00015, 0.0006),
-                    // Core opacity slightly reduced for cleaner background visibility
-                    opacity: getSeededRange(s1, 0.12, 0.35) * (0.4 + z * 0.6),
-                    waveOffset: getSeededRange(s2, 0, Math.PI * 2),
+                    angle: getSeededRange(s7, -0.08, 0.08),
+                    swingSpeed: getSeededRange(s1, 0.0002, 0.0008),
+                    opacity: getSeededRange(s2, 0.15, 0.4) * (0.5 + z * 0.5),
+                    waveOffset: getSeededRange(s3, 0, Math.PI * 2),
                 });
             }
         };
@@ -220,11 +214,21 @@ const AuroraBorealisV6: React.FC<AuroraBackgroundProps> = ({ className }) => {
     }, []);
 
     return (
-        <canvas
-            ref={canvasRef}
-            className={`absolute inset-0 w-full h-full pointer-events-none transition-opacity duration-1000 ${className}`}
-            style={{ filter: 'blur(25px) contrast(1.4) brightness(1.1)' }}
-        />
+        <div className={`absolute inset-0 w-full h-full overflow-hidden ${className}`}>
+            {/* Grain Texture Overlay from Downloaded App.tsx */}
+            <div
+                className="absolute inset-0 pointer-events-none opacity-[0.04] z-[1] mix-blend-overlay"
+                style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+                    backgroundRepeat: 'repeat',
+                }}
+            />
+            <canvas
+                ref={canvasRef}
+                className="absolute inset-0 w-full h-full pointer-events-none transition-opacity duration-1000"
+                style={{ filter: 'blur(30px) contrast(1.5) brightness(1.1)' }}
+            />
+        </div>
     );
 };
 
