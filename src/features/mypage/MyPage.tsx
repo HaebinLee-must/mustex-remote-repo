@@ -29,6 +29,8 @@ interface MyPageProps {
     activeSubTab: string | null;
     onTabChange: (tab: MyPageTab) => void;
     onSubTabChange: (subTab: string | null) => void;
+    directAssetsAccess?: boolean; // True when accessing assets from global nav
+    onDirectAssetsAccessChange?: (value: boolean) => void;
 }
 
 const MyPage: React.FC<MyPageProps> = ({
@@ -39,8 +41,12 @@ const MyPage: React.FC<MyPageProps> = ({
     activeSubTab,
     onTabChange,
     onSubTabChange,
+    directAssetsAccess = false,
+    onDirectAssetsAccessChange,
 }) => {
     const handleTabClick = (id: MyPageTab, hasSubMenu: boolean) => {
+        // When clicking from sidebar, disable direct assets access mode
+        onDirectAssetsAccessChange?.(false);
         onTabChange(id);
         if (hasSubMenu) {
             onSubTabChange(id === 'assets' ? 'my-assets' : null); // Default to 'My Assets' if 'assets' is clicked
@@ -70,19 +76,25 @@ const MyPage: React.FC<MyPageProps> = ({
         { id: 'settings', label: 'Settings', icon: Settings },
     ];
 
+    // Show assets-only sidebar when directly accessed from global nav
+    const isAssetsOnlyView = directAssetsAccess && activeTab === 'assets';
+    const displayedSidebarItems = isAssetsOnlyView
+        ? sidebarItems.filter(item => item.id === 'assets')
+        : sidebarItems;
+
     return (
         <div className="flex w-full min-h-[calc(100vh-80px)] bg-black">
-            {/* Account Sidebar */}
+            {/* Account Sidebar - Shows only Assets when on assets tab */}
             <aside className="w-64 border-r border-white/5 bg-black hidden lg:flex flex-col p-6 space-y-8">
                 <div className="flex items-center space-x-2 px-2 py-4">
                     <div className="p-2 bg-primary/10 rounded-lg">
-                        <User className="w-5 h-5 text-primary" />
+                        {isAssetsOnlyView ? <Wallet className="w-5 h-5 text-primary" /> : <User className="w-5 h-5 text-primary" />}
                     </div>
-                    <span className="font-black text-lg tracking-tight">Account</span>
+                    <span className="font-black text-lg tracking-tight">{isAssetsOnlyView ? 'Assets' : 'Account'}</span>
                 </div>
 
                 <nav className="flex-1 space-y-1">
-                    {sidebarItems.map((item) => (
+                    {displayedSidebarItems.map((item) => (
                         <React.Fragment key={item.id}>
                             <button
                                 onClick={() => handleTabClick(item.id as MyPageTab, !!item.subMenu)}
@@ -122,6 +134,7 @@ const MyPage: React.FC<MyPageProps> = ({
                         </React.Fragment>
                     ))}
 
+                    {!isAssetsOnlyView && (
                     <div className="pt-8 px-2">
                         <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest leading-loose opacity-40">Account Details</p>
                         <div className="mt-4 space-y-4 opacity-50 hover:opacity-100 transition-opacity">
@@ -135,6 +148,7 @@ const MyPage: React.FC<MyPageProps> = ({
                             </div>
                         </div>
                     </div>
+                    )}
                 </nav>
             </aside>
 

@@ -12,6 +12,7 @@ import TradeLayout from './features/trade/TradeLayout';
 import WalletPage from './features/wallet/WalletPage';
 import SwapPage from './features/swap/SwapPage';
 import MyPage from './features/mypage/MyPage';
+import DesignSystemPage from './features/design/DesignSystemPage';
 import { useAuth } from './features/auth/AuthContext';
 import { useUI } from './features/shared/UIContext';
 import { MyPageTab } from './features/mypage/MyPage'; // Import MyPageTab type
@@ -31,6 +32,7 @@ function App() {
     const [showSignupSuccess, setShowSignupSuccess] = React.useState(false);
     const [myPageActiveTab, setMyPageActiveTab] = React.useState<MyPageTab>('dashboard');
     const [myPageActiveSubTab, setMyPageActiveSubTab] = React.useState<string | null>(null);
+    const [directAssetsAccess, setDirectAssetsAccess] = React.useState(false); // True when accessing assets from global nav
 
     const handleSignupComplete = (userData: { email: string }) => {
         const dummyUid = `user_${Date.now()}`;
@@ -54,9 +56,12 @@ function App() {
         if (view === 'mypage') {
             setMyPageActiveTab(tab || 'dashboard');
             setMyPageActiveSubTab(subTab || null);
+            // Direct assets access from global nav (when tab is 'assets' and subTab is provided)
+            setDirectAssetsAccess(tab === 'assets' && !!subTab);
         } else {
             setMyPageActiveTab('dashboard'); // Reset for other views
             setMyPageActiveSubTab(null);
+            setDirectAssetsAccess(false);
         }
     };
 
@@ -80,6 +85,8 @@ function App() {
                         activeSubTab={myPageActiveSubTab}
                         onTabChange={setMyPageActiveTab}
                         onSubTabChange={setMyPageActiveSubTab}
+                        directAssetsAccess={directAssetsAccess}
+                        onDirectAssetsAccessChange={setDirectAssetsAccess}
                     />
                 );
             case 'signup':
@@ -104,6 +111,8 @@ function App() {
                 return (
                     <VerificationFlow onComplete={() => handleViewChange('mypage')} onExit={() => handleViewChange('mypage')} />
                 );
+            case 'design-system':
+                return <DesignSystemPage />;
             case 'landing':
             default:
                 return <LandingPage />;
