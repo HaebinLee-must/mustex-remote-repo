@@ -9,6 +9,7 @@ import AuroraBorealisV5 from './features/landing/components/AuroraBorealisV5';
 import AuroraBorealisV6 from './features/landing/components/AuroraBorealisV6';
 import AuroraBorealisV7 from './features/landing/components/AuroraBorealisV7';
 import AuroraBorealisV8 from './features/landing/components/AuroraBorealisV8';
+import AuroraBorealisV9 from './features/landing/components/AuroraBorealisV9';
 import HeroBorealis from './features/landing/components/HeroBorealis';
 import HeroBorealisV6 from './features/landing/components/HeroBorealisV6';
 import HeroBorealisV7 from './features/landing/components/HeroBorealisV7';
@@ -34,6 +35,13 @@ const LandingPage = ({ variant = 1 }: { variant?: number }) => {
     const renderHero = () => {
         console.log('Rendering LandingPage with variant:', variant);
         switch (variant) {
+            case 9:
+                return (
+                    <div className="relative overflow-hidden bg-[#070112]">
+                        <AuroraBorealisV9 className="z-0" />
+                        <HeroBorealisV6 />
+                    </div>
+                );
             case 8:
                 return <HeroBorealisV8 />;
             case 7:
@@ -100,7 +108,7 @@ function App() {
         // 공유용 링크 대응: URL 파라미터가 있으면 해당 버전을, 없으면 1번(기본)을 보여줌
         const params = new URLSearchParams(window.location.search);
         const urlVariant = params.get('v');
-        const variant = urlVariant ? parseInt(urlVariant) : 6;
+        const variant = urlVariant ? parseInt(urlVariant) : 9;
 
         switch (currentView) {
             case 'exchange':
