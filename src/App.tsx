@@ -100,7 +100,7 @@ function App() {
         // 공유용 링크 대응: URL 파라미터가 있으면 해당 버전을, 없으면 1번(기본)을 보여줌
         const params = new URLSearchParams(window.location.search);
         const urlVariant = params.get('v');
-        const variant = urlVariant ? parseInt(urlVariant) : 1;
+        const variant = urlVariant ? parseInt(urlVariant) : 6;
 
         switch (currentView) {
             case 'exchange':
