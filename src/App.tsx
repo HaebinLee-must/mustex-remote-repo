@@ -32,10 +32,10 @@ import P2PPage from './features/p2p/P2PPage';
 import { useAuth } from './features/auth/AuthContext';
 import { useUI } from './features/shared/UIContext';
 
-const LandingPage = ({ variant = 1 }: { variant?: number }) => {
+const LandingPage = ({ variant = 8 }: { variant?: number }) => {
     /**
      * variant 번호에 따라 서로 다른 메인 비주얼(Hero) 섹션을 렌더링합니다.
-     * 각 case는 /src/features/landing/components/ 경로의 시안 파일들에 대응됩니다.
+     * 8번 시안(HeroBorealisV8 + AuroraBeamBackgroundV8)이 최종안으로 고정되어 있습니다.
      */
     const renderHero = () => {
         console.log('Rendering LandingPage with variant:', variant);
@@ -52,7 +52,7 @@ const LandingPage = ({ variant = 1 }: { variant?: number }) => {
                     </div>
                 );
             case 8:
-                // 8번 시안 (?v=fin): HeroBorealisV8
+                // [최종안] 8번 시안: HeroBorealisV8 (내부에 AuroraBeamBackgroundV8 포함)
                 return <HeroBorealisV8 />;
             case 7:
                 // 7번 시안: AuroraBorealisV7 + HeroBorealisV7 조합
