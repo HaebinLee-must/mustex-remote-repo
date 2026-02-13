@@ -130,8 +130,14 @@ function App() {
         const params = new URLSearchParams(window.location.search);
         const urlVariant = params.get('v');
 
-        // ?v=fin 파라미터가 들어오면 8번 시안을 할당
-        const variant = urlVariant === 'fin' ? 8 : (urlVariant ? parseInt(urlVariant) : 8);
+        // ?v=fin 파라미터가 들어오면 8번 시안을 할당 (최종 아우라빔배경v8)
+        let variant = 9; // 기본값은 9번 시안
+
+        if (urlVariant === 'fin') {
+            variant = 8;
+        } else if (urlVariant) {
+            variant = parseInt(urlVariant);
+        }
 
         switch (currentView) {
             case 'exchange':
