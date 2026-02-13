@@ -134,14 +134,17 @@ function App() {
         console.log('Detected urlVariant:', urlVariant);
 
         // ?v=fin 파라미터가 들어오면 8번 시안을 할당 (최종 아우라빔배경v8)
-        let variant = 9; // 기본값은 9번 시안
+        // 캐시 문제를 방지하기 위해 로직을 더 강력하게 고정
+        let variant = 9;
 
-        if (urlVariant === 'fin') {
+        if (urlVariant === 'fin' || urlVariant === 'FIN' || window.location.search.includes('v=fin')) {
             variant = 8;
         } else if (urlVariant) {
             const parsed = parseInt(urlVariant);
             if (!isNaN(parsed)) variant = parsed;
         }
+
+        console.log('Final variant applied:', variant);
 
         switch (currentView) {
             case 'exchange':
