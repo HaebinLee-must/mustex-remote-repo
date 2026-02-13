@@ -131,7 +131,7 @@ function App() {
         const urlVariant = params.get('v');
 
         // ?v=fin 파라미터가 들어오면 8번 시안을 할당
-        const variant = urlVariant === 'fin' ? 8 : (urlVariant ? parseInt(urlVariant) : 9);
+        const variant = urlVariant === 'fin' ? 8 : (urlVariant ? parseInt(urlVariant) : 8);
 
         switch (currentView) {
             case 'exchange':
