@@ -127,8 +127,11 @@ function App() {
          * 예: ?v=1 (1번 시안), ?v=fin (8번 시안)
          * 파라미터가 없을 경우 기본값은 9번 시안으로 설정되어 있습니다.
          */
-        const params = new URLSearchParams(window.location.search);
-        const urlVariant = params.get('v');
+        // 하위 경로(base)에서도 파라미터를 정확히 읽기 위해 URL 객체 활용
+        const currentUrl = new URL(window.location.href);
+        const urlVariant = currentUrl.searchParams.get('v');
+
+        console.log('Detected urlVariant:', urlVariant);
 
         // ?v=fin 파라미터가 들어오면 8번 시안을 할당 (최종 아우라빔배경v8)
         let variant = 9; // 기본값은 9번 시안
@@ -136,7 +139,8 @@ function App() {
         if (urlVariant === 'fin') {
             variant = 8;
         } else if (urlVariant) {
-            variant = parseInt(urlVariant);
+            const parsed = parseInt(urlVariant);
+            if (!isNaN(parsed)) variant = parsed;
         }
 
         switch (currentView) {
