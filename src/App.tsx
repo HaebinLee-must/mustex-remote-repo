@@ -33,12 +33,18 @@ import { useAuth } from './features/auth/AuthContext';
 import { useUI } from './features/shared/UIContext';
 
 const LandingPage = ({ variant = 1 }: { variant?: number }) => {
+    /**
+     * variant 번호에 따라 서로 다른 메인 비주얼(Hero) 섹션을 렌더링합니다.
+     * 각 case는 /src/features/landing/components/ 경로의 시안 파일들에 대응됩니다.
+     */
     const renderHero = () => {
         console.log('Rendering LandingPage with variant:', variant);
         switch (variant) {
             case 10:
+                // 10번 시안: HeroBorealisV10
                 return <HeroBorealisV10 />;
             case 9:
+                // 9번 시안: AuroraBorealisV9 + HeroBorealisV6 조합
                 return (
                     <div className="relative overflow-hidden bg-[#070112]">
                         <AuroraBorealisV9 className="z-0" />
@@ -46,8 +52,10 @@ const LandingPage = ({ variant = 1 }: { variant?: number }) => {
                     </div>
                 );
             case 8:
+                // 8번 시안 (?v=fin): HeroBorealisV8
                 return <HeroBorealisV8 />;
             case 7:
+                // 7번 시안: AuroraBorealisV7 + HeroBorealisV7 조합
                 return (
                     <div className="relative overflow-hidden bg-[#000000]">
                         <AuroraBorealisV7 className="z-0" />
@@ -55,6 +63,7 @@ const LandingPage = ({ variant = 1 }: { variant?: number }) => {
                     </div>
                 );
             case 6:
+                // 6번 시안: AuroraBorealisV6 + HeroBorealisV6 조합
                 return (
                     <div className="relative overflow-hidden bg-[#070112]">
                         <AuroraBorealisV6 className="z-0" />
@@ -62,6 +71,7 @@ const LandingPage = ({ variant = 1 }: { variant?: number }) => {
                     </div>
                 );
             case 5:
+                // 5번 시안: AuroraBorealisV5 + HeroBorealis 조합
                 return (
                     <div className="relative overflow-hidden bg-[#010308]">
                         <AuroraBorealisV5 className="z-0" />
@@ -69,13 +79,17 @@ const LandingPage = ({ variant = 1 }: { variant?: number }) => {
                     </div>
                 );
             case 4:
+                // 4번 시안: Hero4
                 return <Hero4 />;
             case 3:
+                // 3번 시안: Hero3
                 return <Hero3 />;
             case 2:
+                // 2번 시안: Hero2
                 return <Hero2 />;
             case 1:
             default:
+                // 1번 시안 (기본): Hero
                 return <Hero />;
         }
     };
@@ -108,10 +122,16 @@ function App() {
     };
 
     const renderContent = () => {
-        // 공유용 링크 대응: URL 파라미터가 있으면 해당 버전을, 없으면 1번(기본)을 보여줌
+        /**
+         * URL 파라미터 'v'를 읽어 랜딩 페이지의 시안(variant)을 결정합니다.
+         * 예: ?v=1 (1번 시안), ?v=fin (8번 시안)
+         * 파라미터가 없을 경우 기본값은 9번 시안으로 설정되어 있습니다.
+         */
         const params = new URLSearchParams(window.location.search);
         const urlVariant = params.get('v');
-        const variant = urlVariant ? parseInt(urlVariant) : 9;
+
+        // ?v=fin 파라미터가 들어오면 8번 시안을 할당
+        const variant = urlVariant === 'fin' ? 8 : (urlVariant ? parseInt(urlVariant) : 9);
 
         switch (currentView) {
             case 'exchange':
