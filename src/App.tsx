@@ -123,25 +123,22 @@ function App() {
 
     const renderContent = () => {
         /**
-         * URL 파라미터 'v'를 읽어 랜딩 페이지의 시안(variant)을 결정합니다.
-         * 예: ?v=1 (1번 시안), ?v=fin (8번 시안)
-         * 파라미터가 없을 경우 기본값은 9번 시안으로 설정되어 있습니다.
+         * 8번 시안(아우라 빔 + 별빛)을 기본으로 고정합니다.
+         * 캐시 및 파라미터 혼선을 방지하기 위해 로직을 단순화했습니다.
          */
-        // 하위 경로(base)에서도 파라미터를 정확히 읽기 위해 URL 객체 활용
         const currentUrl = new URL(window.location.href);
         const urlVariant = currentUrl.searchParams.get('v');
 
-        console.log('Detected urlVariant (Bust: 14:56):', urlVariant);
-
-        // 기본값을 8번 시안(최종 아우라빔배경v8)으로 설정
+        // 무조건 8번 시안을 기본으로 사용
         let variant = 8;
 
+        // 다른 시안 확인용 파라미터가 명시적으로 있을 때만 변경
         if (urlVariant && urlVariant !== 'fin' && urlVariant !== 'FIN') {
             const parsed = parseInt(urlVariant);
             if (!isNaN(parsed)) variant = parsed;
         }
 
-        console.log('Final variant applied (Bust: 14:56):', variant);
+        console.log('Applied Final Variant (Draft 8 - Beams/Stars):', variant);
 
         switch (currentView) {
             case 'exchange':
