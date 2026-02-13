@@ -131,7 +131,7 @@ function App() {
         const currentUrl = new URL(window.location.href);
         const urlVariant = currentUrl.searchParams.get('v');
 
-        console.log('Detected urlVariant:', urlVariant);
+        console.log('Detected urlVariant (Bust: 14:54):', urlVariant);
 
         // ?v=fin 파라미터가 들어오면 8번 시안을 할당 (최종 아우라빔배경v8)
         // 캐시 문제를 방지하기 위해 로직을 더 강력하게 고정
@@ -144,7 +144,7 @@ function App() {
             if (!isNaN(parsed)) variant = parsed;
         }
 
-        console.log('Final variant applied:', variant);
+        console.log('Final variant applied (Bust: 14:54):', variant);
 
         switch (currentView) {
             case 'exchange':
