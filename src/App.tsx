@@ -14,6 +14,7 @@ import HeroBorealis from './features/landing/components/HeroBorealis';
 import HeroBorealisV6 from './features/landing/components/HeroBorealisV6';
 import HeroBorealisV7 from './features/landing/components/HeroBorealisV7';
 import HeroBorealisV8 from './features/landing/components/HeroBorealisV8';
+import HeroBorealisV10 from './features/landing/components/HeroBorealisV10';
 import MarketData from './features/landing/components/MarketData';
 import Blog from './features/landing/components/Blog';
 import Features from './features/landing/components/Features';
@@ -35,6 +36,8 @@ const LandingPage = ({ variant = 1 }: { variant?: number }) => {
     const renderHero = () => {
         console.log('Rendering LandingPage with variant:', variant);
         switch (variant) {
+            case 10:
+                return <HeroBorealisV10 />;
             case 9:
                 return (
                     <div className="relative overflow-hidden bg-[#070112]">
