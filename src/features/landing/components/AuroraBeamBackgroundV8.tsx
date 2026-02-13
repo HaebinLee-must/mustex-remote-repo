@@ -20,6 +20,16 @@ interface AuroraBeam {
     opacity: number;    // 개별 투명도 (0~1)
 }
 
+interface Star {
+    x: number;
+    y: number;
+    size: number;
+    baseOpacity: number;
+    blinkSpeed: number;
+    blinkOffset: number;
+    z: number;          // 시차 효과 및 깊이감 (0~1)
+}
+
 /**
  * [포인트 1: 컬러 라이브러리 (HSB)]
  */
@@ -110,12 +120,21 @@ const DEVICE_SETTINGS = {
     desktop: { contrast: 1.5, brightness: 1.1 }
 };
 
+const STAR_CONFIG = {
+    totalCount: 150,           // 전체 별 개수
+    focusedCount: 60,          // 빔 주변에 집중될 별 개수
+    baseSizeRange: [0.5, 1.5], // 기본 별 크기
+    focusedSizeRange: [1.2, 2.5], // 빔 주변 별 크기
+    blinkSpeedRange: [0.001, 0.003]
+};
+
 export const AuroraBeamBackgroundV8: React.FC<{ className?: string }> = ({ className }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const targetMouse = useRef({ x: 0, y: 0 });
     const currentMouse = useRef({ x: 0, y: 0 });
     const animationFrameId = useRef<number>(0);
     const beamsRef = useRef<AuroraBeam[]>([]);
+    const starsRef = useRef<Star[]>([]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -133,8 +152,7 @@ export const AuroraBeamBackgroundV8: React.FC<{ className?: string }> = ({ class
             canvas.style.filter = `contrast(${settings.contrast}) brightness(${settings.brightness})`;
 
             // 마스터 리스트를 기반으로 빔 초기화
-            beamsRef.current = BEAMS_MASTER.map((m, i) => {
-                // X좌표에 따라 4개의 그룹으로 분류 (0~0.25: 0, 0.25~0.5: 1, ...)
+            const initializedBeams = BEAMS_MASTER.map((m, i) => {
                 const groupId = Math.min(3, Math.floor(Math.max(0, m.x) * 4));
                 return {
                     ...m,
@@ -142,6 +160,43 @@ export const AuroraBeamBackgroundV8: React.FC<{ className?: string }> = ({ class
                     groupId: groupId
                 } as AuroraBeam;
             });
+            beamsRef.current = initializedBeams;
+
+            // 별 생성 (한 번만 수행되도록 beamsRef 설정 후 진행)
+            if (starsRef.current.length === 0) {
+                const newStars: Star[] = [];
+
+                // 1. 일반 배경 별 (완전 랜덤 - Z 범위를 0.0~0.3으로 낮춤)
+                for (let i = 0; i < STAR_CONFIG.totalCount - STAR_CONFIG.focusedCount; i++) {
+                    const z = Math.random() * 0.1;
+                    newStars.push({
+                        x: Math.random(),
+                        y: Math.random(),
+                        size: Math.random() * (STAR_CONFIG.baseSizeRange[1] - STAR_CONFIG.baseSizeRange[0]) + STAR_CONFIG.baseSizeRange[0],
+                        baseOpacity: (Math.random() * 0.4 + 0.1) * (0.5 + z),
+                        blinkSpeed: Math.random() * (STAR_CONFIG.blinkSpeedRange[1] - STAR_CONFIG.blinkSpeedRange[0]) + STAR_CONFIG.blinkSpeedRange[0],
+                        blinkOffset: Math.random() * Math.PI * 2,
+                        z: z
+                    });
+                }
+
+                // 2. 빔 주변 집중 별 (밝은 빔 근처에 배치 - Z 범위 낮춤)
+                const mainBeams = initializedBeams.filter(b => b.z > 0.6 || b.opacity > 0.7);
+                for (let i = 0; i < STAR_CONFIG.focusedCount; i++) {
+                    const targetBeam = mainBeams[Math.floor(Math.random() * mainBeams.length)];
+                    const offsetX = (Math.random() - 0.5) * 0.15;
+                    newStars.push({
+                        x: Math.max(0, Math.min(1, targetBeam.x + offsetX)),
+                        y: Math.random(),
+                        size: Math.random() * (STAR_CONFIG.focusedSizeRange[1] - STAR_CONFIG.focusedSizeRange[0]) + STAR_CONFIG.focusedSizeRange[0],
+                        baseOpacity: Math.random() * 0.4 + 0.4,
+                        blinkSpeed: Math.random() * (STAR_CONFIG.blinkSpeedRange[1] - STAR_CONFIG.blinkSpeedRange[0]) + STAR_CONFIG.blinkSpeedRange[0],
+                        blinkOffset: Math.random() * Math.PI * 2,
+                        z: targetBeam.z * 0.3 // 빔의 상대적 깊이를 유지하되 배경(0~0.3)으로 밀어냄
+                    });
+                }
+                starsRef.current = newStars;
+            }
         };
 
         const handleResize = () => {
@@ -173,6 +228,38 @@ export const AuroraBeamBackgroundV8: React.FC<{ className?: string }> = ({ class
 
             ctx.globalCompositeOperation = 'lighter';
 
+            const time = Date.now();
+
+            // --- 별 렌더링 ---
+            ctx.filter = 'none'; // 별은 블러 없이 선명하게
+            starsRef.current.forEach(star => {
+                const twinkle = Math.sin(time * star.blinkSpeed + star.blinkOffset);
+                // 개별 기본 투명도에 반짝임 강도를 비례시킴
+                const opacity = Math.max(0.05, star.baseOpacity + twinkle * (star.baseOpacity * 0.5));
+
+                // 마우스 시차 효과 적용
+                const parallaxX = currentMouse.current.x * star.z * 100;
+                const parallaxY = currentMouse.current.y * star.z * 30;
+                const renderX = star.x * width + parallaxX;
+                const renderY = star.y * height + parallaxY;
+
+                // 외곽 글로우를 제거하고 본체 위주의 부드러운 별 렌더링
+                const starGradient = ctx.createRadialGradient(
+                    renderX, renderY, 0,
+                    renderX, renderY, star.size
+                );
+
+                // 중심은 밝고 경계면에서 자연스럽게 사라지는 구성
+                starGradient.addColorStop(0, `rgba(255, 255, 255, ${opacity})`);
+                starGradient.addColorStop(0.6, `rgba(255, 255, 255, ${opacity * 0.5})`);
+                starGradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
+
+                ctx.fillStyle = starGradient;
+                ctx.beginPath();
+                ctx.arc(renderX, renderY, star.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
             // Z값 순서대로 렌더링하여 깊이감 유지
             const sortedBeams = [...beamsRef.current].sort((a, b) => a.z - b.z);
 
@@ -180,11 +267,14 @@ export const AuroraBeamBackgroundV8: React.FC<{ className?: string }> = ({ class
                 const colorCfg = COLOR_CONFIG[beam.colorKey];
                 const { r, g, b } = hsbToRgb(colorCfg.h, colorCfg.s, colorCfg.b);
 
+                // 오로라 빔을 Z축으로 더 가깝게(0.5 ~ 1.5) 시프트하여 시차 효과 강화
+                const relativeZ = beam.z + 0.5;
+
                 // 개별 블러 적용
                 ctx.filter = `blur(${beam.blur}px)`;
 
-                const parallaxX = currentMouse.current.x * beam.z * 150;
-                const parallaxY = currentMouse.current.y * beam.z * 50;
+                const parallaxX = currentMouse.current.x * relativeZ * 150;
+                const parallaxY = currentMouse.current.y * relativeZ * 50;
 
                 const renderX = beam.x * width + parallaxX;
                 const renderY = beam.y * height + parallaxY;
@@ -203,7 +293,7 @@ export const AuroraBeamBackgroundV8: React.FC<{ className?: string }> = ({ class
                 const pulse = Math.sin(time * OPACITY_ANIMATION.speed + groupId * 1.5);
                 const dynamicOpacity = Math.max(0.1, beam.opacity + (pulse * OPACITY_ANIMATION.amplitude));
 
-                const alpha = dynamicOpacity * (0.5 + beam.z * 0.5);
+                const alpha = dynamicOpacity * (0.5 + relativeZ * 0.3); // 가까울수록 살짝 더 선명하게 보정
 
                 gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha * 0.6})`);
                 gradient.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, ${alpha * 0.3})`);
