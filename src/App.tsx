@@ -131,20 +131,17 @@ function App() {
         const currentUrl = new URL(window.location.href);
         const urlVariant = currentUrl.searchParams.get('v');
 
-        console.log('Detected urlVariant (Bust: 14:54):', urlVariant);
+        console.log('Detected urlVariant (Bust: 14:56):', urlVariant);
 
-        // ?v=fin 파라미터가 들어오면 8번 시안을 할당 (최종 아우라빔배경v8)
-        // 캐시 문제를 방지하기 위해 로직을 더 강력하게 고정
-        let variant = 9;
+        // 기본값을 8번 시안(최종 아우라빔배경v8)으로 설정
+        let variant = 8;
 
-        if (urlVariant === 'fin' || urlVariant === 'FIN' || window.location.search.includes('v=fin')) {
-            variant = 8;
-        } else if (urlVariant) {
+        if (urlVariant && urlVariant !== 'fin' && urlVariant !== 'FIN') {
             const parsed = parseInt(urlVariant);
             if (!isNaN(parsed)) variant = parsed;
         }
 
-        console.log('Final variant applied (Bust: 14:54):', variant);
+        console.log('Final variant applied (Bust: 14:56):', variant);
 
         switch (currentView) {
             case 'exchange':
